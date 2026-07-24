@@ -1,0 +1,127 @@
+aid: paymentsense
+url: https://raw.githubusercontent.com/api-evangelist/paymentsense/refs/heads/main/apis.yml
+name: Paymentsense
+kind: company
+description: >-
+  Paymentsense is a United Kingdom payment processing company that provides card
+  payment acceptance to small and medium-sized businesses through card machines
+  (PDQ terminals), online payment gateways, and EPOS integrations. Now part of
+  Dojo, its developer-facing surface centers on the Connect platform, a
+  cloud-hosted integration layer that gives each merchant an isolated host so
+  point-of-sale and hospitality software can drive card terminals without
+  touching card data. Paymentsense publishes a genuine public developer portal
+  at docs.connect.paymentsense.cloud with interactive Swagger reference docs and
+  downloadable OpenAPI/Swagger specifications for the Connect REST API
+  (Pay-At-Counter and Pay-At-Table terminal integration, versions v0/v1/v2) and
+  the Connect-E REST API for online/e-commerce card payments, plus a documented
+  WebSockets interface. Authentication is HTTP Basic using a per-merchant API key
+  supplied by Paymentsense. A separate merchant/software-house management portal
+  at developers.paymentsense.com sits behind Google sign-in.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Payments
+- United Kingdom
+- Payment Gateway
+- Payment Processing
+- Card Payments
+- Acquiring
+- Point of Sale
+- In-Person Payments
+created: '2026-07-24'
+modified: '2026-07-24'
+specificationVersion: '0.19'
+apis:
+- aid: paymentsense:connect-rest-api
+  name: Paymentsense Connect REST API
+  description: >-
+    Cloud REST API for driving Paymentsense card terminals from EPOS software.
+    Covers Pay-At-Counter (/pac) transactions and reports and Pay-At-Table
+    (/pat) hospitality flows against a per-merchant Connect host. Published in
+    versions v0 (Swagger 2.0, 3.0-beta), v1 (Swagger 2.0, 3.1) and v2 (OpenAPI
+    3.0, 3.2, current). Authenticates with HTTP Basic using the merchant API key
+    as the password.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Payments
+  - Point of Sale
+  - Card Payments
+  - Pay At Table
+  properties:
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: OpenAPI
+    url: openapi/paymentsense-connect-v2.json
+  - type: OpenAPI
+    url: openapi/paymentsense-connect-v1.json
+  - type: OpenAPI
+    url: openapi/paymentsense-connect-v0.json
+- aid: paymentsense:connect-e-rest-api
+  name: Paymentsense Connect-E REST API
+  description: >-
+    OpenAPI 3.0 REST API for online / e-commerce card payments. Issues
+    access-tokens, processes and resumes payments, runs cross-reference
+    (repeat) payments, and lists supported payment methods against the
+    Connect-E host (e.<host>.connect.paymentsense.cloud).
+  humanURL: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  baseURL: https://e.test.connect.paymentsense.cloud
+  tags:
+  - Payments
+  - Online Payments
+  - Card Payments
+  - E-Commerce
+  properties:
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: OpenAPI
+    url: openapi/paymentsense-connect-e-v0.json
+- aid: paymentsense:connect-websockets-api
+  name: Paymentsense Connect WebSockets API
+  description: >-
+    Documented WebSockets interface for the Connect platform, offering an
+    event-driven alternative to the REST API for terminal integration. No
+    downloadable OpenAPI/AsyncAPI specification is published; only reference
+    documentation is available.
+  humanURL: https://docs.connect.paymentsense.cloud/websockets/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Payments
+  - WebSockets
+  - Point of Sale
+  properties:
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/websockets/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/websockets/api
+common:
+- type: Website
+  url: https://www.paymentsense.com/uk/
+- type: DeveloperPortal
+  url: https://docs.connect.paymentsense.cloud/
+- type: Documentation
+  url: https://docs.connect.paymentsense.cloud/
+- type: APIReference
+  url: https://docs.connect.paymentsense.cloud/rest/api
+- type: GettingStarted
+  url: https://docs.connect.paymentsense.cloud/rest/getting-started
+- type: GitHubOrganization
+  url: https://github.com/Paymentsense-DevSupport
+- type: Pricing
+  url: https://www.paymentsense.com/uk/pricing/
+- type: Blog
+  url: https://www.paymentsense.com/uk/blog/
+- type: HelpCenter
+  url: https://support.paymentsense.com/hc/en-us
+- type: TermsOfService
+  url: https://www.paymentsense.com/uk/legal/terms/
+- type: PrivacyPolicy
+  url: https://www.paymentsense.com/uk/legal/privacy/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/paymentsense/
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

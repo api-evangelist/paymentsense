@@ -1,0 +1,1845 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "3.0-beta",
+    "title": "Connect REST API"
+  },
+  "host": "your-host-here.test.connect.paymentsense.cloud",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/connect.v0+json"
+  ],
+  "produces": [
+    "application/connect.v0+json"
+  ],
+  "securityDefinitions": {
+    "connectBasicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    { "connectBasicAuth": [] }
+  ],
+  "paths": {
+    "/retail/terminals": {
+      "get": {
+        "description": "Gets a list of all card terminals that are currently connected. This can be filtered by currency, capabilities and status.",
+        "tags": [
+          "Retail Terminals"
+        ],
+        "operationId": "RetailTerminals",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "$ref": "#/definitions/terminalStatus",
+            "type": "string",
+            "description": "Filter the response to only available or only busy terminals."
+          },
+          {
+            "name": "capabilities",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter the response to only terminals with particular capabilities. This should be a comma separated list of values."
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter the response to only terminals in a particular currency."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of terminals",
+            "schema": {
+              "$ref": "#/definitions/terminalWrapper"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        },
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/retail/terminals?capabilities=[\"TRANSACTION_SALE\", \"TRANSACTION_REFUND\"]"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "KEYS",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {},
+              "body": "{    \"22161332\": {        \"state\": \"ready\",        \"pstid\": \"22161332\",        \"capabilities\": [            \"TRANSACTION_SALE\",            \"TRANSACTION_REFUND\",            \"LAST_TRANSACTION\",            \"CANCEL_TRANSACTION\",            \"REPORT_END_OF_DAY\",            \"REPORT_BANKING\",            \"REPORT_X_BALANCE\",            \"REPORT_Z_BALANCE\",            \"TERMINAL_STATUS\",            \"CALL_TMS\",            \"LOGON\"        ],        \"currency\": \"EUR\"    },    \"22161339\": {        \"state\": \"ready\",        \"pstid\": \"22161339\",        \"capabilities\": [            \"TRANSACTION_SALE\",            \"TRANSACTION_REFUND\",            \"LAST_TRANSACTION\",            \"CANCEL_TRANSACTION\",            \"REPORT_END_OF_DAY\",            \"REPORT_BANKING\",            \"REPORT_X_BALANCE\",            \"REPORT_Z_BALANCE\",            \"TERMINAL_STATUS\",            \"CALL_TMS\",            \"LOGON\"        ],        \"currency\": \"GBP\"    }}"
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "RetailTerminals",
+            "x-testDescription": "Get a list of terminals optionally filtered by capabilities and or state"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/retail/terminals/{tpi}": {
+      "get": {
+        "description": "Gets details for a specific terminal.",
+        "tags": [
+          "Retail Terminals"
+        ],
+        "operationId": "RetailTerminalsByTPI",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns information about the requested terminal",
+            "schema": {
+              "$ref": "#/definitions/terminal"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Unavailable terminal or no data available for terminal."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/retail/terminals/{tpi}/transactions": {
+      "post": {
+        "description": "Starts a transaction on the given TPI",
+        "tags": [
+          "Retail Transactions"
+        ],
+        "operationId": "TransactionOnTPI",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "TransactionRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/transactionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transaction has successfully started. Returns the transaction requestId and the location of an endpoint for further details.",
+            "schema": {
+              "$ref": "#/definitions/requestLocationResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Unavailable terminal or no data available for terminal."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "422": {
+            "description": "The card machine is busy."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/retail/terminals/{tpi}/transactions/{requestId}": {
+      "get": {
+        "description": "Gets the transaction data for the given request",
+        "tags": [
+          "Retail Transactions"
+        ],
+        "operationId": "TransactionsByRequestId",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction details have been successfully returned.",
+            "schema": {
+              "$ref": "#/definitions/transaction"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404": {
+            "description": "Unavailable terminal or no data available for terminal."
+          },
+          "404 ": {
+            "description": "The requestId could not be found."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      },
+      "delete": {
+        "description": "Attempts to cancel the transaction for the given request.",
+        "tags": [
+          "Retail Transactions"
+        ],
+        "operationId": "TransactionsByRequestId",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Transaction associated to the requestId has been cancelled.",
+            "schema": {
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "The requestId could not be found."
+          },
+          "422 ": {
+            "description": "Transaction could not be cancelled."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/retail/terminals/{tpi}/transactions/{requestId}/signature": {
+      "put": {
+        "description": "Verifies the signature for a given request.",
+        "tags": [
+          "Retail Transactions"
+        ],
+        "operationId": "VerifySignature",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "SignatureRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/signatureRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Signature status has been successfully accepted.",
+            "schema": {
+              "$ref": "#/definitions/verifySignatureResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Unavailable terminal or no data available for terminal."
+          },
+          "404  ": {
+            "description": "The requestId could not be found."
+          },
+          "422  ": {
+            "description": "Incorrect JSON received."
+          },
+          "422   ": {
+            "description": "Unable to action the signature check. When required, signatures must be verified within 80 seconds."
+          },
+          "500    ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/retail/terminals/{tpi}/reports": {
+      "post": {
+        "description": "Requests a report from the given terminal",
+        "tags": [
+          "Retail Reports"
+        ],
+        "operationId": "RetailReportRequest",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "reportRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reportRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report has successfully started. Returns the report requestId and the location of an endpoint for further details.",
+            "schema": {
+              "$ref": "#/definitions/requestLocationResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/retail/terminals/{tpi}/reports/{requestId}": {
+      "get": {
+        "description": "Gets the report data for the given request.",
+        "tags": [
+          "Retail Reports"
+        ],
+        "operationId": "RetailReportDetails",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report details have been successfully returned.",
+            "schema": {
+              "$ref": "#/definitions/reportResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404": {
+            "description": "Unavailable terminal or no data available for terminal."
+          },
+          "404 ": {
+            "description": "The requestId could not be found."
+          },
+          "409": {
+            "description": "Report data retrieval in progress."
+          },
+          "500": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/tables": {
+      "get": {
+        "description": "Gets a list of all tables. This can be filtered by locked state, fully paid state and currency.",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "Tables",
+        "parameters": [
+          {
+            "name": "locked",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Filters the response to show only locked or only unlocked tables"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "$ref": "#/definitions/currency",
+            "type": "string",
+            "description": "Filters the response to show only tables with an amount for this currency"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of tables has been successfully returned.",
+            "schema": {
+              "$ref": "#/definitions/tableListWrapper"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      },
+      "post": {
+        "description": "Creates/Opens a table",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "OpenTable",
+        "parameters": [
+          {
+            "name": "tableCreation",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tableCreation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Table has been successfully created.",
+            "schema": {
+              "$ref": "#/definitions/tableCreationResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "409 ": {
+            "description": "Table already exists."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/tables/{tableName}": {
+      "get": {
+        "description": "Gets details for a specific table",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "Table",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of the table"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Table details have been successfully returned",
+            "schema": {
+              "$ref": "#/definitions/table"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Table could not be found."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes/Closes a table. This removes the table from Connect and means it is no longer accessible from any endpoints. It is intended for use when a table is fully paid and closed on the EPoS and allows the same tableName to be reused. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that deletions only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "DeleteTable",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tableDeletion",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tableDeletion"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Table has been successfully deleted.",
+            "schema": {
+
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Table could not be found."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "422  ": {
+            "description": "lastKnownAmount does not match the stored amount."
+          },
+          "422   ": {
+            "description": "lastKnownPaidAmount does not match the stored amount."
+          },
+          "500   ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/tables/{tableName}/amount": {
+      "put": {
+        "description": "Updates the amount on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "TableAmount",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tableAmountUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tableAmountUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Table amount has been successfully updated.",
+            "schema": {
+
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Table could not be found."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "422  ": {
+            "description": "lastKnownAmount does not match the stored amount."
+          },
+          "422   ": {
+            "description": "lastKnownPaidAmount does not match the stored amount."
+          },
+          "423   ": {
+            "description": "Table is currently locked and cannot be updated."
+          },
+          "500   ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/tables/{tableName}/lock": {
+      "put": {
+        "description": "Updates the lock on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "TableLock",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tableLockUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tableLockUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Table lock has been successfully updated.",
+            "schema": {
+
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Table could not be found."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "422  ": {
+            "description": "lastKnownAmount does not match the stored amount."
+          },
+          "422   ": {
+            "description": "lastKnownPaidAmount does not match the stored amount."
+          },
+          "423   ": {
+            "description": "Table is currently locked and cannot be updated."
+          },
+          "500   ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/tables/{tableName}/receipt": {
+      "put": {
+        "description": "Updates the receipt on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "TableReceipt",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tableReceiptUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tableReceiptUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Table receipt has been successfully updated.",
+            "schema": {
+
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Table could not be found."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "422  ": {
+            "description": "lastKnownAmount does not match the stored amount."
+          },
+          "422   ": {
+            "description": "lastKnownPaidAmount does not match the stored amount."
+          },
+          "423   ": {
+            "description": "Table is currently locked and cannot be updated."
+          },
+          "500   ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/tables/{tableName}/waiterids": {
+      "put": {
+        "description": "Updates the waiter ids on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.",
+        "tags": [
+          "Hospitality Tables"
+        ],
+        "operationId": "TableWaiterIds",
+        "parameters": [
+          {
+            "name": "tableName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tableWaiterIdsUpdate",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tableWaiterIdsUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Table waiter ids have been successfully updated.",
+            "schema": {
+
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Table could not be found."
+          },
+          "422 ": {
+            "description": "Incorrect JSON received."
+          },
+          "422  ": {
+            "description": "lastKnownAmount does not match the stored amount."
+          },
+          "422   ": {
+            "description": "lastKnownPaidAmount does not match the stored amount."
+          },
+          "423   ": {
+            "description": "Table is currently locked and cannot be updated."
+          },
+          "500   ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/reports": {
+      "get": {
+        "description": "Get a list of all reports from the last 3 days",
+        "tags": [
+          "Hospitality Reports"
+        ],
+        "operationId": "PATReports",
+        "parameters": [
+          {
+            "name": "tpi",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter the response to reports for only a particular terminal."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of reports has been successfully returned.",
+            "schema": {
+              "$ref": "#/definitions/reportListResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    },
+    "/pat/reports/{reportId}": {
+      "get": {
+        "description": "Gets details for a specific report",
+        "tags": [
+          "Hospitality Reports"
+        ],
+        "operationId": "PATReport",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report details have been successfully returned.",
+            "schema": {
+              "$ref": "#/definitions/reportResponse"
+            }
+          },
+          "401": {
+            "description": "Authorization credentials must be provided in the request headers."
+          },
+          "401 ": {
+            "description": "The provided authorization credentials were not correct."
+          },
+          "404 ": {
+            "description": "Report could not be found."
+          },
+          "500 ": {
+            "description": "An internal Connect error has occurred."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "capabilities": {
+      "type": "string",
+      "enum": [
+        "SALE",
+        "REFUND",
+        "DUPLICATE",
+        "CANCEL_TRANSACTION",
+        "REPORT_END_OF_DAY",
+        "REPORT_BANKING",
+        "REPORT_X_BALANCE",
+        "REPORT_Z_BALANCE",
+        "TERMINAL_STATUS"
+      ]
+    },
+    "capabilitiesList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/capabilities"
+      }
+    },
+    "cardholderVerificationMethod": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "PIN",
+        "SIGNATURE",
+        "DEVICE"
+      ]
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "GBP",
+        "EUR"
+      ]
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "BOLD",
+        "DOUBLE_HEIGHT",
+        "DOUBLE_WIDTH"
+      ]
+    },
+    "issuerTotals": {
+      "type": "object",
+      "description": "A dictionary of issuerTotals keyed by Issuer name. '<issuer name>' is an example key",
+      "properties": {
+        "<issuer name>": {
+          "$ref": "#/definitions/totalsBreakdown"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/totalsBreakdown"
+      }
+    },
+    "messageList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notifications": {
+      "type": "string",
+      "enum": [
+        "APPROVED",
+        "BAD_SWIPE",
+        "CARD_ERROR",
+        "CARD_EXPIRED",
+        "CARD_NOT_SUPPORTED",
+        "CONNECTING",
+        "CONNECTION_MADE",
+        "DECLINED",
+        "DECLINED_BY_CARD",
+        "INSERT_CARD",
+        "PIN_ENTRY",
+        "PLEASE_WAIT",
+        "PRESENT_CARD",
+        "PRESENT_ONLY_ONE_CARD",
+        "PROCESSING_ERROR",
+        "REMOVE_CARD",
+        "RETRYING",
+        "REQUEST_SENT",
+        "RE_PRESENT_CARD",
+        "SIGNATURE_VERIFICATION",
+        "SIGNATURE_VERIFICATION_PROCESS_COMPLETED",
+        "SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED",
+        "SIGNATURE_VERIFICATION_IN_PROGRESS",
+        "SIGNATURE_VERIFICATION_TIMEOUT",
+        "TRANSACTION_FINISHED",
+        "TRANSACTION_STARTED"
+      ]
+    },
+    "paymentMethod": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "KEYED",
+        "SWIPED",
+        "ICC_CHIP",
+        "CONTACTLESS"
+      ]
+    },
+    "receiptLineTypeRetail": {
+      "type": "string",
+      "enum": [
+        "TEXT",
+        "BOX_DECLINE",
+        "BOX_VOID",
+        "CARRIAGE_RETURN",
+        "LINE_SEPARATOR_SINGLE",
+        "LINE_SEPARATOR_DOUBLE",
+        "TICKET_FEED"
+      ]
+    },
+    "receiptLineTypeHospitality": {
+      "type": "string",
+      "enum": [
+        "TEXT",
+        "IMAGE_LOGO",
+        "CARRIAGE_RETURN",
+        "LINE_SEPARATOR_SINGLE",
+        "LINE_SEPARATOR_DOUBLE",
+        "TICKET_FEED",
+        "BARCODE_CODE25",
+        "BARCODE_CODE39",
+        "BARCODE_CODE128"
+      ]
+    },
+    "receiptLine": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "format": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/format"
+          }
+        },
+        "type": {
+          "type": "string",
+          "$ref": "#/definitions/receiptLineTypeRetail"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "receiptLine ": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "format": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/format"
+          }
+        },
+        "type": {
+          "type": "string",
+          "$ref": "#/definitions/receiptLineTypeHospitality"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "receiptLineList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/receiptLine"
+      }
+    },
+    "receiptLineList ": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/receiptLine "
+      }
+    },
+    "reportBalances": {
+      "type": "object",
+      "required": [
+        "currency",
+        "issuerTotals",
+        "totalAmount",
+        "totalCashbackAmount",
+        "totalCashbackCount",
+        "totalGratuityAmount",
+        "totalGratuityCount",
+        "totalRefundsAmount",
+        "totalRefundsCount",
+        "totalSalesAmount",
+        "totalSalesCount",
+        "totalsSince",
+        "waiterTotals"
+      ],
+      "properties": {
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "issuerTotals": {
+          "$ref": "#/definitions/issuerTotals"
+        },
+        "totalAmount": {
+          "type": "integer"
+        },
+        "totalCashbackAmount": {
+          "type": "integer"
+        },
+        "totalCashbackCount": {
+          "type": "integer"
+        },
+        "totalGratuityAmount": {
+          "type": "integer"
+        },
+        "totalGratuityCount": {
+          "type": "integer"
+        },
+        "totalRefundsAmount": {
+          "type": "integer"
+        },
+        "totalRefundsCount": {
+          "type": "integer"
+        },
+        "totalSalesAmount": {
+          "type": "integer"
+        },
+        "totalSalesCount": {
+          "type": "integer"
+        },
+        "totalsSince": {
+          "type": "string"
+        },
+        "waiterTotals": {
+          "$ref": "#/definitions/waiterTotals"
+        }
+      }
+    },
+    "reportBanking": {
+      "type": "object",
+      "required": [
+        "currency",
+        "currentSessionIssuerTotals",
+        "previousSessionIssuerTotals",
+        "currentSessionTotals",
+        "previousSessionTotals",
+        "currentSessionTransactionNumbers",
+        "previousSessionTransactionNumbers"
+      ],
+      "properties": {
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "currentSessionIssuerTotals": {
+          "$ref": "#/definitions/issuerTotals"
+        },
+        "previousSessionIssuerTotals": {
+          "$ref": "#/definitions/issuerTotals"
+        },
+        "currentSessionTotals": {
+          "$ref": "#/definitions/totalsBreakdown"
+        },
+        "previousSessionTotals": {
+          "$ref": "#/definitions/totalsBreakdown"
+        },
+        "currentSessionTransactionNumbers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "previousSessionTransactionNumbers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "reportList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/reportResponse"
+      }
+    },
+    "reportListResponse": {
+      "type": "object",
+      "properties": {
+        "reports": {
+          "$ref": "#/definitions/reportList"
+        }
+      }
+    },
+    "reportRequest": {
+      "type": "object",
+      "properties": {
+        "reportType": {
+          "$ref": "#/definitions/reportType"
+        }
+      }
+    },
+    "reportResponse": {
+      "type": "object",
+      "required": [
+        "balances",
+        "banking",
+        "reportLines",
+        "reportTime",
+        "reportType",
+        "tpi",
+        "requestId",
+        "location"
+      ],
+      "properties": {
+        "balances": {
+          "$ref": "#/definitions/reportBalances"
+        },
+        "banking": {
+          "$ref": "#/definitions/reportsBanking"
+        },
+        "reportLines": {
+          "$ref": "#/definitions/receiptLineList"
+        },
+        "reportTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reportType": {
+          "$ref": "#/definitions/reportType"
+        },
+        "tpi": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string",
+          "description": "The uri where the information about this particular report can be found."
+        }
+      }
+    },
+    "reportsBanking": {
+      "type": "object",
+      "description": "A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key",
+      "properties": {
+        "<acquirer name>": {
+          "$ref": "#/definitions/reportBanking"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/reportBanking"
+      }
+    },
+    "reportType": {
+      "type": "string",
+      "enum": [
+        "END_OF_DAY",
+        "BANKING",
+        "X_BALANCE",
+        "Z_BALANCE"
+      ]
+    },
+    "requestLocationResponse": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string",
+          "description": "The uri where this resource can be found."
+        }
+      }
+    },
+    "signatureRequest": {
+      "type": "object",
+      "required": [
+        "accepted"
+      ],
+      "properties": {
+        "accepted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "table": {
+      "type": "object",
+      "required": [
+        "tableName",
+        "amount",
+        "amountCashback",
+        "amountGratuity",
+        "amountPaid",
+        "payments",
+        "receipt",
+        "locked",
+        "lockedBy",
+        "waiterIds"
+      ],
+      "properties": {
+        "tableName": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer"
+        },
+        "amountCashback": {
+          "type": "integer"
+        },
+        "amountGratuity": {
+          "type": "integer"
+        },
+        "amountPaid": {
+          "type": "integer"
+        },
+        "payments": {
+          "$ref": "#/definitions/tablePaymentList"
+        },
+        "receipt": {
+          "$ref": "#/definitions/receiptLineList "
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "lockedBy": {
+          "type": "string"
+        },
+        "waiterIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tableAmountUpdate": {
+      "type": "object",
+      "required": [
+        "lastKnownAmount",
+        "lastKnownPaidAmount",
+        "newAmount"
+      ],
+      "properties": {
+        "lastKnownAmount": {
+          "type": "integer"
+        },
+        "lastKnownPaidAmount": {
+          "type": "integer"
+        },
+        "newAmount": {
+          "type": "integer"
+        }
+      }
+    },
+    "tableCreation": {
+      "type": "object",
+      "required": [
+        "tableName",
+        "amount",
+        "currency"
+      ],
+      "properties": {
+        "tableName": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer"
+        },
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "receipt": {
+          "$ref": "#/definitions/receiptLineList"
+        },
+        "waiterIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tableCreationResponse": {
+      "type": "object",
+      "required": [
+        "location",
+        "tableName"
+      ],
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "The uri where the information about this particular table can be found."
+        },
+        "tableName": {
+          "type": "string"
+        }
+      }
+    },
+    "tableDeletion": {
+      "type": "object",
+      "required": [
+        "lastKnownAmount",
+        "lastKnownPaidAmount"
+      ],
+      "properties": {
+        "lastKnownAmount": {
+          "type": "integer"
+        },
+        "lastKnownPaidAmount": {
+          "type": "integer"
+        }
+      }
+    },
+    "tableList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/table"
+      }
+    },
+    "tableListWrapper": {
+      "type": "object",
+      "properties": {
+        "tables": {
+          "$ref": "#/definitions/tableList"
+        }
+      }
+    },
+    "tableLockUpdate": {
+      "type": "object",
+      "required": [
+        "lastKnownAmount",
+        "lastKnownPaidAmount",
+        "locked"
+      ],
+      "properties": {
+        "lastKnownAmount": {
+          "type": "integer"
+        },
+        "lastKnownPaidAmount": {
+          "type": "integer"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "lockedBy": {
+          "type": "string",
+          "description": "Used to denote which EPoS/User has locked a table. This will default to 'EPoS' if not set."
+        },
+        "override": {
+          "type": "boolean",
+          "description": "Used to override an existing table lock. This should be used with caution when a terminal or EPoS has malfunctioned while holding a lock."
+        }
+      }
+    },
+    "tablePayment": {
+      "type": "object",
+      "required": [
+        "amountPaid",
+        "amountCashback",
+        "amountGratuity",
+        "authCode",
+        "currency",
+        "cardSchemeName",
+        "paymentId",
+        "paymentMethod",
+        "time"
+      ],
+      "properties": {
+        "amountPaid": {
+          "type": "integer"
+        },
+        "amountCashback": {
+          "type": "integer"
+        },
+        "amountGratuity": {
+          "type": "integer"
+        },
+        "authCode": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string",
+          "$ref": "#/definitions/currency"
+        },
+        "cardSchemeName": {
+          "type": "string"
+        },
+        "paymentId": {
+          "type": "string"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "$ref": "#/definitions/paymentMethod"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "tablePaymentList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/tablePayment"
+      }
+    },
+    "tableReceiptUpdate": {
+      "type": "object",
+      "required": [
+        "lastKnownAmount",
+        "lastKnownPaidAmount",
+        "newReceipt"
+      ],
+      "properties": {
+        "lastKnownAmount": {
+          "type": "integer"
+        },
+        "lastKnownPaidAmount": {
+          "type": "integer"
+        },
+        "newReceipt": {
+          "$ref": "#/definitions/receiptLineList"
+        }
+      }
+    },
+    "tableWaiterIdsUpdate": {
+      "type": "object",
+      "required": [
+        "lastKnownAmount",
+        "lastKnownPaidAmount",
+        "newWaiterIds"
+      ],
+      "properties": {
+        "lastKnownAmount": {
+          "type": "integer"
+        },
+        "lastKnownPaidAmount": {
+          "type": "integer"
+        },
+        "newWaiterIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "terminal": {
+      "title": "Terminal",
+      "type": "object",
+      "required": [
+        "tpi",
+        "status",
+        "currency",
+        "capabilities",
+        "location"
+      ],
+      "properties": {
+        "tpi": {
+          "type": "string",
+          "description": "Terminal Public Identifier. This is a unique identifier assigned to each terminal."
+        },
+        "status": {
+          "$ref": "#/definitions/terminalStatus"
+        },
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "capabilities": {
+          "$ref": "#/definitions/capabilitiesList"
+        },
+        "location": {
+          "type": "string",
+          "description": "The uri where the information about this particular terminal can be found."
+        }
+      }
+    },
+    "terminalList": {
+      "title": "TerminalList",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/terminal"
+      }
+    },
+    "terminalStatus": {
+      "type": "string",
+      "enum": [ "AVAILABLE", "BUSY" ]
+    },
+    "terminalWrapper": {
+      "title": "terminalWrapper",
+      "description": "a list of terminals keyed by 'terminals'",
+      "type": "object",
+      "properties": {
+        "terminals": {
+          "$ref": "#/definitions/terminalList"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/terminal"
+      }
+    },
+    "totalsBreakdown": {
+      "type": "object",
+      "required": [
+        "currency",
+        "totalAmount",
+        "totalRefundsAmount",
+        "totalRefundsCount",
+        "totalSalesAmount",
+        "totalSalesCount"
+      ],
+      "properties": {
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "totalAmount": {
+          "type": "integer"
+        },
+        "totalRefundsAmount": {
+          "type": "integer"
+        },
+        "totalRefundsCount": {
+          "type": "integer"
+        },
+        "totalSalesAmount": {
+          "type": "integer"
+        },
+        "totalSalesCount": {
+          "type": "integer"
+        }
+      }
+    },
+    "transaction": {
+      "type": "object",
+      "properties": {
+        "amountBase": {
+          "description": "The base amount of the transaction, without gratuity or cashback",
+          "type": "integer",
+          "format": "int32"
+        },
+        "amountCashback": {
+          "description": "The amount of cashback on the transaction",
+          "type": "integer",
+          "format": "int32"
+        },
+        "amountGratuity": {
+          "description": "The amount of gratuity on the transaction",
+          "type": "integer",
+          "format": "int32"
+        },
+        "amountTotal": {
+          "description": "The total amount of the transaction, including cashback and gratuity",
+          "type": "integer",
+          "format": "int32"
+        },
+        "applicationId": {
+          "type": "string"
+        },
+        "applicationLabel": {
+          "type": "string"
+        },
+        "authCode": {
+          "type": "string"
+        },
+        "cardSchemeName": {
+          "type": "string"
+        },
+        "cardHolderVerificationMethod": {
+          "$ref": "#/definitions/cardholderVerificationMethod"
+        },
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "dateOfExpiry": {
+          "description": "In the format 'MM/YY'",
+          "type": "string",
+          "format": "MM/YY"
+        },
+        "dateOfStart": {
+          "description": "In the format 'MM/YY'",
+          "type": "string",
+          "format": "MM/YY"
+        },
+        "location": {
+          "description": "The uri where the information about this particular transaction can be found.",
+          "type": "string",
+          "format": "uri"
+        },
+        "notifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/notifications"
+          }
+        },
+        "paymentMethod": {
+          "$ref": "#/definitions/paymentMethod"
+        },
+        "primaryAccountNumber": {
+          "type": "string"
+        },
+        "primaryAccountNumberSequence": {
+          "type": "string"
+        },
+        "receiptLines": {
+          "type": "object",
+          "properties": {
+            "MERCHANT": {
+              "$ref": "#/definitions/receiptLineList"
+            },
+            "CUSTOMER": {
+              "$ref": "#/definitions/receiptLineList"
+            }
+          }
+        },
+        "requestId": {
+          "description": "An ID for this request, which can be used in other endpoints",
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "transactionNumber": {
+          "type": "string"
+        },
+        "transactionResult": {
+          "$ref": "#/definitions/transactionResult"
+        },
+        "transactionTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "transactionType": {
+          "$ref": "#/definitions/transactionTypeResult"
+        }
+      }
+    },
+    "transactionCancelled": {
+      "type": "object",
+      "properties": {
+        "cancelled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "transactionList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/transaction"
+      }
+    },
+    "transactionListWrapper": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "$ref": "#/definitions/transactionList"
+        }
+      }
+    },
+    "transactionRequest": {
+      "type": "object",
+      "properties": {
+        "transactionType": {
+          "$ref": "#/definitions/transactionType"
+        },
+        "amount": {
+          "type": "integer"
+        },
+        "currency": {
+          "$ref": "#/definitions/currency"
+        }
+      }
+    },
+    "transactionResult": {
+      "type": "string",
+      "enum": [
+        "SUCCESSFUL",
+        "DECLINED",
+        "VOID",
+        "UNSUCCESSFUL",
+        "CANCELLED",
+        "TIMED_OUT"
+      ]
+    },
+    "transactionType": {
+      "type": "string",
+      "enum": [
+        "SALE",
+        "REFUND",
+        "DUPLICATE"
+      ]
+    },
+    "transactionTypeResult": {
+      "type": "string",
+      "enum": [
+        "LOGON",
+        "REFUND",
+        "REFUND_REVERSAL",
+        "SALE",
+        "SALE_REVERSAL"
+      ]
+    },
+    "verifySignature": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/messageList"
+        }
+      }
+    },
+    "verifySignatureResponse": {
+      "type": "object",
+      "properties": {
+        "messages": {
+          "$ref": "#/definitions/verifySignature"
+        }
+      }
+    },
+    "waiterTotals": {
+      "type": "object",
+      "description": "A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key",
+      "properties": {
+        "<waiter id>": {
+          "$ref": "#/definitions/totalsBreakdown"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/totalsBreakdown"
+      }
+    }
+  }
+}

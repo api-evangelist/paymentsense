@@ -1,0 +1,121 @@
+aid: paymentsense
+name: Paymentsense
+homeMarket: United Kingdom
+tier: gateway-psp
+review:
+  question: Does Paymentsense publish a real public developer portal with downloadable OpenAPI/Swagger specs, and what is its API posture?
+  answer: true
+  date: '2026-07-24'
+  reviewer: API Evangelist
+findings:
+  summary: |
+    Paymentsense is a UK card-payments provider for SMBs (card machines / PDQ
+    terminals, online payments, EPOS integrations), now part of Dojo. It ships
+    a genuine public developer portal at https://docs.connect.paymentsense.cloud
+    (HTTP 200) for its Connect platform, with interactive Swagger reference docs
+    and DOWNLOADABLE machine-readable specifications. Four specs were harvested
+    verbatim: the Connect REST API (terminal Pay-At-Counter /pac + Pay-At-Table
+    /pat integration) in three versions — v0 (Swagger 2.0, "3.0-beta", 15
+    paths), v1 (Swagger 2.0, "3.1", 15 paths) and v2 (OpenAPI 3.0.0, "3.2", 7
+    paths, current) — plus the Connect-E REST API for online/e-commerce card
+    payments (OpenAPI 3.0.0, "Connect-E Development Environment 1.0.0", 6
+    paths). A Connect WebSockets interface is documented but ships no
+    downloadable OpenAPI/AsyncAPI spec. A second portal at
+    developers.paymentsense.com is gated behind Google sign-in (302 to Google
+    accounts). The Connect platform gives each merchant an isolated host
+    ({identifier}.connect.paymentsense.cloud) so software never touches card
+    data.
+  developerPortal:
+    url: https://docs.connect.paymentsense.cloud/
+    httpStatus: 200
+    confirmed: true
+  gatedPortal:
+    url: https://developers.paymentsense.com/
+    httpStatus: 302
+    note: Redirects to accounts.google.com sign-in (sites.google.com/paymentsense.com/developer-portal-mms). Gated; not harvestable.
+  authModel:
+    scheme: HTTP Basic
+    detail: >-
+      Basic Authorization with the merchant API key placed in the password
+      field and any value as the username (an EPoS identifier is recommended).
+      The API key is issued per customer site by Paymentsense. Additional
+      required headers: Software-House-Id, Installer-Id, and an Accept version
+      header (application/connect.v2+json | v1 | v0).
+    securityScheme: connectBasicAuth (declared in the specs)
+  webhooks:
+    documented: false
+    note: No webhook/event catalog or AsyncAPI found. Event-driven access is offered via the documented Connect WebSockets interface rather than HTTP webhooks.
+  postman:
+    published: false
+    note: No public Postman collection/workspace found. The reference docs are Swagger-UI (Authorize + Try it out).
+  graphql:
+    present: false
+  github:
+    org: https://github.com/Paymentsense-DevSupport
+    note: 24 repositories, all e-commerce plugins (WooCommerce, Magento, OpenCart, PrestaShop, etc.); no OpenAPI/SDK spec repos.
+  specsHarvested:
+    - file: openapi/paymentsense-connect-v0.json
+      title: Connect REST API
+      version: 3.0-beta
+      format: Swagger 2.0
+      paths: 15
+      source: https://docs.connect.paymentsense.cloud/js/swagger_v0.json
+      httpStatus: 200
+      fetched: '2026-07-24'
+    - file: openapi/paymentsense-connect-v1.json
+      title: Connect REST API
+      version: '3.1'
+      format: Swagger 2.0
+      paths: 15
+      source: https://docs.connect.paymentsense.cloud/js/swagger_v1.json
+      httpStatus: 200
+      fetched: '2026-07-24'
+    - file: openapi/paymentsense-connect-v2.json
+      title: Connect REST API
+      version: '3.2'
+      format: OpenAPI 3.0.0
+      paths: 7
+      source: https://docs.connect.paymentsense.cloud/js/swagger_v2.json
+      httpStatus: 200
+      fetched: '2026-07-24'
+    - file: openapi/paymentsense-connect-e-v0.json
+      title: Connect-E Development Environment
+      version: 1.0.0
+      format: OpenAPI 3.0.0
+      paths: 6
+      source: https://docs.connect.paymentsense.cloud/js/swagger_connect-e_v0.json
+      httpStatus: 200
+      fetched: '2026-07-24'
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://{host}.connect.paymentsense.cloud
+      documented: true
+      note: Per-merchant host; Connect REST API (v0/v1/v2) and Connect-E (e.{host}...).
+    - protocol: WebSocket
+      scheme: wss
+      documented: true
+      spec: false
+      note: Connect WebSockets interface documented at /websockets/api and /websockets/getting-started; no downloadable spec.
+sources:
+  - url: https://docs.connect.paymentsense.cloud/
+    type: DeveloperPortal
+    httpStatus: 200
+  - url: https://docs.connect.paymentsense.cloud/rest/api
+    type: APIReference
+    httpStatus: 200
+  - url: https://docs.connect.paymentsense.cloud/rest/getting-started
+    type: Documentation
+    httpStatus: 200
+  - url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+    type: Documentation
+    httpStatus: 200
+  - url: https://docs.connect.paymentsense.cloud/websockets/api
+    type: Documentation
+    httpStatus: 200
+  - url: https://www.paymentsense.com/uk/
+    type: Website
+    httpStatus: 200
+  - url: https://github.com/Paymentsense-DevSupport
+    type: GitHubOrganization
+    httpStatus: 200
