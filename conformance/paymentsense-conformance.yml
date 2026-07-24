@@ -1,0 +1,43 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  openapi/*.json; https://docs.connect.paymentsense.cloud/rest/getting-started;
+  https://dojo.tech/articles/what-is-pci-compliance/;
+  https://support.dojo.tech/hc/en-gb/articles/360014043319-What-is-PCI-compliance-
+standards:
+  - id: pci-dss
+    conforms: true
+    evidence: >-
+      Paymentsense (a trading style operated with Dojo / Paymentsense Ltd, FCA FRN 738728)
+      is PCI DSS compliant; the Connect platform is designed so EPOS/e-commerce software
+      never touches card data, reducing merchant PCI scope. Card machines use P2PE.
+  - id: oauth2
+    conforms: false
+    evidence: no oauth2 securityScheme in any spec; auth is HTTP Basic (Connect) or apiKey+JWT (Connect-E)
+  - id: openid-connect
+    conforms: false
+  - id: http-basic-auth
+    conforms: true
+    evidence: connectBasicAuth (type http, scheme basic) across Connect v0/v1/v2
+  - id: jwt-bearer
+    conforms: true
+    evidence: Connect-E secures REST calls with a JWT bearer token; access-tokens minted via apiKey
+  - id: media-type-versioning
+    conforms: true
+    evidence: version selected via Accept header application/connect.v0+json .. v2+json
+  - id: 3d-secure-2
+    conforms: true
+    evidence: Connect-E supports 3-D Secure and 3-D Secure 2 for online payments
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: errors returned as a custom userMessage envelope, not application/problem+json
+  - id: json-api
+    conforms: false
+  - id: pagination
+    conforms: false
+    evidence: no cursor/offset pagination; collections (terminals, tables) returned in full
+  - id: idempotency
+    conforms: false
+    evidence: >-
+      no Idempotency-Key header documented; Connect-E uses a unique merchantTransactionId
+      for duplicate detection rather than a general idempotency contract

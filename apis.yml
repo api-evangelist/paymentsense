@@ -58,6 +58,15 @@ apis:
     url: openapi/paymentsense-connect-v1.json
   - type: OpenAPI
     url: openapi/paymentsense-connect-v0.json
+  - type: Overlay
+    url: overlays/paymentsense-connect-v2-overlay.yaml
+  - type: Overlay
+    url: overlays/paymentsense-connect-v1-overlay.yaml
+  - type: Overlay
+    url: overlays/paymentsense-connect-v0-overlay.yaml
+  - type: Arazzo
+    name: Pay-At-Counter — take a card payment
+    url: arazzo/paymentsense-pac-take-payment.yml
 - aid: paymentsense:connect-e-rest-api
   name: Paymentsense Connect-E REST API
   description: >-
@@ -79,6 +88,10 @@ apis:
     url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
   - type: OpenAPI
     url: openapi/paymentsense-connect-e-v0.json
+  - type: Overlay
+    url: overlays/paymentsense-connect-e-v0-overlay.yaml
+  - type: Components
+    url: components/paymentsense-components.yml
 - aid: paymentsense:connect-websockets-api
   name: Paymentsense Connect WebSockets API
   description: >-
@@ -97,7 +110,47 @@ apis:
     url: https://docs.connect.paymentsense.cloud/websockets/getting-started
   - type: APIReference
     url: https://docs.connect.paymentsense.cloud/websockets/api
+  - type: Webhooks
+    url: asyncapi/paymentsense-connect-events.yml
 common:
+- type: DomainSecurity
+  url: security/paymentsense-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/paymentsense-agentic-access.yml
+- type: Authentication
+  url: authentication/paymentsense-authentication.yml
+- type: Packages
+  url: packages/paymentsense-packages.yml
+- type: MCPServer
+  url: mcp/paymentsense-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/paymentsense-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/paymentsense-llms.txt
+- type: Conventions
+  url: conventions/paymentsense-conventions.yml
+- type: ErrorCatalog
+  url: errors/paymentsense-problem-types.yml
+- type: DataModel
+  url: data-model/paymentsense-data-model.yml
+- type: Conformance
+  url: conformance/paymentsense-conformance.yml
+- type: Compliance
+  url: https://dojo.tech/articles/what-is-pci-compliance/
+- type: Sandbox
+  url: sandbox/paymentsense-sandbox.yml
+- type: Lifecycle
+  url: lifecycle/paymentsense-lifecycle.yml
+- type: StatusPage
+  url: https://status.paymentsense.com/
+- type: ChangeLog
+  url: changelog/paymentsense-changelog.yml
+- type: ChangeLog
+  url: https://docs.connect.paymentsense.cloud/rest/changelog
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Login
+  url: https://developers.paymentsense.com
 - type: Website
   url: https://www.paymentsense.com/uk/
 - type: DeveloperPortal

@@ -1,0 +1,51 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  https://docs.connect.paymentsense.cloud/ConnectE/SettingUpTestAccount;
+  https://docs.connect.paymentsense.cloud/ConnectE/GettingStarted;
+  https://docs.connect.paymentsense.cloud/rest/getting-started
+note: >-
+  All values below are published verbatim in the Paymentsense docs. Connect-E test
+  cards are Global Payments / CyberSource test PANs. The shared public test JWT and
+  demo merchant URL are documented as revocable at any time.
+environments:
+  connect_rest:
+    model: per-merchant host
+    detail: >-
+      The Connect REST host is unique per merchant site (or per test environment) and
+      is provided by Paymentsense. No global test host; a test terminal/host is issued
+      for integration testing.
+  connect_e:
+    test:
+      rest_api: e.test.connect.paymentsense.cloud
+      access_tokens_endpoint: https://e.test.connect.paymentsense.cloud/v1/access-tokens
+      javascript: https://web.e.test.connect.paymentsense.cloud/assets/js/client.js
+    live:
+      rest_api: e.connect.paymentsense.cloud
+      javascript: https://web.e.connect.paymentsense.cloud/assets/js/client.js
+public_test_credentials:
+  jwt_bearer: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9... (RSA-signed, truncated in docs)"
+  demo_merchant_url: demo-dot-connect-e-build-non-pci.appspot.com
+  request_private_credentials: gatewaysupport@paymentsense.com
+test_cards:
+  - pan: '4456530000001096'
+    scheme: Visa
+    expiry: '12/30'
+    cv2: '020'
+  - pan: '5200000000001096'
+    scheme: Mastercard
+    expiry: '12/30'
+    cv2: '020'
+  - pan: '4456530000000007'
+    scheme: Visa
+    expiry: '12/30'
+    cv2: '020'
+  - pan: '4976000000003436'
+    scheme: Visa (Global Payments test)
+    note: Global Payments gateway test card
+test_notes:
+  - Access tokens are single-use and expire after 30 minutes.
+  - merchantTransactionId values must be unique across users.
+  - If no expiry is supplied, use any date after today; CV2 any 3 digits (4 for Amex).
+  - Apple Pay testing requires an Apple Developer sandbox tester account.
+  - Google Pay testing requires enrolment in Google's Test Card Suite.

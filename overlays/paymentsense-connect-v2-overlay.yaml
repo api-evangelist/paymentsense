@@ -1,0 +1,15 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Paymentsense Connect REST API v2
+  version: 1.0.0
+extends: openapi/paymentsense-connect-v2.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: paymentsense
+      x-apievangelist-product: connect-rest
+      x-apievangelist-auth: http-basic
+      x-apievangelist-versioning: "media-type (Accept: application/connect.v2+json)"
+      x-apievangelist-async-pattern: 202-accepted + poll GetTransactionWithRequestId (1s PAC / 5s PAT) + WebSocket notifications
+      x-apievangelist-error-envelope: userMessage
+      x-apievangelist-required-headers: [Software-House-Id, Installer-Id]

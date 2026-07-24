@@ -1,0 +1,60 @@
+arazzo: 1.0.1
+info:
+  title: Paymentsense Pay-At-Counter — take a card payment
+  version: 1.0.0
+  summary: List a terminal, start a card transaction on it, and poll to the outcome.
+sourceDescriptions:
+  - name: connectV2
+    url: ../openapi/paymentsense-connect-v2.json
+    type: openapi
+workflows:
+  - workflowId: pacTakePayment
+    summary: Take an in-person Pay-At-Counter card payment and confirm the result.
+    inputs:
+      type: object
+      properties:
+        amount:
+          type: integer
+          description: Minor units (pence).
+        transactionType:
+          type: string
+          default: SALE
+      required: [amount]
+    steps:
+      - stepId: listTerminals
+        operationId: PACTerminals
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          tid: $response.body[0].tid
+      - stepId: startTransaction
+        operationId: TransactionOnTID
+        parameters:
+          - name: tid
+            in: path
+            value: $steps.listTerminals.outputs.tid
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: $inputs.amount
+            transactionType: $inputs.transactionType
+        successCriteria:
+          - condition: $statusCode == 202
+        outputs:
+          requestId: $response.body.requestId
+      - stepId: pollTransaction
+        operationId: GetTransactionWithRequestId
+        parameters:
+          - name: tid
+            in: path
+            value: $steps.listTerminals.outputs.tid
+          - name: requestId
+            in: path
+            value: $steps.startTransaction.outputs.requestId
+        successCriteria:
+          - condition: $statusCode == 200
+        outputs:
+          status: $response.body.transactionResult
+    outputs:
+      requestId: $steps.startTransaction.outputs.requestId
+      status: $steps.pollTransaction.outputs.status

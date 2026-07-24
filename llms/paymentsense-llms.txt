@@ -1,0 +1,34 @@
+# Paymentsense
+
+> Paymentsense (now part of Dojo) is a United Kingdom payment processor offering card acceptance to SMBs through card terminals (PDQ), online gateways, and EPOS integrations. Its developer surface is the Connect platform: a cloud integration layer giving each merchant an isolated host so point-of-sale and hospitality software can drive card terminals without touching card data. Authentication is HTTP Basic (Connect) or a JWT/access-token pair (Connect-E). Versioning is by `Accept` media type (application/connect.v0+json .. v2+json).
+
+## APIs
+
+- [Connect REST API](https://docs.connect.paymentsense.cloud/rest/api): Cloud REST API to drive card terminals from EPOS software — Pay-At-Counter (/pac) and Pay-At-Table (/pat). Published as v0 (Swagger 2.0), v1 (Swagger 2.0), v2 (OpenAPI 3.0, current).
+- [Connect-E REST API](https://docs.connect.paymentsense.cloud/ConnectE/RestApi): OpenAPI 3.0 REST API for online / e-commerce card payments — access tokens, payments, cross-reference (repeat) payments, payment methods. Proxies CyberSource.
+- [Connect WebSockets API](https://docs.connect.paymentsense.cloud/websockets/api): Event-driven JSON-RPC2 alternative to REST for terminal integration (pac/pat).
+
+## Specs
+
+- [Connect v2 OpenAPI](https://raw.githubusercontent.com/api-evangelist/paymentsense/refs/heads/main/openapi/paymentsense-connect-v2.json)
+- [Connect v1 OpenAPI](https://raw.githubusercontent.com/api-evangelist/paymentsense/refs/heads/main/openapi/paymentsense-connect-v1.json)
+- [Connect v0 OpenAPI](https://raw.githubusercontent.com/api-evangelist/paymentsense/refs/heads/main/openapi/paymentsense-connect-v0.json)
+- [Connect-E OpenAPI](https://raw.githubusercontent.com/api-evangelist/paymentsense/refs/heads/main/openapi/paymentsense-connect-e-v0.json)
+
+## Docs
+
+- [Developer Portal](https://docs.connect.paymentsense.cloud/)
+- [Connect REST Getting Started](https://docs.connect.paymentsense.cloud/rest/getting-started)
+- [Connect-E Getting Started](https://docs.connect.paymentsense.cloud/ConnectE/GettingStarted)
+- [Connect-E Setting up a Test Account](https://docs.connect.paymentsense.cloud/ConnectE/SettingUpTestAccount)
+- [REST Changelog](https://docs.connect.paymentsense.cloud/rest/changelog)
+- [Built-in user messages](https://docs.connect.paymentsense.cloud/rest/error-messages)
+- [WebSockets Getting Started](https://docs.connect.paymentsense.cloud/websockets/getting-started)
+
+## Operations & Support
+
+- [Status Page](https://status.paymentsense.com/)
+- [Help Centre](https://support.paymentsense.com/hc/en-us)
+- [Pricing](https://www.paymentsense.com/uk/pricing/)
+- [GitHub (DevSupport)](https://github.com/Paymentsense-DevSupport)
+- [Connect-E Samples](https://github.com/Paymentsense/connect-e-samples)

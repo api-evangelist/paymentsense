@@ -1,0 +1,16 @@
+generated: '2026-07-24'
+method: generated
+source: openapi/paymentsense-connect-v2.json, openapi/paymentsense-connect-v1.json, openapi/paymentsense-connect-e-v0.json
+skills:
+  - file: paymentsense-take-counter-payment.md
+    name: Take a Pay-At-Counter card payment
+    api: openapi/paymentsense-connect-v2.json
+    operations: [PACTerminals, TransactionOnTID, GetTransactionWithRequestId, VerifySignature, CancelTransactionWithRequestId]
+  - file: paymentsense-pay-at-table.md
+    name: Run a Pay-At-Table hospitality flow
+    api: openapi/paymentsense-connect-v1.json
+    operations: [Tables, OpenTable, Table, TableAmount, TableLock, DeleteTable]
+  - file: paymentsense-connect-e-online-payment.md
+    name: Take an online card payment with Connect-E
+    api: openapi/paymentsense-connect-e-v0.json
+    operations: ["/v1/access-tokens", "/v1/payments/", "/v1/payments/resume", "/v1/cross-reference-payments/access-token"]

@@ -1,0 +1,30 @@
+generated: '2026-07-24'
+method: derived
+source: openapi/paymentsense-connect-e-v0.json, openapi/paymentsense-connect-v0.json, openapi/paymentsense-connect-v1.json,
+  openapi/paymentsense-connect-v2.json
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/paymentsense-connect-e-v0.json
+- name: jwt
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/paymentsense-connect-e-v0.json
+- name: connectBasicAuth
+  type: http
+  scheme: basic
+  sources:
+  - openapi/paymentsense-connect-v0.json
+  - openapi/paymentsense-connect-v1.json
+  - openapi/paymentsense-connect-v2.json

@@ -1,0 +1,42 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  https://docs.connect.paymentsense.cloud/websockets/getting-started;
+  https://docs.connect.paymentsense.cloud/websockets/api;
+  https://docs.connect.paymentsense.cloud/rest/changelog
+spec_type: Webhooks
+note: >-
+  Paymentsense publishes NO downloadable AsyncAPI document for the Connect WebSockets
+  interface (only reference docs). This file captures the real event/notification surface
+  as a Webhooks catalog — not a fabricated AsyncAPI. The WebSockets API is an event-driven
+  JSON-RPC2 alternative to polling the REST API. The same notification states are also
+  surfaced when polling REST transactions/reports.
+transport:
+  protocol: WebSocket (JSON-RPC2)
+  url_pattern: >-
+    wss://<account-name>.connect.paymentsense.cloud/<integration-type>?token=<api-key>&api-version=<connect-version>&software-house-id=<software-house-id>&installer-id=<installer-id>
+  integration_types: [pac, pat]
+  keepalive: Connect periodically pings the EPoS over the connection to confirm liveness.
+  auth: API key supplied in the connection URI (per customer site).
+events:
+  - name: ATTEMPTING_CANCEL
+    context: pac transaction
+    meaning: A cancellation request is being attempted on an in-flight transaction.
+  - name: CANCELLING
+    context: pac transaction
+    meaning: The transaction is in the process of being cancelled.
+  - name: UNABLE_TO_CANCEL
+    context: pac transaction
+    meaning: The transaction could not be cancelled (already progressed too far).
+  - name: REPLACE_PAPER
+    context: pac terminal
+    meaning: The terminal is out of receipt paper and needs a refill.
+  - name: ENTER_CASHBACK
+    context: pac transaction
+    meaning: Cardholder is being prompted to enter a cashback amount.
+  - name: REPORT_FINISHED
+    context: report
+    meaning: A requested report has finished generating; stop polling.
+notes:
+  - PAT connections may issue a final-pos-receipt-request.
+  - Notification states also appear on REST transaction/report responses when polling.

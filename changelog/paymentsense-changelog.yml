@@ -1,0 +1,34 @@
+generated: '2026-07-24'
+method: searched
+source: https://docs.connect.paymentsense.cloud/rest/changelog
+scheme: media-type versions (v0, v1, v2 via Accept header)
+current: v2
+entries:
+  - version: v2
+    date: '2019-10-07'
+    breaking: true
+    highlights:
+      - Pay-At-Counter parameter renamed from `tpi` to `tid` across all endpoints.
+      - Introduced Software-House-Id and Installer-Id identification headers.
+      - Added cashback via new `amountCashback` field.
+      - Added card-not-present transactions via `cardholderNotPresent`.
+      - New transaction types PRE_AUTH, COMPLETION (requires authCode), ACCOUNT_VERIFICATION.
+      - Cancel and signature endpoints now return 202 immediately; notifications track status.
+      - New notification types ATTEMPTING_CANCEL, UNABLE_TO_CANCEL, CANCELLING, REPLACE_PAPER, ENTER_CASHBACK.
+      - Built-in user messages restructured as a single keyed list.
+      - Terminal capabilities removed from terminal object responses.
+  - version: v1
+    date: '2017-08-22'
+    breaking: true
+    highlights:
+      - Accept header now specifies API version preference.
+      - Pay-At-Counter base path changed from /retail/ to /pac/.
+      - Signature verification stage now returns authCode, applicationId, applicationLabel, cardholderVerificationMethod, paymentMethod, primaryAccountNumber, transactionType.
+      - Report endpoints replaced 409 with notifications; poll until REPORT_FINISHED.
+      - 423 response `location` field changed from list to string.
+      - Pay-At-Table payments now include a `paymentId`; PUT preferred over POST for /pat/tables; receipt data excluded from GET unless `receipt` query param supplied.
+  - version: v0
+    date: null
+    breaking: false
+    highlights:
+      - Initial Connect REST API (Swagger 2.0, 3.0-beta) with /retail and /pat surfaces.

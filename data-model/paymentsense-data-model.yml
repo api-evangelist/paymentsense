@@ -1,0 +1,47 @@
+generated: '2026-07-24'
+method: derived
+source: openapi/paymentsense-connect-v2.json, openapi/paymentsense-connect-v1.json, openapi/paymentsense-connect-e-v0.json
+note: >-
+  Entity graph derived from OpenAPI paths and id-reference fields. Connect REST (terminal)
+  and Connect-E (online) are two distinct object domains sharing the merchant host.
+entities:
+  - name: Terminal
+    domain: connect-rest
+    id: tid
+    prior_id: tpi (renamed to tid in v2)
+    source: PACTerminals / PACTerminalsByTID
+  - name: Transaction
+    domain: connect-rest
+    id: requestId
+    source: TransactionOnTID / GetTransactionWithRequestId
+  - name: Report
+    domain: connect-rest
+    id: requestId
+    source: PACReportRequest / PACReportDetails
+  - name: Table
+    domain: connect-rest-pat
+    id: tableName
+    source: OpenTable / Table / DeleteTable
+  - name: TablePayment
+    domain: connect-rest-pat
+    id: paymentId
+    source: Pay-At-Table payment (added v1)
+  - name: AccessToken
+    domain: connect-e
+    id: access-token
+    lifetime: single-use / 30 minutes
+    source: /v1/access-tokens
+  - name: Payment
+    domain: connect-e
+    id: access-token
+    source: /v1/payments/ , /v1/payments/resume , /v1/cross-reference-payments/access-token
+  - name: PaymentMethod
+    domain: connect-e
+    source: GET /v1/payment-methods
+relationships:
+  - {from: Transaction, type: belongs_to, to: Terminal, via: tid}
+  - {from: Report, type: belongs_to, to: Terminal, via: tid}
+  - {from: TablePayment, type: belongs_to, to: Table, via: tableName}
+  - {from: Table, type: has_many, to: TablePayment, via: paymentId}
+  - {from: Payment, type: belongs_to, to: AccessToken, via: access-token}
+  - {from: Payment, type: references, to: PaymentMethod}

@@ -1,0 +1,36 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  https://docs.connect.paymentsense.cloud/rest/getting-started;
+  https://docs.connect.paymentsense.cloud/rest/changelog;
+  https://status.paymentsense.com/
+versioning:
+  scheme: media-type
+  mechanism: Accept header
+  media_types:
+    - application/connect.v0+json
+    - application/connect.v1+json
+    - application/connect.v2+json
+  current: v2
+  default: v0
+  guidance: "It's strongly recommended to always use the latest version of our API."
+  docs: https://docs.connect.paymentsense.cloud/rest/getting-started
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No formal RFC 8594 Sunset/Deprecation header contract is documented. Older
+    versions (v0/v1) remain available; docs advise using the latest version.
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.paymentsense.com/
+status_page_components:
+  - Card machines
+  - Transfers
+  - Paymentsense app and account
+  - Integrations
+  - Customer support
+  - Online Payments
+changelog: https://docs.connect.paymentsense.cloud/rest/changelog
+deprecated_operations: []

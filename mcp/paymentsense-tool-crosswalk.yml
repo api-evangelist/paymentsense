@@ -1,0 +1,55 @@
+generated: '2026-07-24'
+method: derived
+source: mcp/paymentsense-mcp.yml, openapi/paymentsense-connect-v2.json, openapi/paymentsense-connect-v1.json, openapi/paymentsense-connect-e-v0.json
+note: >-
+  Crosswalk binding each candidate MCP tool to its backing OpenAPI operationId.
+  The MCP tool list is DERIVED from OpenAPI (no live hosted server), so every
+  tool binds 1:1 to a real operation and inherits that operation's parameters +
+  requestBody as its real inputSchema. No GraphQL surface exists.
+surfaces:
+  openapi:
+    - openapi/paymentsense-connect-v2.json
+    - openapi/paymentsense-connect-v1.json
+    - openapi/paymentsense-connect-v0.json
+    - openapi/paymentsense-connect-e-v0.json
+  graphql: null
+  mcp:
+    url: null
+    status: candidate
+    gated: false
+crosswalk:
+  - {tool: list_pac_terminals, category: terminals, rest: [PACTerminals], binding: rest, confidence: high}
+  - {tool: get_pac_terminal, category: terminals, rest: [PACTerminalsByTID], binding: rest, confidence: high}
+  - {tool: create_pac_transaction, category: payments, rest: [TransactionOnTID], binding: rest, confidence: high}
+  - {tool: get_pac_transaction, category: payments, rest: [GetTransactionWithRequestId], binding: rest, confidence: high}
+  - {tool: cancel_pac_transaction, category: payments, rest: [CancelTransactionWithRequestId], binding: rest, confidence: high}
+  - {tool: verify_pac_signature, category: payments, rest: [VerifySignature], binding: rest, confidence: high}
+  - {tool: request_pac_report, category: reports, rest: [PACReportRequest], binding: rest, confidence: high}
+  - {tool: get_pac_report, category: reports, rest: [PACReportDetails], binding: rest, confidence: high}
+  - {tool: list_pat_tables, category: pay-at-table, rest: [Tables], binding: rest, confidence: high}
+  - {tool: open_pat_table, category: pay-at-table, rest: [OpenTable], binding: rest, confidence: high}
+  - {tool: get_pat_table, category: pay-at-table, rest: [Table], binding: rest, confidence: high}
+  - {tool: delete_pat_table, category: pay-at-table, rest: [DeleteTable], binding: rest, confidence: high}
+  - {tool: set_pat_table_amount, category: pay-at-table, rest: [TableAmount], binding: rest, confidence: high}
+  - {tool: lock_pat_table, category: pay-at-table, rest: [TableLock], binding: rest, confidence: high}
+  - {tool: create_access_token, category: online-payments, rest: ['/v1/access-tokens'], binding: rest, confidence: high}
+  - {tool: get_payment, category: online-payments, rest: ['/v1/payments/'], binding: rest, confidence: high}
+  - {tool: resume_payment, category: online-payments, rest: ['/v1/payments/resume'], binding: rest, confidence: high}
+  - {tool: create_cross_reference_payment, category: online-payments, rest: ['/v1/cross-reference-payments/access-token'], binding: rest, confidence: high}
+mcp_only: []
+rest_only:
+  - {operation: RetailTerminals, note: superseded by v2 PACTerminals (v0/v1 /retail + /pac)}
+  - {operation: TableReceipt, note: PAT receipt printing not surfaced as a tool}
+  - {operation: TableWaiterIds, note: PAT waiter-id assignment not surfaced as a tool}
+  - {operation: PATReports, note: PAT report request not surfaced as a tool}
+  - {operation: PATReport, note: PAT report retrieval not surfaced as a tool}
+  - operation: revoke-access-token
+    note: "Connect-E POST /v1/access-tokens/{access-token}/revoke has no operationId in spec"
+  - operation: payment-methods
+    note: "Connect-E GET /v1/payment-methods has no operationId in spec"
+coverage:
+  tools_named: 18
+  tools_bound: 18
+  mcp_only: 0
+  rest_ops_total: 50
+  rest_ops_with_tool: 18

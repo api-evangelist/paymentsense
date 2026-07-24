@@ -1,0 +1,29 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  https://docs.connect.paymentsense.cloud/ConnectE/GettingStarted;
+  https://docs.connect.paymentsense.cloud/ConnectE/Standard
+note: >-
+  Connect-E ships client-side, browser-embedded payment components that keep card
+  entry inside Paymentsense's secure environment (PCI scope reduction). Loaded via a
+  single JavaScript client library.
+families:
+  - name: Connect-E Standard
+    kind: embedded-fields
+    description: >-
+      Custom-styleable payment form where card details are captured and managed within
+      Paymentsense's secure environment. Supports 3-D Secure, 3-D Secure 2 and recurring
+      payments.
+  - name: Connect-E Checkout
+    kind: drop-in
+    description: >-
+      Prebuilt, hosted checkout — reference the JavaScript and pass configuration; no need
+      to build or style a payment form. Supports 3-D Secure, 3-D Secure 2 and recurring
+      payments.
+loader:
+  test: https://web.e.test.connect.paymentsense.cloud/assets/js/client.js
+  live: https://web.e.connect.paymentsense.cloud/assets/js/client.js
+csp_note: >-
+  Docs recommend a Content Security Policy permitting content from *.paymentsense.cloud,
+  *.dojo.tech and specific Google domains.
+samples: https://github.com/Paymentsense/connect-e-samples

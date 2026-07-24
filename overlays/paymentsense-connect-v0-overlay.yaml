@@ -1,0 +1,14 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Paymentsense Connect REST API v0
+  version: 1.0.0
+extends: openapi/paymentsense-connect-v0.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: paymentsense
+      x-apievangelist-product: connect-rest
+      x-apievangelist-auth: http-basic
+      x-apievangelist-versioning: media-type (Accept default application/connect.v0+json)
+      x-apievangelist-base-path: /retail + /pat
+      x-apievangelist-status: legacy (v2 current; always use latest)

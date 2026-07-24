@@ -1,0 +1,47 @@
+generated: '2026-07-24'
+method: derived
+source: openapi/paymentsense-connect-v2.json, openapi/paymentsense-connect-v1.json, openapi/paymentsense-connect-e-v0.json
+searched: https://docs.connect.paymentsense.cloud/rest/error-messages
+format: custom
+envelope:
+  field: userMessage
+  note: >-
+    Connect returns human-readable, end-user-displayable strings on a `userMessage`
+    field — both at the top level (endpoint errors) and within transaction/report
+    objects (transaction-level messages). It is NOT RFC 9457 problem+json.
+problems:
+  - status: 401
+    title: Unauthorized
+    detail: Missing or invalid Basic Authorization (Connect) or JWT bearer (Connect-E) credentials.
+    source_operations: [PACTerminals, TransactionOnTID, "/v1/access-tokens"]
+  - status: 404
+    title: Not Found
+    detail: Terminal (tid), transaction (requestId), table (tableName) or resource does not exist.
+    source_operations: [PACTerminalsByTID, GetTransactionWithRequestId, Table]
+  - status: 409
+    title: Conflict
+    detail: >-
+      Resource state conflict (e.g. a terminal busy / transaction already in progress).
+      In v1+ several report conflicts were replaced by polling notifications instead of 409.
+    source_operations: [TransactionOnTID, RetailReportRequest]
+  - status: 422
+    title: Unprocessable Entity
+    detail: Request body failed validation (bad amount, unsupported transaction type, malformed fields).
+    source_operations: [TransactionOnTID, OpenTable, TableAmount, "/v1/access-tokens"]
+  - status: 423
+    title: Locked
+    detail: >-
+      Resource is locked (e.g. a Pay-At-Table table locked by another operation). The
+      `location` field points to the locking resource (string as of v1).
+    source_operations: [TableAmount, TableLock]
+  - status: 500
+    title: Internal Server Error
+    detail: Unexpected server-side failure processing the request.
+    source_operations: [PACTerminals, TransactionOnTID, "/v1/payments/"]
+example_user_messages:
+  - context: endpoint (top-level userMessage)
+    message: "{tid} is unavailable. Please try again in 10 seconds or check the PDQ screen..."
+    trigger: request directed to an inaccessible / offline terminal
+  - context: transaction object (userMessage)
+    message: "Signature check not actioned before timeout. When required, signatures must be verified..."
+    trigger: cardholder signature not verified within the 80-second window

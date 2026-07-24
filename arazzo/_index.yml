@@ -1,0 +1,7 @@
+generated: '2026-07-24'
+method: derived
+workflows:
+  - file: paymentsense-pac-take-payment.yml
+    workflowId: pacTakePayment
+    title: Pay-At-Counter — take a card payment
+    summary: List a terminal, start a card transaction on it, and poll to the outcome.

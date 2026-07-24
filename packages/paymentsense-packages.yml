@@ -1,0 +1,94 @@
+generated: '2026-07-24'
+method: searched
+source: https://github.com/Paymentsense-DevSupport
+note: >-
+  Paymentsense does not publish a first-party client SDK on a public language
+  registry (npm/PyPI/NuGet/Maven/Packagist). Its official first-party developer
+  distribution is a set of e-commerce platform integration modules published
+  under the Paymentsense-DevSupport and Paymentsense GitHub organizations, plus
+  Connect-E sample code. A third-party Omnipay PHP driver also exists but is not
+  first-party (official:false).
+packages:
+  - language: php
+    registry: github
+    name: connect-e-samples
+    url: https://github.com/Paymentsense/connect-e-samples
+    kind: samples
+    official: true
+  - language: php
+    registry: github
+    name: Paymentsense-Gateway-for-WooCommerce
+    url: https://github.com/Paymentsense-DevSupport/Paymentsense-Gateway-for-WooCommerce
+    kind: platform-plugin
+    platform: WooCommerce
+    official: true
+  - language: php
+    registry: github
+    name: magento2-paymentsense-module
+    url: https://github.com/Paymentsense-DevSupport/magento2-paymentsense-module
+    kind: platform-plugin
+    platform: Magento 2
+    official: true
+  - language: php
+    registry: github
+    name: magento1-paymentsense-module
+    url: https://github.com/Paymentsense-DevSupport/magento1-paymentsense-module
+    kind: platform-plugin
+    platform: Magento 1.9
+    official: true
+  - language: php
+    registry: github
+    name: Prestashop
+    url: https://github.com/Paymentsense-DevSupport/Prestashop
+    kind: platform-plugin
+    platform: PrestaShop
+    official: true
+  - language: php
+    registry: github
+    name: OpenCart3
+    url: https://github.com/Paymentsense-DevSupport/OpenCart3
+    kind: platform-plugin
+    platform: OpenCart 2.3 / 3.0
+    official: true
+  - language: php
+    registry: github
+    name: paymentsense-plugin-for-virtuemart-3
+    url: https://github.com/Paymentsense-DevSupport/paymentsense-plugin-for-virtuemart-3
+    kind: platform-plugin
+    platform: VirtueMart 3
+    official: true
+  - language: php
+    registry: github
+    name: Paymentsense-CS-Cart-add-on
+    url: https://github.com/Paymentsense-DevSupport/Paymentsense-CS-Cart-add-on
+    kind: platform-plugin
+    platform: CS-Cart
+    official: true
+  - language: php
+    registry: github
+    name: Paymentsense-Hosted-Code-Pack-for-CodeIgniter-3
+    url: https://github.com/Paymentsense-DevSupport/Paymentsense-Hosted-Code-Pack-for-CodeIgniter-3
+    kind: sample-pack
+    platform: CodeIgniter 3
+    official: true
+  - language: php
+    registry: github
+    name: Paymentsense-WP-eCommerce-Add-on
+    url: https://github.com/Paymentsense-DevSupport/Paymentsense-WP-eCommerce-Add-on
+    kind: platform-plugin
+    platform: WP eCommerce
+    official: true
+  - language: php
+    registry: github
+    name: cubecart-paymentsense-hosted-module
+    url: https://github.com/Paymentsense-DevSupport/cubecart-paymentsense-hosted-module
+    kind: platform-plugin
+    platform: CubeCart 6
+    official: true
+  - language: php
+    registry: packagist
+    name: digitickets/omnipay-paymentsense
+    url: https://github.com/digitickets/omnipay-paymentsense
+    install: composer require digitickets/omnipay-paymentsense
+    kind: community-driver
+    official: false

@@ -1,0 +1,58 @@
+generated: '2026-07-24'
+method: searched
+source: >-
+  https://docs.connect.paymentsense.cloud/rest/getting-started;
+  https://docs.connect.paymentsense.cloud/rest/api;
+  https://docs.connect.paymentsense.cloud/ConnectE/RestApi;
+  https://docs.connect.paymentsense.cloud/websockets/getting-started
+authentication:
+  connect_rest:
+    style: HTTP Basic
+    detail: >-
+      API key supplied as the Basic password with any username value. Username should
+      identify the EPoS system.
+    profile: authentication/paymentsense-authentication.yml
+  connect_e:
+    style: apiKey to mint access-token, then JWT bearer
+    detail: >-
+      A single-use, 30-minute access token is minted via /v1/access-tokens; the JWT is
+      passed as `Authorization: Bearer <JWT>` on subsequent calls.
+required_headers:
+  - name: Content-Type
+    value: application/json
+  - name: Accept
+    purpose: selects API version (application/connect.v2+json)
+  - name: Software-House-Id
+    purpose: identifies the EPoS software vendor (non-configurable, issued by Paymentsense)
+  - name: Installer-Id
+    purpose: identifies the installer (configurable at setup, issued by Paymentsense)
+versioning:
+  style: media-type
+  header: Accept
+  lifecycle: lifecycle/paymentsense-lifecycle.yml
+idempotency:
+  supported: false
+  note: >-
+    No Idempotency-Key header is documented. Connect-E relies on a unique
+    merchantTransactionId per payment for duplicate detection; this is not a general
+    idempotency-key contract.
+pagination:
+  supported: false
+  note: Terminal, table and report collections are returned in full; no cursor/offset paging.
+async_pattern:
+  style: request-accepted + poll (and/or WebSocket notifications)
+  detail: >-
+    Transaction, cancel and signature calls return 202 Accepted immediately; the caller
+    polls GetTransactionWithRequestId (recommended 1s for Pay-At-Counter, 5s for
+    Pay-At-Table) and reports until REPORT_FINISHED. Notification states drive progress
+    (e.g. ATTEMPTING_CANCEL, CANCELLING, REPLACE_PAPER, ENTER_CASHBACK).
+  poll_frequency:
+    pay_at_counter: 1s
+    pay_at_table: 5s
+  event_surface: asyncapi/paymentsense-connect-events.yml
+error_envelope:
+  field: userMessage
+  format: custom (human-readable strings, not RFC 9457)
+  catalog: errors/paymentsense-problem-types.yml
+rate_limits:
+  documented: false
