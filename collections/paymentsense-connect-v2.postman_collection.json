@@ -1,0 +1,2797 @@
+{
+  "item": [
+    {
+      "id": "0a678172-67b1-4beb-a6a6-97b7ab6dc9b6",
+      "name": "PAC Terminals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9da80def-46a0-48e5-9977-3f4a14a06118",
+          "name": "PAC Terminals",
+          "request": {
+            "name": "PAC Terminals",
+            "description": {
+              "content": "Gets a list of all card terminals that are currently connected. This can be filtered by currency and status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter the response to only available or only busy terminals."
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "<string>",
+                  "description": "Filter the response to only terminals in a particular currency."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3aa210b3-4a59-45dd-b0a2-2da4eaab9261",
+              "name": "Returns a list of terminals",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"terminals\": [\n    {\n      \"tid\": \"12345678\",\n      \"status\": \"AVAILABLE\",\n      \"currency\": \"GBP\",\n      \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}\"\n    },\n    {\n      \"tid\": \"12345678\",\n      \"status\": \"AVAILABLE\",\n      \"currency\": \"GBP\",\n      \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "385116bd-453b-46df-800a-0f88bb3ebdae",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e052b761-2f49-45db-85d6-e456b8695e34",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b10ff361-67c5-47f0-9004-012dca2d4155",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "93c28791-56ea-4f7d-9606-70f7e7fee37e",
+          "name": "PAC Terminals By TID",
+          "request": {
+            "name": "PAC Terminals By TID",
+            "description": {
+              "content": "Gets details for a specific terminal.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a4586384-f8f8-4b2d-ad08-738dda6b4919",
+              "name": "Returns information about the requested terminal",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"tid\": \"12345678\",\n  \"status\": \"AVAILABLE\",\n  \"currency\": \"GBP\",\n  \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76e085a6-90b3-401a-9614-ab7524f8542a",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9258ed71-e263-4b6a-b4d0-a30238b1b2f2",
+              "name": "Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24a32b48-3698-4f47-9213-565fb0adf56d",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c3ef746-9bc3-4d0b-99f6-5c3f7fc5f476",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "0837a680-acc7-4d11-8863-45cbd355f4cf",
+      "name": "PAC Transactions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ab275a60-3a1a-4dff-82ca-bfe909924933",
+          "name": "Transaction On TID",
+          "request": {
+            "name": "Transaction On TID",
+            "description": {
+              "content": "Starts a transaction on the terminal with the given TID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/connect.v2+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionType\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"amount\": \"<integer>\",\n  \"amountCashback\": \"<integer>\",\n  \"cardholderNotPresent\": \"<boolean>\",\n  \"authCode\": \"<string>\",\n  \"amountPreAuthorisedTotal\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cd79db89-78b4-44f6-94b0-93d6f31a789b",
+              "name": "Transaction request has been accepted. Polling should begin on the returned requestId to ascertain the progress and result of the transaction.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionType\": \"SALE\",\n  \"amount\": 100,\n  \"amountCashback\": 50,\n  \"currency\": \"GBP\",\n  \"cardholderNotPresent\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"d19912ad-11a3-4af3-86e0-d6eb2ebea63c\",\n  \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3546a764-c6f8-46b7-8cf4-32091387d19c",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionType\": \"SALE\",\n  \"amount\": 100,\n  \"amountCashback\": 50,\n  \"currency\": \"GBP\",\n  \"cardholderNotPresent\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d082536d-de31-4e64-b839-a44cc9959adc",
+              "name": "Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionType\": \"SALE\",\n  \"amount\": 100,\n  \"amountCashback\": 50,\n  \"currency\": \"GBP\",\n  \"cardholderNotPresent\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "780ca31e-2658-4bbd-bb5c-8b17fc5f9386",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionType\": \"SALE\",\n  \"amount\": 100,\n  \"amountCashback\": 50,\n  \"currency\": \"GBP\",\n  \"cardholderNotPresent\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a964bb06-b181-4dfe-8f7b-240327398327",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transactionType\": \"SALE\",\n  \"amount\": 100,\n  \"amountCashback\": 50,\n  \"currency\": \"GBP\",\n  \"cardholderNotPresent\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "61f71e55-70f6-4afe-8469-e15e750b822c",
+          "name": "Get Transaction With Request Id",
+          "request": {
+            "name": "Get Transaction With Request Id",
+            "description": {
+              "content": "Gets data for the transaction with the given requestId.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid",
+                "transactions",
+                ":requestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "requestId",
+                  "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4c1da105-de91-45ee-9023-2aeadd9b39a1",
+              "name": "Transaction details have been successfully returned. \nProperties marked with an * are always returned. Other properties are only returned following a completed transaction (e.g. most recent notification is \"TRANSACTION_FINISHED\"), however their values may be empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/transactions/{requestId}\",\n  \"notifications\": [\n    \"CARD_NOT_SUPPORTED\",\n    \"PROCESSING_ERROR\"\n  ],\n  \"amountBase\": 2383,\n  \"amountCashback\": 6320,\n  \"amountGratuity\": 5611,\n  \"amountTotal\": 2661,\n  \"applicationId\": \"A0000000031010\",\n  \"applicationLabel\": \"VISA\",\n  \"authCode\": \"78YT6RS0\",\n  \"cardSchemeName\": \"VISA\",\n  \"cardHolderVerificationMethod\": \"PIN\",\n  \"currency\": \"GBP\",\n  \"dateOfExpiry\": \"01/25\",\n  \"dateOfStart\": \"01/19\",\n  \"paymentMethod\": \"ICC_CHIP\",\n  \"primaryAccountNumber\": \"************1234\",\n  \"primaryAccountNumberSequence\": \"01\",\n  \"receiptLines\": {\n    \"MERCHANT\": [\n      {\n        \"value\": \"John's Shop\",\n        \"format\": [\n          \"BOLD\"\n        ],\n        \"type\": \"TEXT\"\n      },\n      {\n        \"value\": \"John's Shop\",\n        \"format\": [\n          \"BOLD\"\n        ],\n        \"type\": \"TEXT\"\n      }\n    ],\n    \"CUSTOMER\": [\n      {\n        \"value\": \"John's Shop\",\n        \"format\": [\n          \"BOLD\"\n        ],\n        \"type\": \"TEXT\"\n      },\n      {\n        \"value\": \"John's Shop\",\n        \"format\": [\n          \"BOLD\"\n        ],\n        \"type\": \"TEXT\"\n      }\n    ]\n  },\n  \"requestId\": \"d19912ad-11a3-4af3-86e0-d6eb2ebea63c\",\n  \"transactionId\": \"1234567\",\n  \"transactionNumber\": \"0012\",\n  \"transactionResult\": \"SUCCESSFUL\",\n  \"transactionTime\": \"2019-03-04T16:12:00\",\n  \"transactionType\": \"SALE\",\n  \"userMessage\": \"Signature check not actioned before timeout. When required, signatures must be verified within 80 seconds.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa55a311-4adb-43b1-be1b-865a8fde5025",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dcc54b25-a744-48c1-a2f0-a9d4484caede",
+              "name": "Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eefddc2a-cfe9-4a37-aefc-3271b2dbf831",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "537d1091-a6dd-4204-917b-8d21cfdccfec",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "040c666a-9ed2-4019-a02c-ccb9a3b6da04",
+          "name": "Cancel Transaction With Request Id",
+          "request": {
+            "name": "Cancel Transaction With Request Id",
+            "description": {
+              "content": "Attempts to cancel the transaction with the given requestId.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid",
+                "transactions",
+                ":requestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "requestId",
+                  "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "56a0a31a-028b-4281-9450-0b83d3b62e12",
+              "name": "Request to attempt cancellation of the transaction has been accepted. The outcome of this request should ascertained from standard transaction polling.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1aee8e3b-2375-4acc-aca0-61fb7bb1da94",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "860db945-03d3-4433-a508-9cb24d4689e9",
+              "name": "Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d595be1d-5e65-462d-8bc1-f8bb1461989d",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6247e798-edfc-4c9e-917e-9b2b9f76eafa",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4e610749-bf03-45ac-b2e2-e08bc2e8e70d",
+          "name": "Verify Signature",
+          "request": {
+            "name": "Verify Signature",
+            "description": {
+              "content": "Attempts to apply signature verification on the transaction with the given requestId. If the signature is declined, the card terminal will attempt to reverse the transaction.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid",
+                "transactions",
+                ":requestId",
+                "signature"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "requestId",
+                  "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/connect.v2+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accepted\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f7fde4e5-4599-4e73-8aca-e00ecba2e602",
+              "name": "Request to verify signature has been accepted. The outcome of this request should ascertained from standard transaction polling.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId",
+                    "signature"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accepted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b573ceb1-9caa-4c78-a62d-3b4562699990",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId",
+                    "signature"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accepted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1de08b4c-1ed7-4589-b89a-2af3fc794e89",
+              "name": "Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId",
+                    "signature"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accepted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8d56c28-406b-4bf9-a06a-d8ca8d26277b",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId",
+                    "signature"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accepted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f477f5cd-226d-4f24-8209-2f8493879d62",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "transactions",
+                    ":requestId",
+                    "signature"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accepted\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "1f859851-eed3-4f3d-8e3a-8cb8e1db251c",
+      "name": "PAC Reports (Ingenico Only)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9a9598e1-e03c-41d8-a230-e3addb36089b",
+          "name": "PAC Report Request",
+          "request": {
+            "name": "PAC Report Request",
+            "description": {
+              "content": "Starts a report on the terminal with the given TID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid",
+                "reports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/connect.v2+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportType\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "64622ed6-586a-4485-9ce4-c69c56045b7c",
+              "name": "Report request has been accepted. Polling should begin on the returned requestId to ascertain the progress and result of the report.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reportType\": \"END_OF_DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"d19912ad-11a3-4af3-86e0-d6eb2ebea63c\",\n  \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "321bb3c4-df5d-4bbd-bc8a-9e8b19b2a4ea",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reportType\": \"END_OF_DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "320c8ebb-bdc4-4b72-8cea-97a1cf90b5b4",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reportType\": \"END_OF_DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f051729-17b5-403c-991a-2fa97f8d7f4e",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reportType\": \"END_OF_DAY\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b46267e4-49f7-4bda-b339-bd38c7f19ff1",
+          "name": "PAC Report Details",
+          "request": {
+            "name": "PAC Report Details",
+            "description": {
+              "content": "Gets data for the report with the given requestId.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pac",
+                "terminals",
+                ":tid",
+                "reports",
+                ":requestId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tid",
+                  "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "requestId",
+                  "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/connect.v2+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae1ba081-0b9a-436a-aadc-3712328ec4a4",
+              "name": "Report details have been successfully returned.  \nProperties marked with an * are always returned. Other properties are only returned following a completed report (e.g. most recent notification is \"REPORT_FINISHED\"), however their values may be empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"d19912ad-11a3-4af3-86e0-d6eb2ebea63c\",\n  \"location\": \"https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/report/{requestId}\",\n  \"notifications\": [\n    \"REPORT_STARTED\",\n    \"REPORT_STARTED\"\n  ],\n  \"balances\": {\n    \"currency\": \"GBP\",\n    \"issuerTotals\": {\n      \"{issuerName}\": {\n        \"currency\": \"GBP\",\n        \"totalAmount\": 447,\n        \"totalRefundsAmount\": 2198,\n        \"totalRefundsCount\": 6843,\n        \"totalSalesAmount\": 4169,\n        \"totalSalesCount\": 4332\n      }\n    },\n    \"totalAmount\": 3759,\n    \"totalCashbackAmount\": 4994,\n    \"totalCashbackCount\": 6182,\n    \"totalGratuityAmount\": 9086,\n    \"totalGratuityCount\": 6669,\n    \"totalRefundsAmount\": 7070,\n    \"totalRefundsCount\": 4979,\n    \"totalSalesAmount\": 7084,\n    \"totalSalesCount\": 1646,\n    \"totalsSince\": \"INSTALLATION\",\n    \"waiterTotals\": {\n      \"{waiterId}\": {\n        \"currency\": \"GBP\",\n        \"totalAmount\": 2032,\n        \"totalRefundsAmount\": 9540,\n        \"totalRefundsCount\": 373,\n        \"totalSalesAmount\": 1526,\n        \"totalSalesCount\": 4856\n      }\n    }\n  },\n  \"banking\": {\n    \"{acquirerName}\": {\n      \"currency\": \"GBP\",\n      \"currentSessionIssuerTotals\": {\n        \"{issuerName}\": {\n          \"currency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"totalAmount\": 4234,\n          \"totalRefundsAmount\": 3988,\n          \"totalRefundsCount\": 8342,\n          \"totalSalesAmount\": 6299,\n          \"totalSalesCount\": 8439\n        }\n      },\n      \"previousSessionIssuerTotals\": {\n        \"{issuerName}\": {\n          \"currency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"totalAmount\": 3071,\n          \"totalRefundsAmount\": 5942,\n          \"totalRefundsCount\": 7026,\n          \"totalSalesAmount\": 4761,\n          \"totalSalesCount\": 765\n        }\n      },\n      \"currentSessionTotals\": {\n        \"currency\": \"GBP\",\n        \"totalAmount\": 4957,\n        \"totalRefundsAmount\": 5355,\n        \"totalRefundsCount\": 7650,\n        \"totalSalesAmount\": 65,\n        \"totalSalesCount\": 8428\n      },\n      \"previousSessionTotals\": {\n        \"currency\": \"GBP\",\n        \"totalAmount\": 5617,\n        \"totalRefundsAmount\": 1114,\n        \"totalRefundsCount\": 9417,\n        \"totalSalesAmount\": 8870,\n        \"totalSalesCount\": 1409\n      },\n      \"currentSessionTransactionNumbers\": [\n        \"0076\",\n        \"0123\"\n      ],\n      \"previousSessionTransactionNumbers\": [\n        \"0000\",\n        \"0075\"\n      ]\n    }\n  },\n  \"reportLines\": [\n    {\n      \"value\": \"John's Shop\",\n      \"format\": [\n        \"BOLD\"\n      ],\n      \"type\": \"TEXT\"\n    },\n    {\n      \"value\": \"John's Shop\",\n      \"format\": [\n        \"BOLD\"\n      ],\n      \"type\": \"TEXT\"\n    }\n  ],\n  \"reportTime\": \"2019-03-04T16:12:00\",\n  \"reportType\": \"END_OF_DAY\",\n  \"reportResult\": \"COMPLETE\",\n  \"tid\": \"12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d164c7c-4be4-4d99-ab6f-c85661929bec",
+              "name": "Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "301efc87-6e17-4790-9f32-e2da24889133",
+              "name": "Terminal or report could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Report requestId could not be found</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6141db4-3fa7-47a4-9baf-1273da7646bc",
+              "name": "Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/connect.v2+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/connect.v2+json"
+                }
+              ],
+              "body": "{\n  \"userMessage\": \"This is an example error message. The string here should be displayed to the user.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "265b9817-cc42-45f3-8c2d-69c33cc086a4",
+              "name": "An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pac",
+                    "terminals",
+                    ":tid",
+                    "reports",
+                    ":requestId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tid",
+                      "description": "(Required) Id (unique identifier assigned to a terminal) of the terminal to use."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "requestId",
+                      "description": "(Required) Id (UUID assigned to a terminal request) of the request to use."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dev-heisenberg.test.connect.paymentsense.cloud",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "09f4d43e-18b5-4f65-9b8c-5d29bf0b71ce",
+    "name": "Connect REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

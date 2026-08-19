@@ -1,0 +1,235 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Connect REST API",
+    "version": "3.2"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "PAC Terminals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PACTerminals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response to only available or only busy terminals."
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response to only terminals in a particular currency."
+              }
+            ]
+          },
+          "docs": "Gets a list of all card terminals that are currently connected. This can be filtered by currency and status."
+        },
+        {
+          "info": {
+            "name": "PACTerminalsByTID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              }
+            ]
+          },
+          "docs": "Gets details for a specific terminal."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "PAC Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "TransactionOnTID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid/transactions",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Starts a transaction on the terminal with the given TID."
+        },
+        {
+          "info": {
+            "name": "GetTransactionWithRequestId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid/transactions/:requestId",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Id (UUID assigned to a terminal request) of the request to use."
+              }
+            ]
+          },
+          "docs": "Gets data for the transaction with the given requestId."
+        },
+        {
+          "info": {
+            "name": "CancelTransactionWithRequestId",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid/transactions/:requestId",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Id (UUID assigned to a terminal request) of the request to use."
+              }
+            ]
+          },
+          "docs": "Attempts to cancel the transaction with the given requestId."
+        },
+        {
+          "info": {
+            "name": "VerifySignature",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid/transactions/:requestId/signature",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Id (UUID assigned to a terminal request) of the request to use."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Attempts to apply signature verification on the transaction with the given requestId. If the signature is declined, the card terminal will attempt to reverse the transaction."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "PAC Reports (Ingenico Only)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PACReportRequest",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid/reports",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Starts a report on the terminal with the given TID."
+        },
+        {
+          "info": {
+            "name": "PACReportDetails",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev-heisenberg.test.connect.paymentsense.cloud/pac/terminals/:tid/reports/:requestId",
+            "params": [
+              {
+                "name": "tid",
+                "value": "",
+                "type": "path",
+                "description": "Id (unique identifier assigned to a terminal) of the terminal to use."
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path",
+                "description": "Id (UUID assigned to a terminal request) of the request to use."
+              }
+            ]
+          },
+          "docs": "Gets data for the report with the given requestId."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

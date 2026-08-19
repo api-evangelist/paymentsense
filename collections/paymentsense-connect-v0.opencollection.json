@@ -1,0 +1,397 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Connect REST API",
+    "version": "3.0-beta"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Retail Terminals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "RetailTerminals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/retail/terminals",
+            "params": [
+              {
+                "name": "capabilities",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response to only terminals with particular capabilities. This should be a comma separated list of values."
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response to only terminals in a particular currency."
+              }
+            ]
+          },
+          "docs": "Gets a list of all card terminals that are currently connected. This can be filtered by currency, capabilities and status."
+        },
+        {
+          "info": {
+            "name": "RetailTerminalsByTPI",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/retail/terminals/:tpi",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets details for a specific terminal."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Retail Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "TransactionOnTPI",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/retail/terminals/:tpi/transactions",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Starts a transaction on the given TPI"
+        },
+        {
+          "info": {
+            "name": "TransactionsByRequestId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/retail/terminals/:tpi/transactions/:requestId",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets the transaction data for the given request"
+        },
+        {
+          "info": {
+            "name": "TransactionsByRequestId",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/retail/terminals/:tpi/transactions/:requestId",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Attempts to cancel the transaction for the given request."
+        },
+        {
+          "info": {
+            "name": "VerifySignature",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/retail/terminals/:tpi/transactions/:requestId/signature",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Verifies the signature for a given request."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Retail Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "RetailReportRequest",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/retail/terminals/:tpi/reports",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Requests a report from the given terminal"
+        },
+        {
+          "info": {
+            "name": "RetailReportDetails",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/retail/terminals/:tpi/reports/:requestId",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets the report data for the given request."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Hospitality Tables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pat/tables",
+            "params": [
+              {
+                "name": "locked",
+                "value": "",
+                "type": "query",
+                "description": "Filters the response to show only locked or only unlocked tables"
+              }
+            ]
+          },
+          "docs": "Gets a list of all tables. This can be filtered by locked state, fully paid state and currency."
+        },
+        {
+          "info": {
+            "name": "OpenTable",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/pat/tables"
+          },
+          "docs": "Creates/Opens a table"
+        },
+        {
+          "info": {
+            "name": "Table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pat/tables/:tableName",
+            "params": [
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              }
+            ]
+          },
+          "docs": "Gets details for a specific table"
+        },
+        {
+          "info": {
+            "name": "DeleteTable",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/pat/tables/:tableName",
+            "params": [
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes/Closes a table. This removes the table from Connect and means it is no longer accessible from any endpoints. It is intended for use when a table is fully paid and closed on the EPoS and allows the same tableName to be reused. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that deletions only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked u"
+        },
+        {
+          "info": {
+            "name": "TableAmount",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/pat/tables/:tableName/amount",
+            "params": [
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates the amount on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS."
+        },
+        {
+          "info": {
+            "name": "TableLock",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/pat/tables/:tableName/lock",
+            "params": [
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates the lock on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS."
+        },
+        {
+          "info": {
+            "name": "TableReceipt",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/pat/tables/:tableName/receipt",
+            "params": [
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates the receipt on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS."
+        },
+        {
+          "info": {
+            "name": "TableWaiterIds",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/pat/tables/:tableName/waiterids",
+            "params": [
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Updates the waiter ids on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Hospitality Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PATReports",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pat/reports",
+            "params": [
+              {
+                "name": "tpi",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response to reports for only a particular terminal."
+              }
+            ]
+          },
+          "docs": "Get a list of all reports from the last 3 days"
+        },
+        {
+          "info": {
+            "name": "PATReport",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pat/reports/:reportId",
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets details for a specific report"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -2,71 +2,72 @@ generated: '2026-07-24'
 method: derived
 status: candidate
 source: openapi/paymentsense-connect-v2.json, openapi/paymentsense-connect-v1.json, openapi/paymentsense-connect-e-v0.json
-note: >-
-  Paymentsense publishes no official hosted/remote MCP server (no listing in the
-  MCP registry, npm @modelcontextprotocol, or the docs). This is a CANDIDATE tool
-  surface derived one-tool-per-operation from the published OpenAPI, to seed an
-  agent integration. Input schemas are inherited from each backing operation's
-  parameters/requestBody (see mcp/paymentsense-tool-crosswalk.yml).
+note: Paymentsense publishes no official hosted/remote MCP server (no listing in the MCP registry, npm
+  @modelcontextprotocol, or the docs). This is a CANDIDATE tool surface derived one-tool-per-operation
+  from the published OpenAPI, to seed an agent integration. Input schemas are inherited from each backing
+  operation's parameters/requestBody (see mcp/paymentsense-tool-crosswalk.yml).
 server:
   name: paymentsense-connect
   transport: http
   url: null
 tools:
-  # Connect REST API v2 — Pay-At-Counter
-  - name: list_pac_terminals
-    description: List the merchant's Pay-At-Counter card terminals.
-    source_operation: openapi/paymentsense-connect-v2.json#PACTerminals
-  - name: get_pac_terminal
-    description: Get a single Pay-At-Counter terminal by terminal id (tid).
-    source_operation: openapi/paymentsense-connect-v2.json#PACTerminalsByTID
-  - name: create_pac_transaction
-    description: Start a card transaction (SALE/REFUND/PRE_AUTH/COMPLETION/ACCOUNT_VERIFICATION) on a terminal.
-    source_operation: openapi/paymentsense-connect-v2.json#TransactionOnTID
-  - name: get_pac_transaction
-    description: Poll a Pay-At-Counter transaction by requestId for status and notifications.
-    source_operation: openapi/paymentsense-connect-v2.json#GetTransactionWithRequestId
-  - name: cancel_pac_transaction
-    description: Request cancellation of an in-flight Pay-At-Counter transaction.
-    source_operation: openapi/paymentsense-connect-v2.json#CancelTransactionWithRequestId
-  - name: verify_pac_signature
-    description: Approve or reject a cardholder signature for a transaction.
-    source_operation: openapi/paymentsense-connect-v2.json#VerifySignature
-  - name: request_pac_report
-    description: Request a Pay-At-Counter end-of-day / X-Z report.
-    source_operation: openapi/paymentsense-connect-v2.json#PACReportRequest
-  - name: get_pac_report
-    description: Poll a requested Pay-At-Counter report by requestId until REPORT_FINISHED.
-    source_operation: openapi/paymentsense-connect-v2.json#PACReportDetails
-  # Connect REST API v1 — Pay-At-Table
-  - name: list_pat_tables
-    description: List open Pay-At-Table tables.
-    source_operation: openapi/paymentsense-connect-v1.json#Tables
-  - name: open_pat_table
-    description: Open a Pay-At-Table table for payment.
-    source_operation: openapi/paymentsense-connect-v1.json#OpenTable
-  - name: get_pat_table
-    description: Get a Pay-At-Table table by name.
-    source_operation: openapi/paymentsense-connect-v1.json#Table
-  - name: delete_pat_table
-    description: Close/delete a Pay-At-Table table.
-    source_operation: openapi/paymentsense-connect-v1.json#DeleteTable
-  - name: set_pat_table_amount
-    description: Set the amount due on a Pay-At-Table table.
-    source_operation: openapi/paymentsense-connect-v1.json#TableAmount
-  - name: lock_pat_table
-    description: Lock a Pay-At-Table table to prevent concurrent edits.
-    source_operation: openapi/paymentsense-connect-v1.json#TableLock
-  # Connect-E — online payments
-  - name: create_access_token
-    description: Create a single-use 30-minute Connect-E access token for an online payment.
-    source_operation: openapi/paymentsense-connect-e-v0.json#/v1/access-tokens
-  - name: get_payment
-    description: Retrieve a Connect-E payment by its access token.
-    source_operation: openapi/paymentsense-connect-e-v0.json#/v1/payments/
-  - name: resume_payment
-    description: Resume a Connect-E payment (e.g. after 3-D Secure challenge).
-    source_operation: openapi/paymentsense-connect-e-v0.json#/v1/payments/resume
-  - name: create_cross_reference_payment
-    description: Take a repeat / cross-reference (cardholder-not-present) payment.
-    source_operation: openapi/paymentsense-connect-e-v0.json#/v1/cross-reference-payments/access-token
+- name: list_pac_terminals
+  description: List the merchant's Pay-At-Counter card terminals.
+  source_operation: openapi/paymentsense-connect-v2.json#PACTerminals
+- name: get_pac_terminal
+  description: Get a single Pay-At-Counter terminal by terminal id (tid).
+  source_operation: openapi/paymentsense-connect-v2.json#PACTerminalsByTID
+- name: create_pac_transaction
+  description: Start a card transaction (SALE/REFUND/PRE_AUTH/COMPLETION/ACCOUNT_VERIFICATION) on a terminal.
+  source_operation: openapi/paymentsense-connect-v2.json#TransactionOnTID
+- name: get_pac_transaction
+  description: Poll a Pay-At-Counter transaction by requestId for status and notifications.
+  source_operation: openapi/paymentsense-connect-v2.json#GetTransactionWithRequestId
+- name: cancel_pac_transaction
+  description: Request cancellation of an in-flight Pay-At-Counter transaction.
+  source_operation: openapi/paymentsense-connect-v2.json#CancelTransactionWithRequestId
+- name: verify_pac_signature
+  description: Approve or reject a cardholder signature for a transaction.
+  source_operation: openapi/paymentsense-connect-v2.json#VerifySignature
+- name: request_pac_report
+  description: Request a Pay-At-Counter end-of-day / X-Z report.
+  source_operation: openapi/paymentsense-connect-v2.json#PACReportRequest
+- name: get_pac_report
+  description: Poll a requested Pay-At-Counter report by requestId until REPORT_FINISHED.
+  source_operation: openapi/paymentsense-connect-v2.json#PACReportDetails
+- name: list_pat_tables
+  description: List open Pay-At-Table tables.
+  source_operation: openapi/paymentsense-connect-v1.json#Tables
+- name: open_pat_table
+  description: Open a Pay-At-Table table for payment.
+  source_operation: openapi/paymentsense-connect-v1.json#OpenTable
+- name: get_pat_table
+  description: Get a Pay-At-Table table by name.
+  source_operation: openapi/paymentsense-connect-v1.json#Table
+- name: delete_pat_table
+  description: Close/delete a Pay-At-Table table.
+  source_operation: openapi/paymentsense-connect-v1.json#DeleteTable
+- name: set_pat_table_amount
+  description: Set the amount due on a Pay-At-Table table.
+  source_operation: openapi/paymentsense-connect-v1.json#TableAmount
+- name: lock_pat_table
+  description: Lock a Pay-At-Table table to prevent concurrent edits.
+  source_operation: openapi/paymentsense-connect-v1.json#TableLock
+- name: create_access_token
+  description: Create a single-use 30-minute Connect-E access token for an online payment.
+  source_operation: openapi/paymentsense-connect-e-v0.json#/v1/access-tokens
+- name: get_payment
+  description: Retrieve a Connect-E payment by its access token.
+  source_operation: openapi/paymentsense-connect-e-v0.json#/v1/payments/
+- name: resume_payment
+  description: Resume a Connect-E payment (e.g. after 3-D Secure challenge).
+  source_operation: openapi/paymentsense-connect-e-v0.json#/v1/payments/resume
+- name: create_cross_reference_payment
+  description: Take a repeat / cross-reference (cardholder-not-present) payment.
+  source_operation: openapi/paymentsense-connect-e-v0.json#/v1/cross-reference-payments/access-token
+deployment:
+  mode: none
+  verified: derived
+  tools: 18
+  checked: '2026-08-12'
+  source: catalog MCP census

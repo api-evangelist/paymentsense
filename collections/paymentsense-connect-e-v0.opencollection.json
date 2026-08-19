@@ -1,0 +1,180 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Connect-E Development Environment",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Access Token",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "/v1/access-tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://e.test.connect.paymentsense.cloud/v1/access-tokens",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a one time use access token to make a payment."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Details",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "/v1/payments/",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://e.test.connect.paymentsense.cloud/v1/payments/:access-token",
+            "params": [
+              {
+                "name": "access-token",
+                "value": "WEV2IGFzt-yOb1bAQFv5gByq38zz1OdMdyvIXHHJdn7CRzBrdd9VZJNdwhAKMW0b-ar6KDJMFivr6NlKiimxljV6kXDC2pCAVoJT6SoEP5GzrmwvPg6EIe7FKE2Bn83HHkd8S4pxSrksSCl6cg==",
+                "type": "path",
+                "description": "Id returned from creating the access token associated with the payment"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get details of the payment with this access token"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Resume Payment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "/v1/payments/resume",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://e.test.connect.paymentsense.cloud/v1/payments/:access-token/resume",
+            "params": [
+              {
+                "name": "access-token",
+                "value": "",
+                "type": "path",
+                "description": "Id returned from create access token for the payment"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Resume a paused wait pre-execute transaction using the id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Cross Reference Payment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "/v1/cross-reference-payments/access-token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://e.test.connect.paymentsense.cloud/v1/cross-reference-payments/:access-token",
+            "params": [
+              {
+                "name": "access-token",
+                "value": "WEV2IGFzt-yOb1bAQFv5gByq38zz1OdMdyvIXHHJdn7CRzBrdd9VZJNdwhAKMW0b-ar6KDJMFivr6NlKiimxljV6kXDC2pCAVoJT6SoEP5GzrmwvPg6EIe7FKE2Bn83HHkd8S4pxSrksSCl6cg==",
+                "type": "path",
+                "description": "Id returned from creating an access-token for the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Execute a transaction using the cross reference from a previous transaction. To execute this request, pass the id from creating an access token as {access-token} in the path. This token can only be used once."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Revoke Access Token",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "POST /v1/access-tokens/{access-token}/revoke",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://e.test.connect.paymentsense.cloud/v1/access-tokens/:access-token/revoke",
+            "params": [
+              {
+                "name": "access-token",
+                "value": "",
+                "type": "path",
+                "description": "Access token associated with the payment"
+              }
+            ]
+          },
+          "docs": "Revoke an access token"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Methods",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /v1/payment-methods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://e.test.connect.paymentsense.cloud/v1/payment-methods"
+          },
+          "docs": "Get supported payment methods for authenticated merchant."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
