@@ -25,6 +25,15 @@ tags:
 - Payment Processing
 - Card Payments
 - Acquiring
+- Point-of-Sale
+- In-Person Payments
+tags_raw:
+- Payments
+- United Kingdom
+- Payment Gateway
+- Payment Processing
+- Card Payments
+- Acquiring
 - Point of Sale
 - In-Person Payments
 created: '2026-07-24'
@@ -43,6 +52,11 @@ apis:
   humanURL: https://docs.connect.paymentsense.cloud/rest/api
   baseURL: https://your-host-here.connect.paymentsense.cloud
   tags:
+  - Payments
+  - Point-of-Sale
+  - Card Payments
+  - Pay at Table
+  tags_raw:
   - Payments
   - Point of Sale
   - Card Payments
@@ -102,6 +116,10 @@ apis:
   humanURL: https://docs.connect.paymentsense.cloud/websockets/api
   baseURL: https://your-host-here.connect.paymentsense.cloud
   tags:
+  - Payments
+  - WebSockets
+  - Point-of-Sale
+  tags_raw:
   - Payments
   - WebSockets
   - Point of Sale
