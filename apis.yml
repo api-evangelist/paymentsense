@@ -40,79 +40,12 @@ created: '2026-07-24'
 modified: '2026-07-24'
 specificationVersion: '0.23'
 apis:
-- aid: paymentsense:connect-rest-api
-  name: Paymentsense Connect REST API
-  description: >-
-    Cloud REST API for driving Paymentsense card terminals from EPOS software.
-    Covers Pay-At-Counter (/pac) transactions and reports and Pay-At-Table
-    (/pat) hospitality flows against a per-merchant Connect host. Published in
-    versions v0 (Swagger 2.0, 3.0-beta), v1 (Swagger 2.0, 3.1) and v2 (OpenAPI
-    3.0, 3.2, current). Authenticates with HTTP Basic using the merchant API key
-    as the password.
-  humanURL: https://docs.connect.paymentsense.cloud/rest/api
-  baseURL: https://your-host-here.connect.paymentsense.cloud
-  tags:
-  - Payments
-  - Point-of-Sale
-  - Card Payments
-  - Pay at Table
-  tags_raw:
-  - Payments
-  - Point of Sale
-  - Card Payments
-  - Pay At Table
-  properties:
-  - type: Documentation
-    url: https://docs.connect.paymentsense.cloud/rest/getting-started
-  - type: APIReference
-    url: https://docs.connect.paymentsense.cloud/rest/api
-  - type: OpenAPI
-    url: openapi/paymentsense-connect-v2.json
-  - type: OpenAPI
-    url: openapi/paymentsense-connect-v1.json
-  - type: OpenAPI
-    url: openapi/paymentsense-connect-v0.json
-  - type: Overlay
-    url: overlays/paymentsense-connect-v2-overlay.yaml
-  - type: Overlay
-    url: overlays/paymentsense-connect-v1-overlay.yaml
-  - type: Overlay
-    url: overlays/paymentsense-connect-v0-overlay.yaml
-  - type: Arazzo
-    name: Pay-At-Counter — take a card payment
-    url: arazzo/paymentsense-pac-take-payment.yml
-- aid: paymentsense:connect-e-rest-api
-  name: Paymentsense Connect-E REST API
-  description: >-
-    OpenAPI 3.0 REST API for online / e-commerce card payments. Issues
-    access-tokens, processes and resumes payments, runs cross-reference
-    (repeat) payments, and lists supported payment methods against the
-    Connect-E host (e.<host>.connect.paymentsense.cloud).
-  humanURL: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
-  baseURL: https://e.test.connect.paymentsense.cloud
-  tags:
-  - Payments
-  - Online Payments
-  - Card Payments
-  - E-Commerce
-  properties:
-  - type: Documentation
-    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
-  - type: APIReference
-    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
-  - type: OpenAPI
-    url: openapi/paymentsense-connect-e-v0.json
-  - type: Overlay
-    url: overlays/paymentsense-connect-e-v0-overlay.yaml
-  - type: Components
-    url: components/paymentsense-components.yml
 - aid: paymentsense:connect-websockets-api
   name: Paymentsense Connect WebSockets API
   description: >-
-    Documented WebSockets interface for the Connect platform, offering an
-    event-driven alternative to the REST API for terminal integration. No
-    downloadable OpenAPI/AsyncAPI specification is published; only reference
-    documentation is available.
+    Documented WebSockets interface for the Connect platform, offering an event-driven alternative to
+    the REST API for terminal integration. No downloadable OpenAPI/AsyncAPI specification is published;
+    only reference documentation is available.
   humanURL: https://docs.connect.paymentsense.cloud/websockets/api
   baseURL: https://your-host-here.connect.paymentsense.cloud
   tags:
@@ -130,7 +63,391 @@ apis:
     url: https://docs.connect.paymentsense.cloud/websockets/api
   - type: Webhooks
     url: asyncapi/paymentsense-connect-events.yml
+- aid: paymentsense:paymentsense-access-token-api
+  name: Paymentsense Access Token API
+  description: The Access Token API from Paymentsense — 1 operation(s) for access token.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Access Token
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-access-token-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-cross-reference-payment-api
+  name: Paymentsense Cross Reference Payment API
+  description: >-
+    The Cross Reference Payment API from Paymentsense — 1 operation(s) for cross reference payment.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Cross Reference Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-cross-reference-payment-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-hospitality-reports-api
+  name: Paymentsense Hospitality Reports API
+  description: The Hospitality Reports API from Paymentsense — 2 operation(s) for hospitality reports.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Hospitality Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-hospitality-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-hospitality-tables-api
+  name: Paymentsense Hospitality Tables API
+  description: The Hospitality Tables API from Paymentsense — 6 operation(s) for hospitality tables.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Hospitality Tables
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-hospitality-tables-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-pac-reports-api
+  name: Paymentsense PAC Reports API
+  description: The PAC Reports API from Paymentsense — 2 operation(s) for pac reports.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - PAC Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-pac-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-pac-reports-ingenico-only-api
+  name: Paymentsense PAC Reports (Ingenico Only) API
+  description: >-
+    The PAC Reports (Ingenico Only) API from Paymentsense — 2 operation(s) for pac reports (ingenico only).
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - PAC Reports (Ingenico Only)
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-pac-reports-ingenico-only-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-pac-terminals-api
+  name: Paymentsense PAC Terminals API
+  description: The PAC Terminals API from Paymentsense — 3 operation(s) for pac terminals.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - PAC Terminals
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-pac-terminals-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-pac-transactions-api
+  name: Paymentsense PAC Transactions API
+  description: The PAC Transactions API from Paymentsense — 6 operation(s) for pac transactions.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - PAC Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-pac-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-pat-reports-api
+  name: Paymentsense PAT Reports API
+  description: The PAT Reports API from Paymentsense — 2 operation(s) for pat reports.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - PAT Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-pat-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-pat-tables-api
+  name: Paymentsense PAT Tables API
+  description: The PAT Tables API from Paymentsense — 6 operation(s) for pat tables.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - PAT Tables
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-pat-tables-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-payment-details-api
+  name: Paymentsense Payment Details API
+  description: The Payment Details API from Paymentsense — 1 operation(s) for payment details.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Payment Details
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-payment-details-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-payment-methods-api
+  name: Paymentsense Payment Methods API
+  description: The Payment Methods API from Paymentsense — 1 operation(s) for payment methods.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-payment-methods-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-resume-payment-api
+  name: Paymentsense Resume Payment API
+  description: The Resume Payment API from Paymentsense — 1 operation(s) for resume payment.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Resume Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-resume-payment-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-retail-reports-api
+  name: Paymentsense Retail Reports API
+  description: The Retail Reports API from Paymentsense — 2 operation(s) for retail reports.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Retail Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-retail-reports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-retail-terminals-api
+  name: Paymentsense Retail Terminals API
+  description: The Retail Terminals API from Paymentsense — 2 operation(s) for retail terminals.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Retail Terminals
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-retail-terminals-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-retail-transactions-api
+  name: Paymentsense Retail Transactions API
+  description: The Retail Transactions API from Paymentsense — 3 operation(s) for retail transactions.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Retail Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-retail-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
+- aid: paymentsense:paymentsense-revoke-access-token-api
+  name: Paymentsense Revoke Access Token API
+  description: The Revoke Access Token API from Paymentsense — 1 operation(s) for revoke access token.
+  humanURL: https://docs.connect.paymentsense.cloud/rest/api
+  baseURL: https://your-host-here.connect.paymentsense.cloud
+  tags:
+  - Revoke Access Token
+  properties:
+  - type: OpenAPI
+    url: openapi/paymentsense-revoke-access-token-api-openapi.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/rest/getting-started
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/rest/api
+  - type: Arazzo
+    url: arazzo/paymentsense-pac-take-payment.yml
+  - type: Documentation
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: APIReference
+    url: https://docs.connect.paymentsense.cloud/ConnectE/RestApi
+  - type: Components
+    url: components/paymentsense-components.yml
 common:
+- type: Overlay
+  url: overlays/paymentsense-connect-v2-overlay.yaml
+- type: Overlay
+  url: overlays/paymentsense-connect-v1-overlay.yaml
+- type: Overlay
+  url: overlays/paymentsense-connect-v0-overlay.yaml
+- type: Overlay
+  url: overlays/paymentsense-connect-e-v0-overlay.yaml
 - type: DomainSecurity
   url: security/paymentsense-domain-security.yml
 - type: AgenticAccess
