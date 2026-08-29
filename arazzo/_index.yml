@@ -1,5 +1,5 @@
-generated: '2026-07-24'
-method: derived
+x-generated: '2026-07-24'
+x-method: derived
 workflows:
   - file: paymentsense-pac-take-payment.yml
     workflowId: pacTakePayment
