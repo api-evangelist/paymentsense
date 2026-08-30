@@ -1,0 +1,293 @@
+openapi: 3.2.0
+info:
+  version: 3.0-beta
+  title: Connect REST Retail Reports API
+servers:
+- url: https://your-host-here.test.connect.paymentsense.cloud/
+security:
+- connectBasicAuth: []
+tags:
+- name: Retail Reports
+paths:
+  /retail/terminals/{tpi}/reports:
+    post:
+      description: Requests a report from the given terminal
+      tags:
+      - Retail Reports
+      operationId: RetailReportRequest
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Report has successfully started. Returns the report requestId and the location of an endpoint for further details.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/requestLocationResponse'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '422 ':
+          description: Incorrect JSON received.
+        '500 ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/reportRequest'
+        required: true
+  /retail/terminals/{tpi}/reports/{requestId}:
+    get:
+      description: Gets the report data for the given request.
+      tags:
+      - Retail Reports
+      operationId: RetailReportDetails
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Report details have been successfully returned.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404':
+          description: Unavailable terminal or no data available for terminal.
+        '404 ':
+          description: The requestId could not be found.
+        '409':
+          description: Report data retrieval in progress.
+        '500':
+          description: An internal Connect error has occurred.
+components:
+  schemas:
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          type: integer
+        totalRefundsAmount:
+          type: integer
+        totalRefundsCount:
+          type: integer
+        totalSalesAmount:
+          type: integer
+        totalSalesCount:
+          type: integer
+    receiptLine:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+        type:
+          type: string
+          $ref: '#/components/schemas/receiptLineTypeRetail'
+        value:
+          type: string
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    reportBalances:
+      type: object
+      required:
+      - currency
+      - issuerTotals
+      - totalAmount
+      - totalCashbackAmount
+      - totalCashbackCount
+      - totalGratuityAmount
+      - totalGratuityCount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      - totalsSince
+      - waiterTotals
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        issuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        totalAmount:
+          type: integer
+        totalCashbackAmount:
+          type: integer
+        totalCashbackCount:
+          type: integer
+        totalGratuityAmount:
+          type: integer
+        totalGratuityCount:
+          type: integer
+        totalRefundsAmount:
+          type: integer
+        totalRefundsCount:
+          type: integer
+        totalSalesAmount:
+          type: integer
+        totalSalesCount:
+          type: integer
+        totalsSince:
+          type: string
+        waiterTotals:
+          $ref: '#/components/schemas/waiterTotals'
+    reportBanking:
+      type: object
+      required:
+      - currency
+      - currentSessionIssuerTotals
+      - previousSessionIssuerTotals
+      - currentSessionTotals
+      - previousSessionTotals
+      - currentSessionTransactionNumbers
+      - previousSessionTransactionNumbers
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        currentSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        previousSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        currentSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        previousSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        currentSessionTransactionNumbers:
+          type: array
+          items:
+            type: string
+        previousSessionTransactionNumbers:
+          type: array
+          items:
+            type: string
+    reportsBanking:
+      type: object
+      description: A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key
+      properties:
+        <acquirer name>:
+          $ref: '#/components/schemas/reportBanking'
+      additionalProperties:
+        $ref: '#/components/schemas/reportBanking'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    waiterTotals:
+      type: object
+      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
+      properties:
+        <waiter id>:
+          $ref: '#/components/schemas/totalsBreakdown'
+      additionalProperties:
+        $ref: '#/components/schemas/totalsBreakdown'
+    receiptLineTypeRetail:
+      type: string
+      enum:
+      - TEXT
+      - BOX_DECLINE
+      - BOX_VOID
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
+    reportResponse:
+      type: object
+      required:
+      - balances
+      - banking
+      - reportLines
+      - reportTime
+      - reportType
+      - tpi
+      - requestId
+      - location
+      properties:
+        balances:
+          $ref: '#/components/schemas/reportBalances'
+        banking:
+          $ref: '#/components/schemas/reportsBanking'
+        reportLines:
+          $ref: '#/components/schemas/receiptLineList'
+        reportTime:
+          type: string
+          format: date-time
+        reportType:
+          $ref: '#/components/schemas/reportType'
+        tpi:
+          type: string
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where the information about this particular report can be found.
+    reportRequest:
+      type: object
+      properties:
+        reportType:
+          $ref: '#/components/schemas/reportType'
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where this resource can be found.
+    reportType:
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    issuerTotals:
+      type: object
+      description: A dictionary of issuerTotals keyed by Issuer name. '<issuer name>' is an example key
+      properties:
+        <issuer name>:
+          $ref: '#/components/schemas/totalsBreakdown'
+      additionalProperties:
+        $ref: '#/components/schemas/totalsBreakdown'
+  securitySchemes:
+    connectBasicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,392 @@
+openapi: 3.2.0
+info:
+  version: '3.2'
+  title: Connect REST PAC Reports (Ingenico Only) API
+servers:
+- url: https://dev-heisenberg.test.connect.paymentsense.cloud
+security:
+- connectBasicAuth: []
+tags:
+- name: PAC Reports (Ingenico Only)
+paths:
+  /pac/terminals/{tid}/reports:
+    parameters:
+    - $ref: '#/components/parameters/tidParam'
+    post:
+      description: Starts a report on the terminal with the given TID.
+      tags:
+      - PAC Reports (Ingenico Only)
+      operationId: PACReportRequest
+      requestBody:
+        required: true
+        content:
+          application/connect.v2+json:
+            schema:
+              $ref: '#/components/schemas/reportRequest'
+      responses:
+        '201':
+          description: Report request has been accepted. Polling should begin on the returned requestId to ascertain the progress and result of the report.
+          content:
+            application/connect.v2+json:
+              schema:
+                $ref: '#/components/schemas/requestLocationResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '422':
+          $ref: '#/components/responses/unprocessibleAndBusy'
+        '500':
+          $ref: '#/components/responses/internalError'
+  /pac/terminals/{tid}/reports/{requestId}:
+    parameters:
+    - $ref: '#/components/parameters/tidParam'
+    - $ref: '#/components/parameters/requestIdParam'
+    get:
+      description: Gets data for the report with the given requestId.
+      tags:
+      - PAC Reports (Ingenico Only)
+      operationId: PACReportDetails
+      responses:
+        '200':
+          description: "Report details have been successfully returned.  \nProperties marked with an * are always returned. Other properties are only returned following a completed report (e.g. most recent notification is \"REPORT_FINISHED\"), however their values may be empty."
+          content:
+            application/connect.v2+json:
+              schema:
+                $ref: '#/components/schemas/reportResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/unavailableReportOrTransaction'
+        '422':
+          $ref: '#/components/responses/unprocessibleEntity'
+        '500':
+          $ref: '#/components/responses/internalError'
+components:
+  parameters:
+    tidParam:
+      name: tid
+      description: Id (unique identifier assigned to a terminal) of the terminal to use.
+      in: path
+      required: true
+      schema:
+        type: string
+    requestIdParam:
+      name: requestId
+      description: Id (UUID assigned to a terminal request) of the request to use.
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this request can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          description: Total amount that has been taken in the current session.
+          type: integer
+        totalRefundsAmount:
+          description: Total amount of refunds (in pence) that have been taken in the current session.
+          type: integer
+        totalRefundsCount:
+          description: Total number of refunds that have taken place in the current session.
+          type: integer
+        totalSalesAmount:
+          description: Total amount of sales (in pence) that have been taken in the current session.
+          type: integer
+        totalSalesCount:
+          description: Total number of sales that have taken place in the current session.
+          type: integer
+    receiptLine:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          description: Defines any special formatting applied to this line.
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+          example:
+          - BOLD
+        type:
+          description: The type of the content contained in the value field.
+          type: string
+          enum:
+          - TEXT
+          - BOX_DECLINE
+          - BOX_VOID
+          - CARRIAGE_RETURN
+          - LINE_SEPARATOR_SINGLE
+          - LINE_SEPARATOR_DOUBLE
+          - TICKET_FEED
+          example: TEXT
+        value:
+          description: Raw content of the line.
+          type: string
+          example: John's Shop
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    issuerTotals:
+      type: object
+      description: A dictionary of totals split by issuer. {issuerName} is an example key.
+      properties:
+        '{issuerName}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    reportBalances:
+      description: Local totals for the current terminal session. Only contained in X_BALANCE, Z_BALANCE and END_OF_DAY.
+      type: object
+      required:
+      - currency
+      - issuerTotals
+      - totalAmount
+      - totalCashbackAmount
+      - totalCashbackCount
+      - totalGratuityAmount
+      - totalGratuityCount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      - totalsSince
+      - waiterTotals
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        issuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        totalAmount:
+          description: Total amount that has been taken in the current session.
+          type: integer
+          example: '1000'
+        totalCashbackAmount:
+          description: Total amount of cashback (in pence) that has been taken in the current session.
+          type: integer
+          example: '100'
+        totalCashbackCount:
+          description: Total number of transactions with cashback that have taken place in the current session.
+          type: integer
+          example: '2'
+        totalGratuityAmount:
+          description: Total amount of gratuity (in pence) that has been taken in the current session.
+          type: integer
+          example: '100'
+        totalGratuityCount:
+          description: Total number of transactions with gratuity that have taken place in the current session.
+          type: integer
+          example: '3'
+        totalRefundsAmount:
+          description: Total amount of refunds (in pence) that have been taken in the current session.
+          type: integer
+          example: '400'
+        totalRefundsCount:
+          description: Total number of refunds that have taken place in the current session.
+          type: integer
+          example: '9'
+        totalSalesAmount:
+          description: Total amount of sales (in pence) that have been taken in the current session.
+          type: integer
+          example: '1200'
+        totalSalesCount:
+          description: Total number of sales that have taken place in the current session.
+          type: integer
+          example: '14'
+        totalsSince:
+          description: Time at which the terminal totals were last reset.
+          type: string
+          example: INSTALLATION
+        waiterTotals:
+          $ref: '#/components/schemas/waiterTotals'
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
+      type: string
+      enum:
+      - GBP
+      - EUR
+      example: GBP
+    reportsBanking:
+      type: object
+      description: Banking totals for the current terminal session (these are reset in line with the banking window). Only contained in BANKING and END_OF_DAY. Consists of a dictionary of reports keyed by acquirer name. '{acquirerName}' is an example key
+      properties:
+        '{acquirerName}':
+          $ref: '#/components/schemas/reportBanking'
+    userMessage:
+      type: object
+      properties:
+        userMessage:
+          description: Error message to display to the user.
+          type: string
+          example: This is an example error message. The string here should be displayed to the user.
+    waiterTotals:
+      type: object
+      description: A dictionary of totals split by waiter. {waiterId} is an example key.
+      properties:
+        '{waiterId}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    reportRequest:
+      type: object
+      properties:
+        reportType:
+          $ref: '#/components/schemas/reportType'
+    reportBanking:
+      type: object
+      required:
+      - currency
+      - currentSessionIssuerTotals
+      - previousSessionIssuerTotals
+      - currentSessionTotals
+      - previousSessionTotals
+      - currentSessionTransactionNumbers
+      - previousSessionTransactionNumbers
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        currentSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        previousSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        currentSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        previousSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        currentSessionTransactionNumbers:
+          description: Range of transaction numbers within the current terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0076'
+          - '0123'
+        previousSessionTransactionNumbers:
+          description: Range of transaction numbers within the previous terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0000'
+          - '0075'
+    reportResponse:
+      type: object
+      required:
+      - requestId
+      - location
+      - notifications
+      properties:
+        balances:
+          $ref: '#/components/schemas/reportBalances'
+        banking:
+          $ref: '#/components/schemas/reportsBanking'
+        reportLines:
+          $ref: '#/components/schemas/receiptLineList'
+        reportTime:
+          description: Time at which the report took place.
+          type: string
+          format: YYYY-MM-DDThh:mm:ss
+          example: '2019-03-04T16:12:00'
+        reportType:
+          description: Type of the report.
+          type: string
+          enum:
+          - END_OF_DAY
+          - BANKING
+          - X_BALANCE
+          - Z_BALANCE
+          example: END_OF_DAY
+        reportResult:
+          description: Outcome of the report.
+          type: string
+          enum:
+          - TIMED_OUT
+          - COMPLETE
+          example: COMPLETE
+        tid:
+          description: Terminal Id (unique identifier assigned to a terminal) of the terminal used in this request.
+          type: string
+          example: '12345678'
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this report can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/report/{requestId}
+        notifications:
+          description: Notifications indicating the progress of the report.
+          type: array
+          items:
+            type: string
+            enum:
+            - REPORT_FINISHED
+            - REPORT_STARTED
+            example:
+            - REPORT_FINISHED
+            - REPORT_STARTED
+    reportType:
+      description: Type of the report.
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+      example: END_OF_DAY
+  responses:
+    unprocessibleAndBusy:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unauthorized:
+      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unavailableReportOrTransaction:
+      description: Terminal or report could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Report requestId could not be found</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
+    unprocessibleEntity:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+  securitySchemes:
+    connectBasicAuth:
+      type: http
+      scheme: basic

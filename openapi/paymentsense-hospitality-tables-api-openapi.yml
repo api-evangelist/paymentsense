@@ -1,0 +1,562 @@
+openapi: 3.2.0
+info:
+  version: 3.0-beta
+  title: Connect REST Hospitality Tables API
+servers:
+- url: https://your-host-here.test.connect.paymentsense.cloud/
+security:
+- connectBasicAuth: []
+tags:
+- name: Hospitality Tables
+paths:
+  /pat/tables:
+    get:
+      description: Gets a list of all tables. This can be filtered by locked state, fully paid state and currency.
+      tags:
+      - Hospitality Tables
+      operationId: Tables
+      parameters:
+      - name: locked
+        in: query
+        required: false
+        description: Filters the response to show only locked or only unlocked tables
+        schema:
+          type: boolean
+      - name: currency
+        in: query
+        required: false
+        $ref: '#/components/schemas/currency'
+        type: string
+        description: Filters the response to show only tables with an amount for this currency
+      responses:
+        '200':
+          description: List of tables has been successfully returned.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/tableListWrapper'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '500 ':
+          description: An internal Connect error has occurred.
+    post:
+      description: Creates/Opens a table
+      tags:
+      - Hospitality Tables
+      operationId: OpenTable
+      responses:
+        '201':
+          description: Table has been successfully created.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/tableCreationResponse'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '409 ':
+          description: Table already exists.
+        '422 ':
+          description: Incorrect JSON received.
+        '500 ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/tableCreation'
+        required: true
+  /pat/tables/{tableName}:
+    get:
+      description: Gets details for a specific table
+      tags:
+      - Hospitality Tables
+      operationId: Table
+      parameters:
+      - name: tableName
+        in: path
+        required: true
+        description: Name of the table
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Table details have been successfully returned
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/table'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Table could not be found.
+        '500 ':
+          description: An internal Connect error has occurred.
+    delete:
+      description: Deletes/Closes a table. This removes the table from Connect and means it is no longer accessible from any endpoints. It is intended for use when a table is fully paid and closed on the EPoS and allows the same tableName to be reused. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that deletions only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
+      tags:
+      - Hospitality Tables
+      operationId: DeleteTable
+      parameters:
+      - name: tableName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Table has been successfully deleted.
+          content:
+            application/connect.v0+json:
+              schema: {}
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Table could not be found.
+        '422 ':
+          description: Incorrect JSON received.
+        '422  ':
+          description: lastKnownAmount does not match the stored amount.
+        '422   ':
+          description: lastKnownPaidAmount does not match the stored amount.
+        '500   ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/tableDeletion'
+        required: true
+  /pat/tables/{tableName}/amount:
+    put:
+      description: Updates the amount on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
+      tags:
+      - Hospitality Tables
+      operationId: TableAmount
+      parameters:
+      - name: tableName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Table amount has been successfully updated.
+          content:
+            application/connect.v0+json:
+              schema: {}
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Table could not be found.
+        '422 ':
+          description: Incorrect JSON received.
+        '422  ':
+          description: lastKnownAmount does not match the stored amount.
+        '422   ':
+          description: lastKnownPaidAmount does not match the stored amount.
+        '423   ':
+          description: Table is currently locked and cannot be updated.
+        '500   ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/tableAmountUpdate'
+        required: true
+  /pat/tables/{tableName}/lock:
+    put:
+      description: Updates the lock on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
+      tags:
+      - Hospitality Tables
+      operationId: TableLock
+      parameters:
+      - name: tableName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Table lock has been successfully updated.
+          content:
+            application/connect.v0+json:
+              schema: {}
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Table could not be found.
+        '422 ':
+          description: Incorrect JSON received.
+        '422  ':
+          description: lastKnownAmount does not match the stored amount.
+        '422   ':
+          description: lastKnownPaidAmount does not match the stored amount.
+        '423   ':
+          description: Table is currently locked and cannot be updated.
+        '500   ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/tableLockUpdate'
+        required: true
+  /pat/tables/{tableName}/receipt:
+    put:
+      description: Updates the receipt on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
+      tags:
+      - Hospitality Tables
+      operationId: TableReceipt
+      parameters:
+      - name: tableName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Table receipt has been successfully updated.
+          content:
+            application/connect.v0+json:
+              schema: {}
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Table could not be found.
+        '422 ':
+          description: Incorrect JSON received.
+        '422  ':
+          description: lastKnownAmount does not match the stored amount.
+        '422   ':
+          description: lastKnownPaidAmount does not match the stored amount.
+        '423   ':
+          description: Table is currently locked and cannot be updated.
+        '500   ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/tableReceiptUpdate'
+        required: true
+  /pat/tables/{tableName}/waiterids:
+    put:
+      description: Updates the waiter ids on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
+      tags:
+      - Hospitality Tables
+      operationId: TableWaiterIds
+      parameters:
+      - name: tableName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Table waiter ids have been successfully updated.
+          content:
+            application/connect.v0+json:
+              schema: {}
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Table could not be found.
+        '422 ':
+          description: Incorrect JSON received.
+        '422  ':
+          description: lastKnownAmount does not match the stored amount.
+        '422   ':
+          description: lastKnownPaidAmount does not match the stored amount.
+        '423   ':
+          description: Table is currently locked and cannot be updated.
+        '500   ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/tableWaiterIdsUpdate'
+        required: true
+components:
+  schemas:
+    tableCreation:
+      type: object
+      required:
+      - tableName
+      - amount
+      - currency
+      properties:
+        tableName:
+          type: string
+        amount:
+          type: integer
+        currency:
+          $ref: '#/components/schemas/currency'
+        receipt:
+          $ref: '#/components/schemas/receiptLineList'
+        waiterIds:
+          type: array
+          items:
+            type: string
+    table:
+      type: object
+      required:
+      - tableName
+      - amount
+      - amountCashback
+      - amountGratuity
+      - amountPaid
+      - payments
+      - receipt
+      - locked
+      - lockedBy
+      - waiterIds
+      properties:
+        tableName:
+          type: string
+        amount:
+          type: integer
+        amountCashback:
+          type: integer
+        amountGratuity:
+          type: integer
+        amountPaid:
+          type: integer
+        payments:
+          $ref: '#/components/schemas/tablePaymentList'
+        receipt:
+          $ref: '#/components/schemas/receiptLineList_2'
+        locked:
+          type: boolean
+        lockedBy:
+          type: string
+        waiterIds:
+          type: array
+          items:
+            type: string
+    tablePaymentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/tablePayment'
+    receiptLineList_2:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine_2'
+    receiptLine:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+        type:
+          type: string
+          $ref: '#/components/schemas/receiptLineTypeRetail'
+        value:
+          type: string
+    tableList:
+      type: array
+      items:
+        $ref: '#/components/schemas/table'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    tableListWrapper:
+      type: object
+      properties:
+        tables:
+          $ref: '#/components/schemas/tableList'
+    tableCreationResponse:
+      type: object
+      required:
+      - location
+      - tableName
+      properties:
+        location:
+          type: string
+          description: The uri where the information about this particular table can be found.
+        tableName:
+          type: string
+    receiptLineTypeHospitality:
+      type: string
+      enum:
+      - TEXT
+      - IMAGE_LOGO
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
+      - BARCODE_CODE25
+      - BARCODE_CODE39
+      - BARCODE_CODE128
+    tablePayment:
+      type: object
+      required:
+      - amountPaid
+      - amountCashback
+      - amountGratuity
+      - authCode
+      - currency
+      - cardSchemeName
+      - paymentId
+      - paymentMethod
+      - time
+      properties:
+        amountPaid:
+          type: integer
+        amountCashback:
+          type: integer
+        amountGratuity:
+          type: integer
+        authCode:
+          type: string
+        currency:
+          type: string
+          $ref: '#/components/schemas/currency'
+        cardSchemeName:
+          type: string
+        paymentId:
+          type: string
+        paymentMethod:
+          type: string
+          $ref: '#/components/schemas/paymentMethod'
+        time:
+          type: string
+          format: date-time
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    tableDeletion:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+    tableLockUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - locked
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        locked:
+          type: boolean
+        lockedBy:
+          type: string
+          description: Used to denote which EPoS/User has locked a table. This will default to 'EPoS' if not set.
+        override:
+          type: boolean
+          description: Used to override an existing table lock. This should be used with caution when a terminal or EPoS has malfunctioned while holding a lock.
+    tableAmountUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newAmount
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newAmount:
+          type: integer
+    tableReceiptUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newReceipt
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newReceipt:
+          $ref: '#/components/schemas/receiptLineList'
+    tableWaiterIdsUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newWaiterIds
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newWaiterIds:
+          type: array
+          items:
+            type: string
+    receiptLineTypeRetail:
+      type: string
+      enum:
+      - TEXT
+      - BOX_DECLINE
+      - BOX_VOID
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
+    receiptLine_2:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+        type:
+          type: string
+          $ref: '#/components/schemas/receiptLineTypeHospitality'
+        value:
+          type: string
+    paymentMethod:
+      type: string
+      enum:
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
+  securitySchemes:
+    connectBasicAuth:
+      type: http
+      scheme: basic

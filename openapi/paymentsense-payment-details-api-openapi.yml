@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  description: Javascript client to remove the PCI burden when taking payments online
+  title: Connect-E Development Environment Payment Details API
+  version: 1.0.0
+servers:
+- url: https://e.test.connect.paymentsense.cloud
+tags:
+- name: Payment Details
+paths:
+  /v1/payments/{access-token}:
+    get:
+      description: Get details of the payment with this access token
+      tags:
+      - Payment Details
+      operationId: /v1/payments/
+      parameters:
+      - description: Id returned from creating the access token associated with the payment
+        in: path
+        name: access-token
+        required: true
+        example: WEV2IGFzt-yOb1bAQFv5gByq38zz1OdMdyvIXHHJdn7CRzBrdd9VZJNdwhAKMW0b-ar6KDJMFivr6NlKiimxljV6kXDC2pCAVoJT6SoEP5GzrmwvPg6EIe7FKE2Bn83HHkd8S4pxSrksSCl6cg==
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Payment Info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/paymentInfo'
+        '400':
+          description: Bad Request - The request has failed validation by our servers.
+        '401':
+          description: Unauthorized - There is an issue authenticating the request.
+        '404':
+          description: Not Found - Unable to find a payment with this access-token.
+        '500':
+          description: Internal Server Error - An error has occured while processing the request.
+      security:
+      - jwt: []
+components:
+  schemas:
+    paymentInfo:
+      type: object
+      properties:
+        transactionDateTime:
+          type: string
+          description: ISO 8601 datetime including offset
+          example: 2019-07-16 07:39:29 +0000 UTC
+        statusCode:
+          type: integer
+          example: 0
+          enum:
+          - 0
+          - 3
+          - 4
+          - 5
+          - 20
+          - 30
+          - 40
+          - 90
+          - 99
+          description: "* `0` - Successful\n* `3` - Authorizing\n* `4` - Referred\n* `5` - Declined\n* `20` - Duplicate Transaction\n* `30` - Failed\n* `40` - Processing\n* `90` - Revoked\n* `99` - Waiting pre-execute\n\n More details <a href='/ConnectE/Standard#statusCode'>here</a>"
+        message:
+          type: string
+          example: 'AuthCode: 898968'
+        crossReference:
+          type: string
+          example: '181025085937854101886353'
+          description: Code to be passed to /v1/cross-reference-payments, this code does not have an expiry date.
+        authCode:
+          type: string
+          example: '866344'
+        cardNumber:
+          type: string
+          example: 411111*****1111
+          description: Masked card number used in the transaction.
+        cardName:
+          type: string
+          example: John Smith
+          description: Card name used in the transaction.
+        expiryDate:
+          type: string
+          example: 11/20
+          description: Expiry date used in the transaction.
+        cardType:
+          type: string
+          example: VISA
+          description: Card type used in the transaction.
+        billingAddress:
+          $ref: '#/components/schemas/address'
+        shippingDetails:
+          $ref: '#/components/schemas/shippingDetails'
+        userEmailAddress:
+          type: string
+          example: john.smith@example.com
+          description: User email associated with this transaction
+        metaData:
+          type: object
+          description: String key value pairs passed when creating the access token.
+          additionalProperties:
+            example:
+              item: t-shirt
+              tax: '123.00'
+            type: string
+    address:
+      type: object
+      properties:
+        address1:
+          type: string
+          example: 1 Test Street
+          description: Line 1 of the address.
+        address2:
+          type: string
+          description: Line 2 of the address.
+        address3:
+          type: string
+          description: Line 3 of the address.
+        address4:
+          type: string
+          description: Line 4 of the address.
+        city:
+          type: string
+          example: London
+          description: City of the address.
+        state:
+          type: string
+          example: Greater London
+          description: State of the address.
+        postcode:
+          type: string
+          example: TR14 8PA
+          description: postcode of the address.
+        countryCode:
+          type: string
+          example: '826'
+          description: CountryCode of the address.
+    shippingDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: Authorization
+    access_token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: This authorization is deprecated and only used on the POST /v1/cross-reference-payments endpoint. Please only use the api_key for new integrations.
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

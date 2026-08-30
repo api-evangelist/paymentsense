@@ -1,0 +1,73 @@
+openapi: 3.2.0
+info:
+  description: Javascript client to remove the PCI burden when taking payments online
+  title: Connect-E Development Environment Resume Payment API
+  version: 1.0.0
+servers:
+- url: https://e.test.connect.paymentsense.cloud
+tags:
+- name: Resume Payment
+paths:
+  /v1/payments/{access-token}/resume:
+    post:
+      description: Resume a paused wait pre-execute transaction using the id.
+      tags:
+      - Resume Payment
+      operationId: /v1/payments/resume
+      responses:
+        '200':
+          description: Resume Payment Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/resumePaymentResponse'
+        '400':
+          description: Bad Request - The request has failed validation by our servers.
+        '401':
+          description: Unauthorized - There is an issue authenticating the request.
+        '500':
+          description: Internal Server Error - An error has occured while processing the request.
+      parameters:
+      - description: Id returned from create access token for the payment
+        in: path
+        name: access-token
+        required: true
+        schema:
+          type: string
+      security:
+      - jwt: []
+components:
+  schemas:
+    resumePaymentResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          enum:
+          - 0
+          - 4
+          - 5
+          - 20
+          - 30
+          example: 0
+          description: "* `0` - Successful\n* `4` - Referred\n* `5` - Declined\n* `20` - Duplicate Transaction\n* `30` - Failed\n\n More details <a href='/ConnectE/Standard#statusCode'>here</a>"
+        authCode:
+          type: string
+          example: '866344'
+        message:
+          type: string
+          example: 'AuthCode: 898968'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: Authorization
+    access_token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: This authorization is deprecated and only used on the POST /v1/cross-reference-payments endpoint. Please only use the api_key for new integrations.
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

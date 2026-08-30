@@ -1,0 +1,253 @@
+openapi: 3.2.0
+info:
+  title: Paymentsense PAC Terminals API
+  version: '1.0'
+  description: 'Operations tagged PAC Terminals across 2 of this provider''s published API definitions: paymentsense-connect-v1.json, paymentsense-connect-v2.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://your-host-here.test.connect.paymentsense.cloud/
+- url: https://dev-heisenberg.test.connect.paymentsense.cloud
+security:
+- connectBasicAuth: []
+tags:
+- name: PAC Terminals
+paths:
+  /pac/terminals:
+    get:
+      description: Gets a list of all card terminals that are currently connected. This can be filtered by currency, capabilities and status.
+      tags:
+      - PAC Terminals
+      operationId: RetailTerminals
+      parameters:
+      - name: status
+        in: query
+        required: false
+        description: Filter the response to only available or only busy terminals.
+        schema:
+          type: string
+          enum:
+          - AVAILABLE
+          - BUSY
+      - name: capabilities
+        in: query
+        required: false
+        description: Filter the response to only terminals with particular capabilities. This should be a comma separated list of values.
+        schema:
+          type: string
+      - name: currency
+        in: query
+        required: false
+        description: Filter the response to only terminals in a particular currency.
+        schema:
+          type: string
+          enum:
+          - GBP
+          - EUR
+      responses:
+        '200':
+          description: Returns a list of terminals
+          content:
+            application/connect.v1+json:
+              schema:
+                $ref: '#/components/schemas/terminalWrapper'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '500 ':
+          description: An internal Connect error has occurred.
+    servers:
+    - url: https://your-host-here.test.connect.paymentsense.cloud/
+  /pac/terminals/{tpi}:
+    get:
+      description: Gets details for a specific terminal.
+      tags:
+      - PAC Terminals
+      operationId: RetailTerminalsByTPI
+      parameters:
+      - $ref: '#/components/parameters/tpiParam'
+      responses:
+        '200':
+          description: Returns information about the requested terminal
+          content:
+            application/connect.v1+json:
+              schema:
+                $ref: '#/components/schemas/terminal'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Unavailable terminal or no data available for terminal.
+        '500 ':
+          description: An internal Connect error has occurred.
+    servers:
+    - url: https://your-host-here.test.connect.paymentsense.cloud/
+  /pac/terminals/{tid}:
+    parameters:
+    - $ref: '#/components/parameters/tidParam'
+    get:
+      description: Gets details for a specific terminal.
+      tags:
+      - PAC Terminals
+      operationId: PACTerminalsByTID
+      responses:
+        '200':
+          description: Returns information about the requested terminal
+          content:
+            application/connect.v2+json:
+              schema:
+                $ref: '#/components/schemas/terminal_2'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/unavailableTerminal'
+        '422':
+          $ref: '#/components/responses/unprocessibleEntity'
+        '500':
+          $ref: '#/components/responses/internalError'
+    servers:
+    - url: https://dev-heisenberg.test.connect.paymentsense.cloud
+components:
+  schemas:
+    terminal:
+      title: Terminal
+      type: object
+      required:
+      - tpi
+      - status
+      - currency
+      - capabilities
+      - location
+      properties:
+        tpi:
+          description: Terminal Public Identifier, a unique identifier assigned to this terminal.
+          type: string
+          example: '12345678'
+        status:
+          description: Current status of the terminal, indicating whether it is ready to accept requests.
+          type: string
+          enum:
+          - AVAILABLE
+          - BUSY
+          example: AVAILABLE
+        currency:
+          description: Currency in which the terminal is setup. The textual representation from ISO 4217 is used.
+          type: string
+          enum:
+          - GBP
+          - EUR
+          example: GBP
+        capabilities:
+          description: Defines the actions that this terminal is capable of performing. This field is due to be deprecated in the next API version (v2).
+          type: array
+          items:
+            type: string
+            enum:
+            - SALE
+            - REFUND
+            - DUPLICATE
+            - CANCEL_TRANSACTION
+            - REPORT_END_OF_DAY
+            - REPORT_BANKING
+            - REPORT_X_BALANCE
+            - REPORT_Z_BALANCE
+            - TERMINAL_STATUS
+          example:
+          - SALE
+          - REFUND
+        location:
+          description: URI where information about this terminal can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}
+    terminalList:
+      type: array
+      items:
+        $ref: '#/components/schemas/terminal'
+    terminalWrapper:
+      type: object
+      properties:
+        terminals:
+          $ref: '#/components/schemas/terminalList'
+    terminal_2:
+      title: Terminal
+      type: object
+      required:
+      - tid
+      - status
+      - currency
+      - location
+      properties:
+        tid:
+          description: Terminal Id, a unique identifier assigned to this terminal.
+          type: string
+          example: '12345678'
+        status:
+          description: Current status of the terminal, indicating whether it is ready to accept requests.
+          type: string
+          enum:
+          - AVAILABLE
+          - BUSY
+          example: AVAILABLE
+        currency:
+          description: Currency in which the terminal is setup. The textual representation from ISO 4217 is used.
+          type: string
+          enum:
+          - GBP
+          - EUR
+          example: GBP
+        location:
+          description: URI where information about this terminal can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}
+    userMessage:
+      type: object
+      properties:
+        userMessage:
+          description: Error message to display to the user.
+          type: string
+          example: This is an example error message. The string here should be displayed to the user.
+  parameters:
+    tpiParam:
+      name: tpi
+      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
+      in: path
+      required: true
+      schema:
+        type: string
+    tidParam:
+      name: tid
+      description: Id (unique identifier assigned to a terminal) of the terminal to use.
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
+    unauthorized:
+      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unprocessibleEntity:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unavailableTerminal:
+      description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+  securitySchemes:
+    connectBasicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- paymentsense-connect-v1.json
+- paymentsense-connect-v2.json

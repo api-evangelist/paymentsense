@@ -1,0 +1,382 @@
+openapi: 3.2.0
+info:
+  version: 3.0-beta
+  title: Connect REST Retail Transactions API
+servers:
+- url: https://your-host-here.test.connect.paymentsense.cloud/
+security:
+- connectBasicAuth: []
+tags:
+- name: Retail Transactions
+paths:
+  /retail/terminals/{tpi}/transactions:
+    post:
+      description: Starts a transaction on the given TPI
+      tags:
+      - Retail Transactions
+      operationId: TransactionOnTPI
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Transaction has successfully started. Returns the transaction requestId and the location of an endpoint for further details.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/requestLocationResponse'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Unavailable terminal or no data available for terminal.
+        '422 ':
+          description: Incorrect JSON received.
+        '422':
+          description: The card machine is busy.
+        '500 ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/transactionRequest'
+        required: true
+  /retail/terminals/{tpi}/transactions/{requestId}:
+    get:
+      description: Gets the transaction data for the given request
+      tags:
+      - Retail Transactions
+      operationId: TransactionsByRequestId
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Transaction details have been successfully returned.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/transaction'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404':
+          description: Unavailable terminal or no data available for terminal.
+        '404 ':
+          description: The requestId could not be found.
+        '500 ':
+          description: An internal Connect error has occurred.
+    delete:
+      description: Attempts to cancel the transaction for the given request.
+      tags:
+      - Retail Transactions
+      operationId: TransactionsByRequestId
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Transaction associated to the requestId has been cancelled.
+          content:
+            application/connect.v0+json:
+              schema: {}
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: The requestId could not be found.
+        '422 ':
+          description: Transaction could not be cancelled.
+        '500 ':
+          description: An internal Connect error has occurred.
+  /retail/terminals/{tpi}/transactions/{requestId}/signature:
+    put:
+      description: Verifies the signature for a given request.
+      tags:
+      - Retail Transactions
+      operationId: VerifySignature
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Signature status has been successfully accepted.
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/verifySignatureResponse'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Unavailable terminal or no data available for terminal.
+        '404  ':
+          description: The requestId could not be found.
+        '422  ':
+          description: Incorrect JSON received.
+        '422   ':
+          description: Unable to action the signature check. When required, signatures must be verified within 80 seconds.
+        '500    ':
+          description: An internal Connect error has occurred.
+      requestBody:
+        content:
+          application/connect.v0+json:
+            schema:
+              $ref: '#/components/schemas/signatureRequest'
+        required: true
+components:
+  schemas:
+    receiptLine:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+        type:
+          type: string
+          $ref: '#/components/schemas/receiptLineTypeRetail'
+        value:
+          type: string
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    verifySignature:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/messageList'
+    notifications:
+      type: string
+      enum:
+      - APPROVED
+      - BAD_SWIPE
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
+    messageList:
+      type: array
+      items:
+        type: string
+    transactionType:
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+    transactionTypeResult:
+      type: string
+      enum:
+      - LOGON
+      - REFUND
+      - REFUND_REVERSAL
+      - SALE
+      - SALE_REVERSAL
+    transactionRequest:
+      type: object
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType'
+        amount:
+          type: integer
+        currency:
+          $ref: '#/components/schemas/currency'
+    cardholderVerificationMethod:
+      type: string
+      enum:
+      - NONE
+      - PIN
+      - SIGNATURE
+      - DEVICE
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    verifySignatureResponse:
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/verifySignature'
+    receiptLineTypeRetail:
+      type: string
+      enum:
+      - TEXT
+      - BOX_DECLINE
+      - BOX_VOID
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
+    signatureRequest:
+      type: object
+      required:
+      - accepted
+      properties:
+        accepted:
+          type: boolean
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where this resource can be found.
+    transaction:
+      type: object
+      properties:
+        amountBase:
+          description: The base amount of the transaction, without gratuity or cashback
+          type: integer
+          format: int32
+        amountCashback:
+          description: The amount of cashback on the transaction
+          type: integer
+          format: int32
+        amountGratuity:
+          description: The amount of gratuity on the transaction
+          type: integer
+          format: int32
+        amountTotal:
+          description: The total amount of the transaction, including cashback and gratuity
+          type: integer
+          format: int32
+        applicationId:
+          type: string
+        applicationLabel:
+          type: string
+        authCode:
+          type: string
+        cardSchemeName:
+          type: string
+        cardHolderVerificationMethod:
+          $ref: '#/components/schemas/cardholderVerificationMethod'
+        currency:
+          $ref: '#/components/schemas/currency'
+        dateOfExpiry:
+          description: In the format 'MM/YY'
+          type: string
+          format: MM/YY
+        dateOfStart:
+          description: In the format 'MM/YY'
+          type: string
+          format: MM/YY
+        location:
+          description: The uri where the information about this particular transaction can be found.
+          type: string
+          format: uri
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/notifications'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethod'
+        primaryAccountNumber:
+          type: string
+        primaryAccountNumberSequence:
+          type: string
+        receiptLines:
+          type: object
+          properties:
+            MERCHANT:
+              $ref: '#/components/schemas/receiptLineList'
+            CUSTOMER:
+              $ref: '#/components/schemas/receiptLineList'
+        requestId:
+          description: An ID for this request, which can be used in other endpoints
+          type: string
+        transactionId:
+          type: string
+        transactionNumber:
+          type: string
+        transactionResult:
+          $ref: '#/components/schemas/transactionResult'
+        transactionTime:
+          type: string
+          format: date-time
+        transactionType:
+          $ref: '#/components/schemas/transactionTypeResult'
+    paymentMethod:
+      type: string
+      enum:
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
+    transactionResult:
+      type: string
+      enum:
+      - SUCCESSFUL
+      - DECLINED
+      - VOID
+      - UNSUCCESSFUL
+      - CANCELLED
+      - TIMED_OUT
+  securitySchemes:
+    connectBasicAuth:
+      type: http
+      scheme: basic

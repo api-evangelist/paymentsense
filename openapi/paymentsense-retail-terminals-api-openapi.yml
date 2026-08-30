@@ -1,0 +1,165 @@
+openapi: 3.2.0
+info:
+  version: 3.0-beta
+  title: Connect REST Retail Terminals API
+servers:
+- url: https://your-host-here.test.connect.paymentsense.cloud/
+security:
+- connectBasicAuth: []
+tags:
+- name: Retail Terminals
+paths:
+  /retail/terminals:
+    get:
+      description: Gets a list of all card terminals that are currently connected. This can be filtered by currency, capabilities and status.
+      tags:
+      - Retail Terminals
+      operationId: RetailTerminals
+      parameters:
+      - name: status
+        in: query
+        required: false
+        $ref: '#/components/schemas/terminalStatus'
+        type: string
+        description: Filter the response to only available or only busy terminals.
+      - name: capabilities
+        in: query
+        required: false
+        description: Filter the response to only terminals with particular capabilities. This should be a comma separated list of values.
+        schema:
+          type: string
+      - name: currency
+        in: query
+        required: false
+        description: Filter the response to only terminals in a particular currency.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns a list of terminals
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/terminalWrapper'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '500 ':
+          description: An internal Connect error has occurred.
+      x-unitTests:
+      - request:
+          method: GET
+          uri: /retail/terminals?capabilities=["TRANSACTION_SALE", "TRANSACTION_REFUND"]
+        expectedResponse:
+          x-allowExtraHeaders: true
+          x-bodyMatchMode: KEYS
+          x-arrayOrderedMatching: false
+          x-arrayCheckCount: false
+          x-matchResponseSchema: true
+          headers: {}
+          body: '{    "22161332": {        "state": "ready",        "pstid": "22161332",        "capabilities": [            "TRANSACTION_SALE",            "TRANSACTION_REFUND",            "LAST_TRANSACTION",            "CANCEL_TRANSACTION",            "REPORT_END_OF_DAY",            "REPORT_BANKING",            "REPORT_X_BALANCE",            "REPORT_Z_BALANCE",            "TERMINAL_STATUS",            "CALL_TMS",            "LOGON"        ],        "currency": "EUR"    },    "22161339": {        "state": "ready",        "pstid": "22161339",        "capabilities": [            "TRANSACTION_SALE",            "TRANSACTION_REFUND",            "LAST_TRANSACTION",            "CANCEL_TRANSACTION",            "REPORT_END_OF_DAY",            "REPORT_BANKING",            "REPORT_X_BALANCE",            "REPORT_Z_BALANCE",            "TERMINAL_STATUS",            "CALL_TMS",            "LOGON"        ],        "currency": "GBP"    }}'
+        x-testShouldPass: true
+        x-testEnabled: true
+        x-testName: RetailTerminals
+        x-testDescription: Get a list of terminals optionally filtered by capabilities and or state
+      x-operation-settings:
+        CollectParameters: false
+        AllowDynamicQueryParameters: false
+        AllowDynamicFormParameters: false
+        IsMultiContentStreaming: false
+  /retail/terminals/{tpi}:
+    get:
+      description: Gets details for a specific terminal.
+      tags:
+      - Retail Terminals
+      operationId: RetailTerminalsByTPI
+      parameters:
+      - name: tpi
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns information about the requested terminal
+          content:
+            application/connect.v0+json:
+              schema:
+                $ref: '#/components/schemas/terminal'
+        '401':
+          description: Authorization credentials must be provided in the request headers.
+        '401 ':
+          description: The provided authorization credentials were not correct.
+        '404 ':
+          description: Unavailable terminal or no data available for terminal.
+        '500 ':
+          description: An internal Connect error has occurred.
+components:
+  schemas:
+    terminalStatus:
+      type: string
+      enum:
+      - AVAILABLE
+      - BUSY
+    capabilitiesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/capabilities'
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    terminalWrapper:
+      title: terminalWrapper
+      description: a list of terminals keyed by 'terminals'
+      type: object
+      properties:
+        terminals:
+          $ref: '#/components/schemas/terminalList'
+      additionalProperties:
+        $ref: '#/components/schemas/terminal'
+    terminal:
+      title: Terminal
+      type: object
+      required:
+      - tpi
+      - status
+      - currency
+      - capabilities
+      - location
+      properties:
+        tpi:
+          type: string
+          description: Terminal Public Identifier. This is a unique identifier assigned to each terminal.
+        status:
+          $ref: '#/components/schemas/terminalStatus'
+        currency:
+          $ref: '#/components/schemas/currency'
+        capabilities:
+          $ref: '#/components/schemas/capabilitiesList'
+        location:
+          type: string
+          description: The uri where the information about this particular terminal can be found.
+    terminalList:
+      title: TerminalList
+      type: array
+      items:
+        $ref: '#/components/schemas/terminal'
+    capabilities:
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+      - CANCEL_TRANSACTION
+      - REPORT_END_OF_DAY
+      - REPORT_BANKING
+      - REPORT_X_BALANCE
+      - REPORT_Z_BALANCE
+      - TERMINAL_STATUS
+  securitySchemes:
+    connectBasicAuth:
+      type: http
+      scheme: basic
