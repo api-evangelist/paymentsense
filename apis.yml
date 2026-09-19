@@ -76,7 +76,7 @@ apis:
   baseURL: https://your-host-here.connect.paymentsense.cloud
   tags:
   - Payments
-  - WebSockets
+  - WebSocket
   - Point-of-Sale
   tags_raw:
   - Payments
