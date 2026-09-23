@@ -68,6 +68,8 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
+      summary: Retail terminals
+      x-summary-source: derived
   /retail/terminals/{tpi}:
     get:
       description: Gets details for a specific terminal.
@@ -95,31 +97,10 @@ paths:
           description: Unavailable terminal or no data available for terminal.
         '500 ':
           description: An internal Connect error has occurred.
+      summary: Retail terminals by TPI
+      x-summary-source: derived
 components:
   schemas:
-    terminalStatus:
-      type: string
-      enum:
-      - AVAILABLE
-      - BUSY
-    capabilitiesList:
-      type: array
-      items:
-        $ref: '#/components/schemas/capabilities'
-    currency:
-      type: string
-      enum:
-      - GBP
-      - EUR
-    terminalWrapper:
-      title: terminalWrapper
-      description: a list of terminals keyed by 'terminals'
-      type: object
-      properties:
-        terminals:
-          $ref: '#/components/schemas/terminalList'
-      additionalProperties:
-        $ref: '#/components/schemas/terminal'
     terminal:
       title: Terminal
       type: object
@@ -142,11 +123,11 @@ components:
         location:
           type: string
           description: The uri where the information about this particular terminal can be found.
-    terminalList:
-      title: TerminalList
-      type: array
-      items:
-        $ref: '#/components/schemas/terminal'
+    terminalStatus:
+      type: string
+      enum:
+      - AVAILABLE
+      - BUSY
     capabilities:
       type: string
       enum:
@@ -159,6 +140,29 @@ components:
       - REPORT_X_BALANCE
       - REPORT_Z_BALANCE
       - TERMINAL_STATUS
+    terminalList:
+      title: TerminalList
+      type: array
+      items:
+        $ref: '#/components/schemas/terminal'
+    capabilitiesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/capabilities'
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    terminalWrapper:
+      title: terminalWrapper
+      description: a list of terminals keyed by 'terminals'
+      type: object
+      properties:
+        terminals:
+          $ref: '#/components/schemas/terminalList'
+      additionalProperties:
+        $ref: '#/components/schemas/terminal'
   securitySchemes:
     connectBasicAuth:
       type: http

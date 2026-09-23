@@ -42,6 +42,8 @@ paths:
             schema:
               $ref: '#/components/schemas/reportRequest'
         required: true
+      summary: Retail report request
+      x-summary-source: derived
   /retail/terminals/{tpi}/reports/{requestId}:
     get:
       description: Gets the report data for the given request.
@@ -78,30 +80,18 @@ paths:
           description: Report data retrieval in progress.
         '500':
           description: An internal Connect error has occurred.
+      summary: Retail report details
+      x-summary-source: derived
 components:
   schemas:
-    totalsBreakdown:
+    reportsBanking:
       type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
+      description: A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key
       properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          type: integer
-        totalRefundsAmount:
-          type: integer
-        totalRefundsCount:
-          type: integer
-        totalSalesAmount:
-          type: integer
-        totalSalesCount:
-          type: integer
+        <acquirer name>:
+          $ref: '#/components/schemas/reportBanking'
+      additionalProperties:
+        $ref: '#/components/schemas/reportBanking'
     receiptLine:
       type: object
       required:
@@ -116,6 +106,19 @@ components:
           $ref: '#/components/schemas/receiptLineTypeRetail'
         value:
           type: string
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where this resource can be found.
+    reportRequest:
+      type: object
+      properties:
+        reportType:
+          $ref: '#/components/schemas/reportType'
     currency:
       type: string
       enum:
@@ -164,6 +167,10 @@ components:
           type: string
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
     reportBanking:
       type: object
       required:
@@ -193,26 +200,6 @@ components:
           type: array
           items:
             type: string
-    reportsBanking:
-      type: object
-      description: A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key
-      properties:
-        <acquirer name>:
-          $ref: '#/components/schemas/reportBanking'
-      additionalProperties:
-        $ref: '#/components/schemas/reportBanking'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    waiterTotals:
-      type: object
-      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
-      properties:
-        <waiter id>:
-          $ref: '#/components/schemas/totalsBreakdown'
-      additionalProperties:
-        $ref: '#/components/schemas/totalsBreakdown'
     receiptLineTypeRetail:
       type: string
       enum:
@@ -223,6 +210,28 @@ components:
       - LINE_SEPARATOR_SINGLE
       - LINE_SEPARATOR_DOUBLE
       - TICKET_FEED
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          type: integer
+        totalRefundsAmount:
+          type: integer
+        totalRefundsCount:
+          type: integer
+        totalSalesAmount:
+          type: integer
+        totalSalesCount:
+          type: integer
     reportResponse:
       type: object
       required:
@@ -253,19 +262,14 @@ components:
         location:
           type: string
           description: The uri where the information about this particular report can be found.
-    reportRequest:
+    waiterTotals:
       type: object
+      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
       properties:
-        reportType:
-          $ref: '#/components/schemas/reportType'
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-        location:
-          type: string
-          description: The uri where this resource can be found.
+        <waiter id>:
+          $ref: '#/components/schemas/totalsBreakdown'
+      additionalProperties:
+        $ref: '#/components/schemas/totalsBreakdown'
     reportType:
       type: string
       enum:

@@ -39,8 +39,42 @@ paths:
           description: Internal Server Error - An error has occured while processing the request.
       security:
       - jwt: []
+      summary: /v1/payments/
+      x-summary-source: derived
 components:
   schemas:
+    address:
+      type: object
+      properties:
+        address1:
+          type: string
+          example: 1 Test Street
+          description: Line 1 of the address.
+        address2:
+          type: string
+          description: Line 2 of the address.
+        address3:
+          type: string
+          description: Line 3 of the address.
+        address4:
+          type: string
+          description: Line 4 of the address.
+        city:
+          type: string
+          example: London
+          description: City of the address.
+        state:
+          type: string
+          example: Greater London
+          description: State of the address.
+        postcode:
+          type: string
+          example: TR14 8PA
+          description: postcode of the address.
+        countryCode:
+          type: string
+          example: '826'
+          description: CountryCode of the address.
     paymentInfo:
       type: object
       properties:
@@ -104,38 +138,6 @@ components:
               item: t-shirt
               tax: '123.00'
             type: string
-    address:
-      type: object
-      properties:
-        address1:
-          type: string
-          example: 1 Test Street
-          description: Line 1 of the address.
-        address2:
-          type: string
-          description: Line 2 of the address.
-        address3:
-          type: string
-          description: Line 3 of the address.
-        address4:
-          type: string
-          description: Line 4 of the address.
-        city:
-          type: string
-          example: London
-          description: City of the address.
-        state:
-          type: string
-          example: Greater London
-          description: State of the address.
-        postcode:
-          type: string
-          example: TR14 8PA
-          description: postcode of the address.
-        countryCode:
-          type: string
-          example: '826'
-          description: CountryCode of the address.
     shippingDetails:
       type: object
       properties:

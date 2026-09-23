@@ -35,6 +35,8 @@ paths:
           description: The provided authorization credentials were not correct.
         '500 ':
           description: An internal Connect error has occurred.
+      summary: PAT reports
+      x-summary-source: derived
   /pat/reports/{reportId}:
     get:
       description: Gets details for a specific report
@@ -62,30 +64,18 @@ paths:
           description: Report could not be found.
         '500 ':
           description: An internal Connect error has occurred.
+      summary: PAT report
+      x-summary-source: derived
 components:
   schemas:
-    totalsBreakdown:
+    reportsBanking:
       type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
+      description: A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key
       properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          type: integer
-        totalRefundsAmount:
-          type: integer
-        totalRefundsCount:
-          type: integer
-        totalSalesAmount:
-          type: integer
-        totalSalesCount:
-          type: integer
+        <acquirer name>:
+          $ref: '#/components/schemas/reportBanking'
+      additionalProperties:
+        $ref: '#/components/schemas/reportBanking'
     receiptLine:
       type: object
       required:
@@ -148,6 +138,10 @@ components:
           type: string
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
     reportBanking:
       type: object
       required:
@@ -177,30 +171,6 @@ components:
           type: array
           items:
             type: string
-    reportList:
-      type: array
-      items:
-        $ref: '#/components/schemas/reportResponse'
-    reportsBanking:
-      type: object
-      description: A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key
-      properties:
-        <acquirer name>:
-          $ref: '#/components/schemas/reportBanking'
-      additionalProperties:
-        $ref: '#/components/schemas/reportBanking'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    waiterTotals:
-      type: object
-      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
-      properties:
-        <waiter id>:
-          $ref: '#/components/schemas/totalsBreakdown'
-      additionalProperties:
-        $ref: '#/components/schemas/totalsBreakdown'
     receiptLineTypeRetail:
       type: string
       enum:
@@ -211,6 +181,33 @@ components:
       - LINE_SEPARATOR_SINGLE
       - LINE_SEPARATOR_DOUBLE
       - TICKET_FEED
+    reportListResponse:
+      type: object
+      properties:
+        reports:
+          $ref: '#/components/schemas/reportList'
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          type: integer
+        totalRefundsAmount:
+          type: integer
+        totalRefundsCount:
+          type: integer
+        totalSalesAmount:
+          type: integer
+        totalSalesCount:
+          type: integer
     reportResponse:
       type: object
       required:
@@ -241,11 +238,14 @@ components:
         location:
           type: string
           description: The uri where the information about this particular report can be found.
-    reportListResponse:
+    waiterTotals:
       type: object
+      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
       properties:
-        reports:
-          $ref: '#/components/schemas/reportList'
+        <waiter id>:
+          $ref: '#/components/schemas/totalsBreakdown'
+      additionalProperties:
+        $ref: '#/components/schemas/totalsBreakdown'
     reportType:
       type: string
       enum:
@@ -253,6 +253,10 @@ components:
       - BANKING
       - X_BALANCE
       - Z_BALANCE
+    reportList:
+      type: array
+      items:
+        $ref: '#/components/schemas/reportResponse'
     format:
       type: string
       enum:

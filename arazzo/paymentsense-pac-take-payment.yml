@@ -5,7 +5,7 @@ info:
   summary: List a terminal, start a card transaction on it, and poll to the outcome.
 sourceDescriptions:
   - name: connectV2
-    url: ../openapi/paymentsense-connect-v2.json
+    url: ../openapi/_original/paymentsense-connect-v2.json
     type: openapi
 workflows:
   - workflowId: pacTakePayment

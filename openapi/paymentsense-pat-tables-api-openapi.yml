@@ -44,6 +44,8 @@ paths:
           description: The provided authorization credentials were not correct.
         '500 ':
           description: An internal Connect error has occurred.
+      summary: Tables
+      x-summary-source: derived
     put:
       description: Creates/Opens a table
       tags:
@@ -72,6 +74,8 @@ paths:
             schema:
               $ref: '#/components/schemas/tableCreation'
         required: true
+      summary: Open table
+      x-summary-source: derived
   /pat/tables/{tableName}:
     get:
       description: Gets details for a specific table
@@ -106,6 +110,8 @@ paths:
           description: Table could not be found.
         '500 ':
           description: An internal Connect error has occurred.
+      summary: Table
+      x-summary-source: derived
     delete:
       description: Deletes/Closes a table. This removes the table from Connect and means it is no longer accessible from any endpoints. It is intended for use when a table is fully paid and closed on the EPoS and allows the same tableName to be reused. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that deletions only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
       tags:
@@ -143,6 +149,8 @@ paths:
             schema:
               $ref: '#/components/schemas/tableDeletion'
         required: true
+      summary: Delete table
+      x-summary-source: derived
   /pat/tables/{tableName}/amount:
     put:
       description: Updates the amount on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
@@ -183,6 +191,8 @@ paths:
             schema:
               $ref: '#/components/schemas/tableAmountUpdate'
         required: true
+      summary: Table amount
+      x-summary-source: derived
   /pat/tables/{tableName}/lock:
     put:
       description: Updates the lock on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
@@ -223,6 +233,8 @@ paths:
             schema:
               $ref: '#/components/schemas/tableLockUpdate'
         required: true
+      summary: Table lock
+      x-summary-source: derived
   /pat/tables/{tableName}/receipt:
     put:
       description: Updates the receipt on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
@@ -263,6 +275,8 @@ paths:
             schema:
               $ref: '#/components/schemas/tableReceiptUpdate'
         required: true
+      summary: Table receipt
+      x-summary-source: derived
   /pat/tables/{tableName}/waiterids:
     put:
       description: Updates the waiter ids on a table. The lastKnownAmount and lastKnownPaidAmount must be passed in to ensure that updates only take place when the EPoS has the latest table data. This is to help avoid scenarios where a table has been updated by a card terminal and the update has not yet been picked up by the EPoS.
@@ -303,8 +317,23 @@ paths:
             schema:
               $ref: '#/components/schemas/tableWaiterIdsUpdate'
         required: true
+      summary: Table waiter ids
+      x-summary-source: derived
 components:
   schemas:
+    tableAmountUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newAmount
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newAmount:
+          type: integer
     receiptLine:
       type: object
       required:
@@ -333,6 +362,10 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
+    tablePaymentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/tablePayment'
     currency:
       description: Currency of the request. The textual representation from ISO 4217 is used.
       type: string
@@ -340,38 +373,122 @@ components:
       - GBP
       - EUR
       example: GBP
-    tableCreation:
-      type: object
-      required:
-      - tableName
-      - amount
-      - currency
-      properties:
-        tableName:
-          type: string
-        amount:
-          type: integer
-        currency:
-          $ref: '#/components/schemas/currency'
-        receipt:
-          $ref: '#/components/schemas/receiptLineList'
-        waiterIds:
-          type: array
-          items:
-            type: string
-    tableAmountUpdate:
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    tableLockUpdate:
       type: object
       required:
       - lastKnownAmount
       - lastKnownPaidAmount
-      - newAmount
+      - locked
       properties:
         lastKnownAmount:
           type: integer
         lastKnownPaidAmount:
           type: integer
-        newAmount:
+        locked:
+          type: boolean
+        lockedBy:
+          type: string
+          description: Used to denote which EPoS/User has locked a table. This will default to 'EPoS' if not set.
+        override:
+          type: boolean
+          description: Used to override an existing table lock. This should be used with caution when a terminal or EPoS has malfunctioned while holding a lock.
+    paymentMethod:
+      type: string
+      example: ICC_CHIP
+      enum:
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
+    tableReceiptUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newReceipt
+      properties:
+        lastKnownAmount:
           type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newReceipt:
+          $ref: '#/components/schemas/receiptLineList'
+    tablePayment:
+      type: object
+      required:
+      - amountPaid
+      - amountCashback
+      - amountGratuity
+      - authCode
+      - currency
+      - cardSchemeName
+      - paymentId
+      - paymentMethod
+      - time
+      properties:
+        amountPaid:
+          type: integer
+        amountCashback:
+          type: integer
+        amountGratuity:
+          type: integer
+        authCode:
+          type: string
+        currency:
+          type: string
+          $ref: '#/components/schemas/currency'
+        cardSchemeName:
+          type: string
+        paymentId:
+          type: string
+        paymentMethod:
+          type: string
+          $ref: '#/components/schemas/paymentMethod'
+        time:
+          type: string
+          format: date-time
+    tableList:
+      type: array
+      items:
+        $ref: '#/components/schemas/table_2'
+    table_2:
+      type: object
+      required:
+      - tableName
+      - amount
+      - amountCashback
+      - amountGratuity
+      - amountPaid
+      - payments
+      - locked
+      - lockedBy
+      - waiterIds
+      properties:
+        tableName:
+          type: string
+        amount:
+          type: integer
+        amountCashback:
+          type: integer
+        amountGratuity:
+          type: integer
+        amountPaid:
+          type: integer
+        payments:
+          $ref: '#/components/schemas/tablePaymentList'
+        locked:
+          type: boolean
+        lockedBy:
+          type: string
+        waiterIds:
+          type: array
+          items:
+            type: string
     table:
       type: object
       required:
@@ -407,31 +524,30 @@ components:
           type: array
           items:
             type: string
-    tableList:
-      type: array
-      items:
-        $ref: '#/components/schemas/table_2'
-    tableReceiptUpdate:
+    tableCreationResponse:
       type: object
       required:
-      - lastKnownAmount
-      - lastKnownPaidAmount
-      - newReceipt
+      - location
+      - tableName
       properties:
-        lastKnownAmount:
-          type: integer
-        lastKnownPaidAmount:
-          type: integer
-        newReceipt:
-          $ref: '#/components/schemas/receiptLineList'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    tablePaymentList:
-      type: array
-      items:
-        $ref: '#/components/schemas/tablePayment'
+        location:
+          type: string
+          description: The URI where the information about this particular table can be found.
+        tableName:
+          type: string
+    tableListWrapper:
+      type: object
+      properties:
+        tables:
+          $ref: '#/components/schemas/tableList'
+      required:
+      - tables
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
     tableWaiterIdsUpdate:
       type: object
       required:
@@ -447,6 +563,25 @@ components:
           type: array
           items:
             type: string
+    tableCreation:
+      type: object
+      required:
+      - tableName
+      - amount
+      - currency
+      properties:
+        tableName:
+          type: string
+        amount:
+          type: integer
+        currency:
+          $ref: '#/components/schemas/currency'
+        receipt:
+          $ref: '#/components/schemas/receiptLineList'
+        waiterIds:
+          type: array
+          items:
+            type: string
     tableDeletion:
       type: object
       required:
@@ -457,125 +592,6 @@ components:
           type: integer
         lastKnownPaidAmount:
           type: integer
-    tableListWrapper:
-      type: object
-      properties:
-        tables:
-          $ref: '#/components/schemas/tableList'
-      required:
-      - tables
-    tableLockUpdate:
-      type: object
-      required:
-      - lastKnownAmount
-      - lastKnownPaidAmount
-      - locked
-      properties:
-        lastKnownAmount:
-          type: integer
-        lastKnownPaidAmount:
-          type: integer
-        locked:
-          type: boolean
-        lockedBy:
-          type: string
-          description: Used to denote which EPoS/User has locked a table. This will default to 'EPoS' if not set.
-        override:
-          type: boolean
-          description: Used to override an existing table lock. This should be used with caution when a terminal or EPoS has malfunctioned while holding a lock.
-    table_2:
-      type: object
-      required:
-      - tableName
-      - amount
-      - amountCashback
-      - amountGratuity
-      - amountPaid
-      - payments
-      - locked
-      - lockedBy
-      - waiterIds
-      properties:
-        tableName:
-          type: string
-        amount:
-          type: integer
-        amountCashback:
-          type: integer
-        amountGratuity:
-          type: integer
-        amountPaid:
-          type: integer
-        payments:
-          $ref: '#/components/schemas/tablePaymentList'
-        locked:
-          type: boolean
-        lockedBy:
-          type: string
-        waiterIds:
-          type: array
-          items:
-            type: string
-    tableCreationResponse:
-      type: object
-      required:
-      - location
-      - tableName
-      properties:
-        location:
-          type: string
-          description: The URI where the information about this particular table can be found.
-        tableName:
-          type: string
-    paymentMethod:
-      type: string
-      example: ICC_CHIP
-      enum:
-      - UNKNOWN
-      - KEYED
-      - SWIPED
-      - ICC_CHIP
-      - CONTACTLESS
-    tablePayment:
-      type: object
-      required:
-      - amountPaid
-      - amountCashback
-      - amountGratuity
-      - authCode
-      - currency
-      - cardSchemeName
-      - paymentId
-      - paymentMethod
-      - time
-      properties:
-        amountPaid:
-          type: integer
-        amountCashback:
-          type: integer
-        amountGratuity:
-          type: integer
-        authCode:
-          type: string
-        currency:
-          type: string
-          $ref: '#/components/schemas/currency'
-        cardSchemeName:
-          type: string
-        paymentId:
-          type: string
-        paymentMethod:
-          type: string
-          $ref: '#/components/schemas/paymentMethod'
-        time:
-          type: string
-          format: date-time
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
   securitySchemes:
     connectBasicAuth:
       type: http

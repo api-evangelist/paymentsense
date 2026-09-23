@@ -36,6 +36,10 @@ paths:
         required: true
         schema:
           type: string
+      summary: Create access tokens by access token revoke
+      x-summary-source: derived
+      operationId: postV1AccessTokensByAccessTokenRevoke
+      x-operation-id-source: derived
 components:
   securitySchemes:
     api_key:

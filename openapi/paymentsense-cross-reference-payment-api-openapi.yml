@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   description: Javascript client to remove the PCI burden when taking payments online
-  title: Connect-E Development Environment Cross Reference Payment API
+  title: Connect-E Development Environment Cross Reference Payment…
   version: 1.0.0
 servers:
 - url: https://e.test.connect.paymentsense.cloud
@@ -39,6 +39,8 @@ paths:
         $ref: '#/components/requestBodies/paymentCrossReferenceRequest'
       security:
       - jwt: []
+      summary: /v1/cross reference payments/access token
+      x-summary-source: derived
 components:
   schemas:
     paymentCrossReferenceRequest:

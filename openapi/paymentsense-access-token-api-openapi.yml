@@ -31,16 +31,17 @@ paths:
         $ref: '#/components/requestBodies/accessTokenRequest'
       security:
       - jwt: []
+      summary: /v1/access tokens
+      x-summary-source: derived
 components:
-  requestBodies:
-    accessTokenRequest:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/accessTokenRequest'
-      description: Details of the Payment to be made
-      required: true
   schemas:
+    shippingDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
     address:
       type: object
       properties:
@@ -73,25 +74,6 @@ components:
           type: string
           example: '826'
           description: CountryCode of the address.
-    shippingDetails:
-      type: object
-      properties:
-        name:
-          type: string
-        address:
-          $ref: '#/components/schemas/address'
-    accessToken:
-      properties:
-        id:
-          type: string
-          readOnly: true
-          description: Id to track the payment.
-          example: 5f1tYtm-I5X_fB4lxkD7vQqtHGCykdguffB9GWySCr73qtAnz-g_3KQqxxAQVUyViMgmGbplcYVraRnYz7ro_5PkbD64WIalEgY788Q1yNbYTIIXmD6t
-        expiresAt:
-          type: integer
-          readOnly: true
-          description: UTC timestamp when this token will expire (Number of seconds since Jan 01 1970. (UTC))
-          example: 1540457361
     accessTokenRequest:
       type: object
       properties:
@@ -222,6 +204,26 @@ components:
       - amount
       - orderId
       - merchantUrl
+    accessToken:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Id to track the payment.
+          example: 5f1tYtm-I5X_fB4lxkD7vQqtHGCykdguffB9GWySCr73qtAnz-g_3KQqxxAQVUyViMgmGbplcYVraRnYz7ro_5PkbD64WIalEgY788Q1yNbYTIIXmD6t
+        expiresAt:
+          type: integer
+          readOnly: true
+          description: UTC timestamp when this token will expire (Number of seconds since Jan 01 1970. (UTC))
+          example: 1540457361
+  requestBodies:
+    accessTokenRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/accessTokenRequest'
+      description: Details of the Payment to be made
+      required: true
   securitySchemes:
     api_key:
       type: apiKey

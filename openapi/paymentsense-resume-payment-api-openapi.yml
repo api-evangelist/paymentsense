@@ -36,6 +36,8 @@ paths:
           type: string
       security:
       - jwt: []
+      summary: /v1/payments/resume
+      x-summary-source: derived
 components:
   schemas:
     resumePaymentResponse:

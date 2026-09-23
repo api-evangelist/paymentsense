@@ -22,6 +22,10 @@ paths:
                 $ref: '#/components/schemas/paymentMethods'
         '500':
           description: Internal Server Error
+      summary: Get payment methods
+      x-summary-source: derived
+      operationId: getV1PaymentMethods
+      x-operation-id-source: derived
 components:
   schemas:
     paymentMethods:

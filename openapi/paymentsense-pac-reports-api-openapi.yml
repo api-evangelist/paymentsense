@@ -38,6 +38,8 @@ paths:
             schema:
               $ref: '#/components/schemas/reportRequest'
         required: true
+      summary: Retail report request
+      x-summary-source: derived
   /pac/terminals/{tpi}/reports/{requestId}:
     get:
       description: Gets data for the report with the given requestId.
@@ -64,35 +66,16 @@ paths:
           description: The requestId could not be found.
         '500':
           description: An internal Connect error has occurred.
+      summary: Retail report details
+      x-summary-source: derived
 components:
   schemas:
-    totalsBreakdown:
+    reportsBanking:
       type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
+      description: Banking totals for the current terminal session (these are reset in line with the banking window). Only contained in BANKING and END_OF_DAY. Consists of a dictionary of reports keyed by acquirer name. '{acquirerName}' is an example key
       properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          description: Total amount that has been taken in the current session.
-          type: integer
-        totalRefundsAmount:
-          description: Total amount of refunds (in pence) that have been taken in the current session.
-          type: integer
-        totalRefundsCount:
-          description: Total number of refunds that have taken place in the current session.
-          type: integer
-        totalSalesAmount:
-          description: Total amount of sales (in pence) that have been taken in the current session.
-          type: integer
-        totalSalesCount:
-          description: Total number of sales that have taken place in the current session.
-          type: integer
+        '{acquirerName}':
+          $ref: '#/components/schemas/reportBanking'
     receiptLine:
       type: object
       required:
@@ -121,6 +104,23 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this request can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
+    reportRequest:
+      type: object
+      properties:
+        reportType:
+          $ref: '#/components/schemas/reportType'
     currency:
       description: Currency of the request. The textual representation from ISO 4217 is used.
       type: string
@@ -192,15 +192,10 @@ components:
           example: INSTALLATION
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
-    reportType:
-      description: Type of the report.
-      type: string
-      enum:
-      - END_OF_DAY
-      - BANKING
-      - X_BALANCE
-      - Z_BALANCE
-      example: END_OF_DAY
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
     reportBanking:
       type: object
       required:
@@ -238,27 +233,54 @@ components:
           example:
           - '0000'
           - '0075'
-    reportsBanking:
+    totalsBreakdown:
       type: object
-      description: Banking totals for the current terminal session (these are reset in line with the banking window). Only contained in BANKING and END_OF_DAY. Consists of a dictionary of reports keyed by acquirer name. '{acquirerName}' is an example key
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
       properties:
-        '{acquirerName}':
-          $ref: '#/components/schemas/reportBanking'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          description: Total amount that has been taken in the current session.
+          type: integer
+        totalRefundsAmount:
+          description: Total amount of refunds (in pence) that have been taken in the current session.
+          type: integer
+        totalRefundsCount:
+          description: Total number of refunds that have taken place in the current session.
+          type: integer
+        totalSalesAmount:
+          description: Total amount of sales (in pence) that have been taken in the current session.
+          type: integer
+        totalSalesCount:
+          description: Total number of sales that have taken place in the current session.
+          type: integer
     waiterTotals:
       type: object
       description: A dictionary of totals split by waiter. {waiterId} is an example key.
       properties:
         '{waiterId}':
           $ref: '#/components/schemas/totalsBreakdown'
-    reportRequest:
-      type: object
-      properties:
-        reportType:
-          $ref: '#/components/schemas/reportType'
+    reportType:
+      description: Type of the report.
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+      example: END_OF_DAY
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
     reportResponsePAC:
       type: object
       required:
@@ -317,24 +339,6 @@ components:
             example:
             - REPORT_FINISHED
             - REPORT_STARTED
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          description: UUID for this request, which can be used in other endpoints.
-          type: string
-          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
-        location:
-          description: URI where information about this request can be found.
-          type: string
-          format: URI
-          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
     issuerTotals:
       type: object
       description: A dictionary of totals split by issuer. {issuerName} is an example key.
@@ -342,16 +346,16 @@ components:
         '{issuerName}':
           $ref: '#/components/schemas/totalsBreakdown'
   parameters:
-    requestIdParam:
-      name: requestId
-      description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
+    tpiParam:
+      name: tpi
+      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
       in: path
       required: true
       schema:
         type: string
-    tpiParam:
-      name: tpi
-      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
+    requestIdParam:
+      name: requestId
+      description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
       in: path
       required: true
       schema:
