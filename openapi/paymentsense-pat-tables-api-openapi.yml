@@ -321,19 +321,25 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    tableAmountUpdate:
+    tableCreation:
       type: object
       required:
-      - lastKnownAmount
-      - lastKnownPaidAmount
-      - newAmount
+      - tableName
+      - amount
+      - currency
       properties:
-        lastKnownAmount:
+        tableName:
+          type: string
+        amount:
           type: integer
-        lastKnownPaidAmount:
-          type: integer
-        newAmount:
-          type: integer
+        currency:
+          $ref: '#/components/schemas/currency'
+        receipt:
+          $ref: '#/components/schemas/receiptLineList'
+        waiterIds:
+          type: array
+          items:
+            type: string
     receiptLine:
       type: object
       required:
@@ -362,21 +368,15 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
-    tablePaymentList:
-      type: array
-      items:
-        $ref: '#/components/schemas/tablePayment'
-    currency:
-      description: Currency of the request. The textual representation from ISO 4217 is used.
+    paymentMethod:
       type: string
+      example: ICC_CHIP
       enum:
-      - GBP
-      - EUR
-      example: GBP
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
     tableLockUpdate:
       type: object
       required:
@@ -396,28 +396,26 @@ components:
         override:
           type: boolean
           description: Used to override an existing table lock. This should be used with caution when a terminal or EPoS has malfunctioned while holding a lock.
-    paymentMethod:
-      type: string
-      example: ICC_CHIP
-      enum:
-      - UNKNOWN
-      - KEYED
-      - SWIPED
-      - ICC_CHIP
-      - CONTACTLESS
-    tableReceiptUpdate:
+    tableDeletion:
       type: object
       required:
       - lastKnownAmount
       - lastKnownPaidAmount
-      - newReceipt
       properties:
         lastKnownAmount:
           type: integer
         lastKnownPaidAmount:
           type: integer
-        newReceipt:
-          $ref: '#/components/schemas/receiptLineList'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
     tablePayment:
       type: object
       required:
@@ -452,10 +450,6 @@ components:
         time:
           type: string
           format: date-time
-    tableList:
-      type: array
-      items:
-        $ref: '#/components/schemas/table_2'
     table_2:
       type: object
       required:
@@ -489,6 +483,80 @@ components:
           type: array
           items:
             type: string
+    tableWaiterIdsUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newWaiterIds
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newWaiterIds:
+          type: array
+          items:
+            type: string
+    tableCreationResponse:
+      type: object
+      required:
+      - location
+      - tableName
+      properties:
+        location:
+          type: string
+          description: The URI where the information about this particular table can be found.
+        tableName:
+          type: string
+    tableList:
+      type: array
+      items:
+        $ref: '#/components/schemas/table_2'
+    tablePaymentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/tablePayment'
+    tableAmountUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newAmount
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newAmount:
+          type: integer
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
+      type: string
+      enum:
+      - GBP
+      - EUR
+      example: GBP
+    tableReceiptUpdate:
+      type: object
+      required:
+      - lastKnownAmount
+      - lastKnownPaidAmount
+      - newReceipt
+      properties:
+        lastKnownAmount:
+          type: integer
+        lastKnownPaidAmount:
+          type: integer
+        newReceipt:
+          $ref: '#/components/schemas/receiptLineList'
+    tableListWrapper:
+      type: object
+      properties:
+        tables:
+          $ref: '#/components/schemas/tableList'
+      required:
+      - tables
     table:
       type: object
       required:
@@ -524,74 +592,6 @@ components:
           type: array
           items:
             type: string
-    tableCreationResponse:
-      type: object
-      required:
-      - location
-      - tableName
-      properties:
-        location:
-          type: string
-          description: The URI where the information about this particular table can be found.
-        tableName:
-          type: string
-    tableListWrapper:
-      type: object
-      properties:
-        tables:
-          $ref: '#/components/schemas/tableList'
-      required:
-      - tables
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
-    tableWaiterIdsUpdate:
-      type: object
-      required:
-      - lastKnownAmount
-      - lastKnownPaidAmount
-      - newWaiterIds
-      properties:
-        lastKnownAmount:
-          type: integer
-        lastKnownPaidAmount:
-          type: integer
-        newWaiterIds:
-          type: array
-          items:
-            type: string
-    tableCreation:
-      type: object
-      required:
-      - tableName
-      - amount
-      - currency
-      properties:
-        tableName:
-          type: string
-        amount:
-          type: integer
-        currency:
-          $ref: '#/components/schemas/currency'
-        receipt:
-          $ref: '#/components/schemas/receiptLineList'
-        waiterIds:
-          type: array
-          items:
-            type: string
-    tableDeletion:
-      type: object
-      required:
-      - lastKnownAmount
-      - lastKnownPaidAmount
-      properties:
-        lastKnownAmount:
-          type: integer
-        lastKnownPaidAmount:
-          type: integer
   securitySchemes:
     connectBasicAuth:
       type: http

@@ -43,38 +43,13 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    address:
+    shippingDetails:
       type: object
       properties:
-        address1:
+        name:
           type: string
-          example: 1 Test Street
-          description: Line 1 of the address.
-        address2:
-          type: string
-          description: Line 2 of the address.
-        address3:
-          type: string
-          description: Line 3 of the address.
-        address4:
-          type: string
-          description: Line 4 of the address.
-        city:
-          type: string
-          example: London
-          description: City of the address.
-        state:
-          type: string
-          example: Greater London
-          description: State of the address.
-        postcode:
-          type: string
-          example: TR14 8PA
-          description: postcode of the address.
-        countryCode:
-          type: string
-          example: '826'
-          description: CountryCode of the address.
+        address:
+          $ref: '#/components/schemas/address'
     paymentInfo:
       type: object
       properties:
@@ -138,13 +113,38 @@ components:
               item: t-shirt
               tax: '123.00'
             type: string
-    shippingDetails:
+    address:
       type: object
       properties:
-        name:
+        address1:
           type: string
-        address:
-          $ref: '#/components/schemas/address'
+          example: 1 Test Street
+          description: Line 1 of the address.
+        address2:
+          type: string
+          description: Line 2 of the address.
+        address3:
+          type: string
+          description: Line 3 of the address.
+        address4:
+          type: string
+          description: Line 4 of the address.
+        city:
+          type: string
+          example: London
+          description: City of the address.
+        state:
+          type: string
+          example: Greater London
+          description: State of the address.
+        postcode:
+          type: string
+          example: TR14 8PA
+          description: postcode of the address.
+        countryCode:
+          type: string
+          example: '826'
+          description: CountryCode of the address.
   securitySchemes:
     api_key:
       type: apiKey

@@ -88,7 +88,7 @@ paths:
       description: Attempts to cancel the transaction for the given request.
       tags:
       - Retail Transactions
-      operationId: TransactionsByRequestId
+      operationId: deleteRetailTerminalsByTpiTransactionsByRequestId
       parameters:
       - name: tpi
         in: path
@@ -118,6 +118,8 @@ paths:
           description: An internal Connect error has occurred.
       summary: Transactions by request id
       x-summary-source: derived
+      x-operation-id-source: normalized
+      x-operation-id-original: TransactionsByRequestId
   /retail/terminals/{tpi}/transactions/{requestId}/signature:
     put:
       description: Verifies the signature for a given request.
@@ -180,6 +182,80 @@ components:
           $ref: '#/components/schemas/receiptLineTypeRetail'
         value:
           type: string
+    receiptLineTypeRetail:
+      type: string
+      enum:
+      - TEXT
+      - BOX_DECLINE
+      - BOX_VOID
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
+    signatureRequest:
+      type: object
+      required:
+      - accepted
+      properties:
+        accepted:
+          type: boolean
+    paymentMethod:
+      type: string
+      enum:
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
+    transactionType:
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    messageList:
+      type: array
+      items:
+        type: string
+    notifications:
+      type: string
+      enum:
+      - APPROVED
+      - BAD_SWIPE
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
     transactionResult:
       type: string
       enum:
@@ -189,16 +265,6 @@ components:
       - UNSUCCESSFUL
       - CANCELLED
       - TIMED_OUT
-    transactionType:
-      type: string
-      enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-    messageList:
-      type: array
-      items:
-        type: string
     transactionRequest:
       type: object
       properties:
@@ -208,6 +274,44 @@ components:
           type: integer
         currency:
           $ref: '#/components/schemas/currency'
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where this resource can be found.
+    cardholderVerificationMethod:
+      type: string
+      enum:
+      - NONE
+      - PIN
+      - SIGNATURE
+      - DEVICE
+    verifySignatureResponse:
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/verifySignature'
+    verifySignature:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/messageList'
+    transactionTypeResult:
+      type: string
+      enum:
+      - LOGON
+      - REFUND
+      - REFUND_REVERSAL
+      - SALE
+      - SALE_REVERSAL
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
     transaction:
       type: object
       properties:
@@ -282,108 +386,6 @@ components:
           format: date-time
         transactionType:
           $ref: '#/components/schemas/transactionTypeResult'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    currency:
-      type: string
-      enum:
-      - GBP
-      - EUR
-    paymentMethod:
-      type: string
-      enum:
-      - UNKNOWN
-      - KEYED
-      - SWIPED
-      - ICC_CHIP
-      - CONTACTLESS
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-        location:
-          type: string
-          description: The uri where this resource can be found.
-    notifications:
-      type: string
-      enum:
-      - APPROVED
-      - BAD_SWIPE
-      - CARD_ERROR
-      - CARD_EXPIRED
-      - CARD_NOT_SUPPORTED
-      - CONNECTING
-      - CONNECTION_MADE
-      - DECLINED
-      - DECLINED_BY_CARD
-      - INSERT_CARD
-      - PIN_ENTRY
-      - PLEASE_WAIT
-      - PRESENT_CARD
-      - PRESENT_ONLY_ONE_CARD
-      - PROCESSING_ERROR
-      - REMOVE_CARD
-      - RETRYING
-      - REQUEST_SENT
-      - RE_PRESENT_CARD
-      - SIGNATURE_VERIFICATION
-      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
-      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
-      - SIGNATURE_VERIFICATION_IN_PROGRESS
-      - SIGNATURE_VERIFICATION_TIMEOUT
-      - TRANSACTION_FINISHED
-      - TRANSACTION_STARTED
-    receiptLineTypeRetail:
-      type: string
-      enum:
-      - TEXT
-      - BOX_DECLINE
-      - BOX_VOID
-      - CARRIAGE_RETURN
-      - LINE_SEPARATOR_SINGLE
-      - LINE_SEPARATOR_DOUBLE
-      - TICKET_FEED
-    verifySignatureResponse:
-      type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/verifySignature'
-    verifySignature:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/messageList'
-    transactionTypeResult:
-      type: string
-      enum:
-      - LOGON
-      - REFUND
-      - REFUND_REVERSAL
-      - SALE
-      - SALE_REVERSAL
-    signatureRequest:
-      type: object
-      required:
-      - accepted
-      properties:
-        accepted:
-          type: boolean
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
-    cardholderVerificationMethod:
-      type: string
-      enum:
-      - NONE
-      - PIN
-      - SIGNATURE
-      - DEVICE
   securitySchemes:
     connectBasicAuth:
       type: http

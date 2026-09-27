@@ -119,6 +119,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/terminal'
+    terminalWrapper:
+      type: object
+      properties:
+        terminals:
+          $ref: '#/components/schemas/terminalList'
     terminal:
       title: Terminal
       type: object
@@ -170,11 +175,6 @@ components:
           type: string
           format: URI
           example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}
-    terminalWrapper:
-      type: object
-      properties:
-        terminals:
-          $ref: '#/components/schemas/terminalList'
     terminal_2:
       title: Terminal
       type: object
@@ -230,22 +230,22 @@ components:
       schema:
         type: string
   responses:
-    internalError:
-      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
+    unauthorized:
+      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
     unprocessibleEntity:
       description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
       content:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
     unavailableTerminal:
       description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unauthorized:
-      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
       content:
         application/connect.v2+json:
           schema:

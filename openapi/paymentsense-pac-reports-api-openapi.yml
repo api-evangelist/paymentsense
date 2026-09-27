@@ -104,6 +104,36 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
+    reportRequest:
+      type: object
+      properties:
+        reportType:
+          $ref: '#/components/schemas/reportType'
+    reportType:
+      description: Type of the report.
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+      example: END_OF_DAY
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    issuerTotals:
+      type: object
+      description: A dictionary of totals split by issuer. {issuerName} is an example key.
+      properties:
+        '{issuerName}':
+          $ref: '#/components/schemas/totalsBreakdown'
     requestLocationResponse:
       type: object
       properties:
@@ -116,11 +146,101 @@ components:
           type: string
           format: URI
           example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
-    reportRequest:
+    reportBanking:
       type: object
+      required:
+      - currency
+      - currentSessionIssuerTotals
+      - previousSessionIssuerTotals
+      - currentSessionTotals
+      - previousSessionTotals
+      - currentSessionTransactionNumbers
+      - previousSessionTransactionNumbers
       properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        currentSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        previousSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        currentSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        previousSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        currentSessionTransactionNumbers:
+          description: Range of transaction numbers within the current terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0076'
+          - '0123'
+        previousSessionTransactionNumbers:
+          description: Range of transaction numbers within the previous terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0000'
+          - '0075'
+    reportResponsePAC:
+      type: object
+      required:
+      - requestId
+      - location
+      - notifications
+      properties:
+        balances:
+          $ref: '#/components/schemas/reportBalances'
+        banking:
+          $ref: '#/components/schemas/reportsBanking'
+        reportLines:
+          $ref: '#/components/schemas/receiptLineList'
+        reportTime:
+          description: Time at which the report took place.
+          type: string
+          format: YYYY-MM-DDThh:mm:ss
+          example: '2019-03-04T16:12:00'
         reportType:
-          $ref: '#/components/schemas/reportType'
+          description: Type of the report.
+          type: string
+          enum:
+          - END_OF_DAY
+          - BANKING
+          - X_BALANCE
+          - Z_BALANCE
+          example: END_OF_DAY
+        reportResult:
+          description: Outcome of the report.
+          type: string
+          enum:
+          - TIMED_OUT
+          - COMPLETE
+          example: COMPLETE
+        tpi:
+          description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal used in this request.
+          type: string
+          example: '12345678'
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this report can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/report/{requestId}
+        notifications:
+          description: Notifications indicating the progress of the report.
+          type: array
+          items:
+            type: string
+            enum:
+            - REPORT_FINISHED
+            - REPORT_STARTED
+            example:
+            - REPORT_FINISHED
+            - REPORT_STARTED
     currency:
       description: Currency of the request. The textual representation from ISO 4217 is used.
       type: string
@@ -128,6 +248,12 @@ components:
       - GBP
       - EUR
       example: GBP
+    waiterTotals:
+      type: object
+      description: A dictionary of totals split by waiter. {waiterId} is an example key.
+      properties:
+        '{waiterId}':
+          $ref: '#/components/schemas/totalsBreakdown'
     reportBalances:
       description: Local totals for the current terminal session. Only contained in X_BALANCE, Z_BALANCE and END_OF_DAY.
       type: object
@@ -192,47 +318,6 @@ components:
           example: INSTALLATION
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    reportBanking:
-      type: object
-      required:
-      - currency
-      - currentSessionIssuerTotals
-      - previousSessionIssuerTotals
-      - currentSessionTotals
-      - previousSessionTotals
-      - currentSessionTransactionNumbers
-      - previousSessionTransactionNumbers
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        currentSessionIssuerTotals:
-          $ref: '#/components/schemas/issuerTotals'
-        previousSessionIssuerTotals:
-          $ref: '#/components/schemas/issuerTotals'
-        currentSessionTotals:
-          $ref: '#/components/schemas/totalsBreakdown'
-        previousSessionTotals:
-          $ref: '#/components/schemas/totalsBreakdown'
-        currentSessionTransactionNumbers:
-          description: Range of transaction numbers within the current terminal session.
-          type: array
-          items:
-            type: string
-          example:
-          - '0076'
-          - '0123'
-        previousSessionTransactionNumbers:
-          description: Range of transaction numbers within the previous terminal session.
-          type: array
-          items:
-            type: string
-          example:
-          - '0000'
-          - '0075'
     totalsBreakdown:
       type: object
       required:
@@ -260,102 +345,17 @@ components:
         totalSalesCount:
           description: Total number of sales that have taken place in the current session.
           type: integer
-    waiterTotals:
-      type: object
-      description: A dictionary of totals split by waiter. {waiterId} is an example key.
-      properties:
-        '{waiterId}':
-          $ref: '#/components/schemas/totalsBreakdown'
-    reportType:
-      description: Type of the report.
-      type: string
-      enum:
-      - END_OF_DAY
-      - BANKING
-      - X_BALANCE
-      - Z_BALANCE
-      example: END_OF_DAY
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
-    reportResponsePAC:
-      type: object
-      required:
-      - requestId
-      - location
-      - notifications
-      properties:
-        balances:
-          $ref: '#/components/schemas/reportBalances'
-        banking:
-          $ref: '#/components/schemas/reportsBanking'
-        reportLines:
-          $ref: '#/components/schemas/receiptLineList'
-        reportTime:
-          description: Time at which the report took place.
-          type: string
-          format: YYYY-MM-DDThh:mm:ss
-          example: '2019-03-04T16:12:00'
-        reportType:
-          description: Type of the report.
-          type: string
-          enum:
-          - END_OF_DAY
-          - BANKING
-          - X_BALANCE
-          - Z_BALANCE
-          example: END_OF_DAY
-        reportResult:
-          description: Outcome of the report.
-          type: string
-          enum:
-          - TIMED_OUT
-          - COMPLETE
-          example: COMPLETE
-        tpi:
-          description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal used in this request.
-          type: string
-          example: '12345678'
-        requestId:
-          description: UUID for this request, which can be used in other endpoints.
-          type: string
-          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
-        location:
-          description: URI where information about this report can be found.
-          type: string
-          format: URI
-          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/report/{requestId}
-        notifications:
-          description: Notifications indicating the progress of the report.
-          type: array
-          items:
-            type: string
-            enum:
-            - REPORT_FINISHED
-            - REPORT_STARTED
-            example:
-            - REPORT_FINISHED
-            - REPORT_STARTED
-    issuerTotals:
-      type: object
-      description: A dictionary of totals split by issuer. {issuerName} is an example key.
-      properties:
-        '{issuerName}':
-          $ref: '#/components/schemas/totalsBreakdown'
   parameters:
-    tpiParam:
-      name: tpi
-      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
+    requestIdParam:
+      name: requestId
+      description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
       in: path
       required: true
       schema:
         type: string
-    requestIdParam:
-      name: requestId
-      description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
+    tpiParam:
+      name: tpi
+      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
       in: path
       required: true
       schema:

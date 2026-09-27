@@ -216,7 +216,7 @@ paths:
       description: Gets data for the transaction with the given requestId.
       tags:
       - PAC Transactions
-      operationId: GetTransactionWithRequestId
+      operationId: getPacTerminalsByTidTransactionsByRequestId
       responses:
         '200':
           description: "Transaction details have been successfully returned. \nProperties marked with an * are always returned. Other properties are only returned following a completed transaction (e.g. most recent notification is \"TRANSACTION_FINISHED\"), however their values may be empty."
@@ -234,11 +234,13 @@ paths:
           $ref: '#/components/responses/internalError'
       summary: Get transaction with request id
       x-summary-source: derived
+      x-operation-id-source: normalized
+      x-operation-id-original: GetTransactionWithRequestId
     delete:
       description: Attempts to cancel the transaction with the given requestId.
       tags:
       - PAC Transactions
-      operationId: CancelTransactionWithRequestId
+      operationId: deletePacTerminalsByTidTransactionsByRequestId
       responses:
         '202':
           description: Request to attempt cancellation of the transaction has been accepted. The outcome of this request should ascertained from standard transaction polling.
@@ -254,6 +256,8 @@ paths:
           $ref: '#/components/responses/internalError'
       summary: Cancel transaction with request id
       x-summary-source: derived
+      x-operation-id-source: normalized
+      x-operation-id-original: CancelTransactionWithRequestId
     servers:
     - url: https://dev-heisenberg.test.connect.paymentsense.cloud
   /pac/terminals/{tid}/transactions/{requestId}/signature:
@@ -264,7 +268,7 @@ paths:
       description: Attempts to apply signature verification on the transaction with the given requestId. If the signature is declined, the card terminal will attempt to reverse the transaction.
       tags:
       - PAC Transactions
-      operationId: VerifySignature
+      operationId: putPacTerminalsByTidTransactionsByRequestIdSignature
       requestBody:
         required: true
         content:
@@ -286,6 +290,8 @@ paths:
           $ref: '#/components/responses/internalError'
       summary: Verify signature
       x-summary-source: derived
+      x-operation-id-source: normalized
+      x-operation-id-original: VerifySignature
     servers:
     - url: https://dev-heisenberg.test.connect.paymentsense.cloud
 components:
@@ -318,6 +324,15 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
+    signatureRequest:
+      type: object
+      required:
+      - accepted
+      properties:
+        accepted:
+          description: Indicates whether the signature has been accepted.
+          type: boolean
+          example: true
     transactionType:
       description: Type of the transaction.
       type: string
@@ -326,6 +341,56 @@ components:
       - REFUND
       - DUPLICATE
       example: SALE
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    notifications:
+      type: string
+      enum:
+      - APPROVED
+      - BAD_SWIPE
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
+    transactionRequest:
+      type: object
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType'
+        amount:
+          description: Base amount of the transaction (in pence).
+          type: integer
+          example: 1234
+        currency:
+          $ref: '#/components/schemas/currency'
     requestLocationResponse:
       type: object
       properties:
@@ -338,17 +403,26 @@ components:
           type: string
           format: URI
           example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
-    transactionRequest:
+    verifySignatureResponse:
       type: object
       properties:
-        transactionType:
-          $ref: '#/components/schemas/transactionType'
-        amount:
-          description: Base amount of the transaction (in pence).
-          type: integer
-          example: 1234
-        currency:
-          $ref: '#/components/schemas/currency'
+        messages:
+          $ref: '#/components/schemas/verifySignature'
+    verifySignature:
+      type: object
+      properties:
+        status:
+          type: array
+          items:
+            type: string
+          example: Signature verification in progress.
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
+      type: string
+      enum:
+      - GBP
+      - EUR
+      example: GBP
     transaction:
       type: object
       properties:
@@ -500,22 +574,24 @@ components:
       required:
       - location
       - notifications
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    currency:
-      description: Currency of the request. The textual representation from ISO 4217 is used.
+    transactionType_2:
+      description: Type of the transaction. The DUPLICATE type is only supported on Ingenico terminals.
       type: string
       enum:
-      - GBP
-      - EUR
-      example: GBP
-    notifications:
+      - SALE
+      - REFUND
+      - DUPLICATE
+      - PRE_AUTH
+      - COMPLETION
+      - ACCOUNT_VERIFICATION
+      example: SALE
+    notifications_2:
       type: string
       enum:
       - APPROVED
+      - ATTEMPTING_CANCEL
       - BAD_SWIPE
+      - CANCELLING
       - CARD_ERROR
       - CARD_EXPIRED
       - CARD_NOT_SUPPORTED
@@ -540,34 +616,7 @@ components:
       - SIGNATURE_VERIFICATION_TIMEOUT
       - TRANSACTION_FINISHED
       - TRANSACTION_STARTED
-    verifySignatureResponse:
-      type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/verifySignature'
-    verifySignature:
-      type: object
-      properties:
-        status:
-          type: array
-          items:
-            type: string
-          example: Signature verification in progress.
-    signatureRequest:
-      type: object
-      required:
-      - accepted
-      properties:
-        accepted:
-          description: Indicates whether the signature has been accepted.
-          type: boolean
-          example: true
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
+      - UNABLE_TO_CANCEL
     requestLocationResponse_2:
       type: object
       properties:
@@ -580,17 +629,13 @@ components:
           type: string
           format: URI
           example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
-    transactionType_2:
-      description: Type of the transaction. The DUPLICATE type is only supported on Ingenico terminals.
-      type: string
-      enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-      - PRE_AUTH
-      - COMPLETION
-      - ACCOUNT_VERIFICATION
-      example: SALE
+    userMessage:
+      type: object
+      properties:
+        userMessage:
+          description: Error message to display to the user.
+          type: string
+          example: This is an example error message. The string here should be displayed to the user.
     transactionRequest_2:
       type: object
       properties:
@@ -624,38 +669,6 @@ components:
           minimum: 1
           maximum: 99999999
           example: 1234
-    notifications_2:
-      type: string
-      enum:
-      - APPROVED
-      - ATTEMPTING_CANCEL
-      - BAD_SWIPE
-      - CANCELLING
-      - CARD_ERROR
-      - CARD_EXPIRED
-      - CARD_NOT_SUPPORTED
-      - CONNECTING
-      - CONNECTION_MADE
-      - DECLINED
-      - DECLINED_BY_CARD
-      - INSERT_CARD
-      - PIN_ENTRY
-      - PLEASE_WAIT
-      - PRESENT_CARD
-      - PRESENT_ONLY_ONE_CARD
-      - PROCESSING_ERROR
-      - REMOVE_CARD
-      - RETRYING
-      - REQUEST_SENT
-      - RE_PRESENT_CARD
-      - SIGNATURE_VERIFICATION
-      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
-      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
-      - SIGNATURE_VERIFICATION_IN_PROGRESS
-      - SIGNATURE_VERIFICATION_TIMEOUT
-      - TRANSACTION_FINISHED
-      - TRANSACTION_STARTED
-      - UNABLE_TO_CANCEL
     transaction_2:
       type: object
       properties:
@@ -816,13 +829,6 @@ components:
       required:
       - location
       - notifications
-    userMessage:
-      type: object
-      properties:
-        userMessage:
-          description: Error message to display to the user.
-          type: string
-          example: This is an example error message. The string here should be displayed to the user.
   parameters:
     tpiParam:
       name: tpi
@@ -853,22 +859,8 @@ components:
       schema:
         type: string
   responses:
-    internalError:
-      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
-    unprocessibleEntity:
-      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unauthorized:
-      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unavailableTerminal:
-      description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
+    unavailableTerminalOrTransaction:
+      description: Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>
       content:
         application/connect.v2+json:
           schema:
@@ -879,12 +871,26 @@ components:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
-    unavailableTerminalOrTransaction:
-      description: Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>
+    unavailableTerminal:
+      description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
       content:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
+    unauthorized:
+      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unprocessibleEntity:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
   securitySchemes:
     connectBasicAuth:
       type: http

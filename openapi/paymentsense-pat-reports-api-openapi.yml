@@ -131,6 +131,81 @@ components:
         location:
           type: string
           description: The URI where the information about this particular report can be found.
+    reportType:
+      description: Type of the report.
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+      example: END_OF_DAY
+    reportList:
+      type: array
+      items:
+        $ref: '#/components/schemas/reportResponsePAT'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    reportListResponse:
+      type: object
+      properties:
+        reports:
+          $ref: '#/components/schemas/reportList'
+    issuerTotals:
+      type: object
+      description: A dictionary of totals split by issuer. {issuerName} is an example key.
+      properties:
+        '{issuerName}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    reportBanking:
+      type: object
+      required:
+      - currency
+      - currentSessionIssuerTotals
+      - previousSessionIssuerTotals
+      - currentSessionTotals
+      - previousSessionTotals
+      - currentSessionTransactionNumbers
+      - previousSessionTransactionNumbers
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        currentSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        previousSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        currentSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        previousSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        currentSessionTransactionNumbers:
+          description: Range of transaction numbers within the current terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0076'
+          - '0123'
+        previousSessionTransactionNumbers:
+          description: Range of transaction numbers within the previous terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0000'
+          - '0075'
+    reportResultsPAT:
+      type: string
+      enum:
+      - COMPLETE
     currency:
       description: Currency of the request. The textual representation from ISO 4217 is used.
       type: string
@@ -138,6 +213,12 @@ components:
       - GBP
       - EUR
       example: GBP
+    waiterTotals:
+      type: object
+      description: A dictionary of totals split by waiter. {waiterId} is an example key.
+      properties:
+        '{waiterId}':
+          $ref: '#/components/schemas/totalsBreakdown'
     reportBalances:
       description: Local totals for the current terminal session. Only contained in X_BALANCE, Z_BALANCE and END_OF_DAY.
       type: object
@@ -202,69 +283,6 @@ components:
           example: INSTALLATION
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    reportResultsPAT:
-      type: string
-      enum:
-      - COMPLETE
-    reportBanking:
-      type: object
-      required:
-      - currency
-      - currentSessionIssuerTotals
-      - previousSessionIssuerTotals
-      - currentSessionTotals
-      - previousSessionTotals
-      - currentSessionTransactionNumbers
-      - previousSessionTransactionNumbers
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        currentSessionIssuerTotals:
-          $ref: '#/components/schemas/issuerTotals'
-        previousSessionIssuerTotals:
-          $ref: '#/components/schemas/issuerTotals'
-        currentSessionTotals:
-          $ref: '#/components/schemas/totalsBreakdown'
-        previousSessionTotals:
-          $ref: '#/components/schemas/totalsBreakdown'
-        currentSessionTransactionNumbers:
-          description: Range of transaction numbers within the current terminal session.
-          type: array
-          items:
-            type: string
-          example:
-          - '0076'
-          - '0123'
-        previousSessionTransactionNumbers:
-          description: Range of transaction numbers within the previous terminal session.
-          type: array
-          items:
-            type: string
-          example:
-          - '0000'
-          - '0075'
-    reportList:
-      type: array
-      items:
-        $ref: '#/components/schemas/reportResponsePAT'
-    reportListResponse:
-      type: object
-      properties:
-        reports:
-          $ref: '#/components/schemas/reportList'
-    reportType:
-      description: Type of the report.
-      type: string
-      enum:
-      - END_OF_DAY
-      - BANKING
-      - X_BALANCE
-      - Z_BALANCE
-      example: END_OF_DAY
     totalsBreakdown:
       type: object
       required:
@@ -292,24 +310,6 @@ components:
         totalSalesCount:
           description: Total number of sales that have taken place in the current session.
           type: integer
-    waiterTotals:
-      type: object
-      description: A dictionary of totals split by waiter. {waiterId} is an example key.
-      properties:
-        '{waiterId}':
-          $ref: '#/components/schemas/totalsBreakdown'
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
-    issuerTotals:
-      type: object
-      description: A dictionary of totals split by issuer. {issuerName} is an example key.
-      properties:
-        '{issuerName}':
-          $ref: '#/components/schemas/totalsBreakdown'
   parameters:
     tpiParam:
       name: tpi
