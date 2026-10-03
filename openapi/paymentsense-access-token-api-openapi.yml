@@ -173,6 +173,13 @@ components:
       - amount
       - orderId
       - merchantUrl
+    shippingDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
     accessToken:
       properties:
         id:
@@ -217,13 +224,6 @@ components:
           type: string
           example: '826'
           description: CountryCode of the address.
-    shippingDetails:
-      type: object
-      properties:
-        name:
-          type: string
-        address:
-          $ref: '#/components/schemas/address'
   securitySchemes:
     api_key:
       type: apiKey

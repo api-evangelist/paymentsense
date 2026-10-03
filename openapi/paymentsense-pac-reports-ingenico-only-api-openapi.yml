@@ -65,175 +65,7 @@ paths:
       summary: PAC report details
       x-summary-source: derived
 components:
-  responses:
-    unprocessibleAndBusy:
-      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unauthorized:
-      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unprocessibleEntity:
-      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unavailableReportOrTransaction:
-      description: Terminal or report could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Report requestId could not be found</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    internalError:
-      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
   schemas:
-    waiterTotals:
-      type: object
-      description: A dictionary of totals split by waiter. {waiterId} is an example key.
-      properties:
-        '{waiterId}':
-          $ref: '#/components/schemas/totalsBreakdown'
-    reportsBanking:
-      type: object
-      description: Banking totals for the current terminal session (these are reset in line with the banking window). Only contained in BANKING and END_OF_DAY. Consists of a dictionary of reports keyed by acquirer name. '{acquirerName}' is an example key
-      properties:
-        '{acquirerName}':
-          $ref: '#/components/schemas/reportBanking'
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          description: UUID for this request, which can be used in other endpoints.
-          type: string
-          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
-        location:
-          description: URI where information about this request can be found.
-          type: string
-          format: URI
-          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
-    reportBanking:
-      type: object
-      required:
-      - currency
-      - currentSessionIssuerTotals
-      - previousSessionIssuerTotals
-      - currentSessionTotals
-      - previousSessionTotals
-      - currentSessionTransactionNumbers
-      - previousSessionTransactionNumbers
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        currentSessionIssuerTotals:
-          $ref: '#/components/schemas/issuerTotals'
-        previousSessionIssuerTotals:
-          $ref: '#/components/schemas/issuerTotals'
-        currentSessionTotals:
-          $ref: '#/components/schemas/totalsBreakdown'
-        previousSessionTotals:
-          $ref: '#/components/schemas/totalsBreakdown'
-        currentSessionTransactionNumbers:
-          description: Range of transaction numbers within the current terminal session.
-          type: array
-          items:
-            type: string
-          example:
-          - '0076'
-          - '0123'
-        previousSessionTransactionNumbers:
-          description: Range of transaction numbers within the previous terminal session.
-          type: array
-          items:
-            type: string
-          example:
-          - '0000'
-          - '0075'
-    totalsBreakdown:
-      type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          description: Total amount that has been taken in the current session.
-          type: integer
-        totalRefundsAmount:
-          description: Total amount of refunds (in pence) that have been taken in the current session.
-          type: integer
-        totalRefundsCount:
-          description: Total number of refunds that have taken place in the current session.
-          type: integer
-        totalSalesAmount:
-          description: Total amount of sales (in pence) that have been taken in the current session.
-          type: integer
-        totalSalesCount:
-          description: Total number of sales that have taken place in the current session.
-          type: integer
-    userMessage:
-      type: object
-      properties:
-        userMessage:
-          description: Error message to display to the user.
-          type: string
-          example: This is an example error message. The string here should be displayed to the user.
-    receiptLine:
-      type: object
-      required:
-      - value
-      properties:
-        format:
-          description: Defines any special formatting applied to this line.
-          type: array
-          items:
-            $ref: '#/components/schemas/format'
-          example:
-          - BOLD
-        type:
-          description: The type of the content contained in the value field.
-          type: string
-          enum:
-          - TEXT
-          - BOX_DECLINE
-          - BOX_VOID
-          - CARRIAGE_RETURN
-          - LINE_SEPARATOR_SINGLE
-          - LINE_SEPARATOR_DOUBLE
-          - TICKET_FEED
-          example: TEXT
-        value:
-          description: Raw content of the line.
-          type: string
-          example: John's Shop
-    reportRequest:
-      type: object
-      properties:
-        reportType:
-          $ref: '#/components/schemas/reportType'
-    currency:
-      description: Currency of the request. The textual representation from ISO 4217 is used.
-      type: string
-      enum:
-      - GBP
-      - EUR
-      example: GBP
     reportBalances:
       description: Local totals for the current terminal session. Only contained in X_BALANCE, Z_BALANCE and END_OF_DAY.
       type: object
@@ -298,6 +130,105 @@ components:
           example: INSTALLATION
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
+    reportRequest:
+      type: object
+      properties:
+        reportType:
+          $ref: '#/components/schemas/reportType'
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this request can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
+    waiterTotals:
+      type: object
+      description: A dictionary of totals split by waiter. {waiterId} is an example key.
+      properties:
+        '{waiterId}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          description: Total amount that has been taken in the current session.
+          type: integer
+        totalRefundsAmount:
+          description: Total amount of refunds (in pence) that have been taken in the current session.
+          type: integer
+        totalRefundsCount:
+          description: Total number of refunds that have taken place in the current session.
+          type: integer
+        totalSalesAmount:
+          description: Total amount of sales (in pence) that have been taken in the current session.
+          type: integer
+        totalSalesCount:
+          description: Total number of sales that have taken place in the current session.
+          type: integer
+    reportsBanking:
+      type: object
+      description: Banking totals for the current terminal session (these are reset in line with the banking window). Only contained in BANKING and END_OF_DAY. Consists of a dictionary of reports keyed by acquirer name. '{acquirerName}' is an example key
+      properties:
+        '{acquirerName}':
+          $ref: '#/components/schemas/reportBanking'
+    reportBanking:
+      type: object
+      required:
+      - currency
+      - currentSessionIssuerTotals
+      - previousSessionIssuerTotals
+      - currentSessionTotals
+      - previousSessionTotals
+      - currentSessionTransactionNumbers
+      - previousSessionTransactionNumbers
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        currentSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        previousSessionIssuerTotals:
+          $ref: '#/components/schemas/issuerTotals'
+        currentSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        previousSessionTotals:
+          $ref: '#/components/schemas/totalsBreakdown'
+        currentSessionTransactionNumbers:
+          description: Range of transaction numbers within the current terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0076'
+          - '0123'
+        previousSessionTransactionNumbers:
+          description: Range of transaction numbers within the previous terminal session.
+          type: array
+          items:
+            type: string
+          example:
+          - '0000'
+          - '0075'
     reportType:
       description: Type of the report.
       type: string
@@ -307,10 +238,41 @@ components:
       - X_BALANCE
       - Z_BALANCE
       example: END_OF_DAY
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
+    userMessage:
+      type: object
+      properties:
+        userMessage:
+          description: Error message to display to the user.
+          type: string
+          example: This is an example error message. The string here should be displayed to the user.
+    receiptLine:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          description: Defines any special formatting applied to this line.
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+          example:
+          - BOLD
+        type:
+          description: The type of the content contained in the value field.
+          type: string
+          enum:
+          - TEXT
+          - BOX_DECLINE
+          - BOX_VOID
+          - CARRIAGE_RETURN
+          - LINE_SEPARATOR_SINGLE
+          - LINE_SEPARATOR_DOUBLE
+          - TICKET_FEED
+          example: TEXT
+        value:
+          description: Raw content of the line.
+          type: string
+          example: John's Shop
     issuerTotals:
       type: object
       description: A dictionary of totals split by issuer. {issuerName} is an example key.
@@ -375,14 +337,18 @@ components:
             example:
             - REPORT_FINISHED
             - REPORT_STARTED
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
+      type: string
+      enum:
+      - GBP
+      - EUR
+      example: GBP
   parameters:
-    tidParam:
-      name: tid
-      description: Id (unique identifier assigned to a terminal) of the terminal to use.
-      in: path
-      required: true
-      schema:
-        type: string
     requestIdParam:
       name: requestId
       description: Id (UUID assigned to a terminal request) of the request to use.
@@ -390,6 +356,40 @@ components:
       required: true
       schema:
         type: string
+    tidParam:
+      name: tid
+      description: Id (unique identifier assigned to a terminal) of the terminal to use.
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    unprocessibleAndBusy:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
+    unauthorized:
+      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unprocessibleEntity:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    unavailableReportOrTransaction:
+      description: Terminal or report could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Report requestId could not be found</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
   securitySchemes:
     connectBasicAuth:
       type: http

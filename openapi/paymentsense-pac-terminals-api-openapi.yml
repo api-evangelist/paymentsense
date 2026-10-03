@@ -230,6 +230,8 @@ components:
       schema:
         type: string
   responses:
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
     unauthorized:
       description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
       content:
@@ -242,8 +244,6 @@ components:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
-    internalError:
-      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
     unavailableTerminal:
       description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
       content:

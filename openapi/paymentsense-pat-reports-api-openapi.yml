@@ -63,40 +63,32 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
     reportsBanking:
       type: object
       description: Banking totals for the current terminal session (these are reset in line with the banking window). Only contained in BANKING and END_OF_DAY. Consists of a dictionary of reports keyed by acquirer name. '{acquirerName}' is an example key
       properties:
         '{acquirerName}':
           $ref: '#/components/schemas/reportBanking'
-    receiptLine:
+    reportListResponse:
       type: object
-      required:
-      - value
       properties:
-        format:
-          description: Defines any special formatting applied to this line.
-          type: array
-          items:
-            $ref: '#/components/schemas/format'
-          example:
-          - BOLD
-        type:
-          description: The type of the content contained in the value field.
-          type: string
-          enum:
-          - TEXT
-          - BOX_DECLINE
-          - BOX_VOID
-          - CARRIAGE_RETURN
-          - LINE_SEPARATOR_SINGLE
-          - LINE_SEPARATOR_DOUBLE
-          - TICKET_FEED
-          example: TEXT
-        value:
-          description: Raw content of the line.
-          type: string
-          example: John's Shop
+        reports:
+          $ref: '#/components/schemas/reportList'
+    reportType:
+      description: Type of the report.
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+      example: END_OF_DAY
     reportResponsePAT:
       type: object
       required:
@@ -131,40 +123,6 @@ components:
         location:
           type: string
           description: The URI where the information about this particular report can be found.
-    reportType:
-      description: Type of the report.
-      type: string
-      enum:
-      - END_OF_DAY
-      - BANKING
-      - X_BALANCE
-      - Z_BALANCE
-      example: END_OF_DAY
-    reportList:
-      type: array
-      items:
-        $ref: '#/components/schemas/reportResponsePAT'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
-    reportListResponse:
-      type: object
-      properties:
-        reports:
-          $ref: '#/components/schemas/reportList'
-    issuerTotals:
-      type: object
-      description: A dictionary of totals split by issuer. {issuerName} is an example key.
-      properties:
-        '{issuerName}':
-          $ref: '#/components/schemas/totalsBreakdown'
     reportBanking:
       type: object
       required:
@@ -202,22 +160,74 @@ components:
           example:
           - '0000'
           - '0075'
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          description: Total amount that has been taken in the current session.
+          type: integer
+        totalRefundsAmount:
+          description: Total amount of refunds (in pence) that have been taken in the current session.
+          type: integer
+        totalRefundsCount:
+          description: Total number of refunds that have taken place in the current session.
+          type: integer
+        totalSalesAmount:
+          description: Total amount of sales (in pence) that have been taken in the current session.
+          type: integer
+        totalSalesCount:
+          description: Total number of sales that have taken place in the current session.
+          type: integer
+    reportList:
+      type: array
+      items:
+        $ref: '#/components/schemas/reportResponsePAT'
     reportResultsPAT:
       type: string
       enum:
       - COMPLETE
-    currency:
-      description: Currency of the request. The textual representation from ISO 4217 is used.
-      type: string
-      enum:
-      - GBP
-      - EUR
-      example: GBP
-    waiterTotals:
+    receiptLine:
       type: object
-      description: A dictionary of totals split by waiter. {waiterId} is an example key.
+      required:
+      - value
       properties:
-        '{waiterId}':
+        format:
+          description: Defines any special formatting applied to this line.
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+          example:
+          - BOLD
+        type:
+          description: The type of the content contained in the value field.
+          type: string
+          enum:
+          - TEXT
+          - BOX_DECLINE
+          - BOX_VOID
+          - CARRIAGE_RETURN
+          - LINE_SEPARATOR_SINGLE
+          - LINE_SEPARATOR_DOUBLE
+          - TICKET_FEED
+          example: TEXT
+        value:
+          description: Raw content of the line.
+          type: string
+          example: John's Shop
+    issuerTotals:
+      type: object
+      description: A dictionary of totals split by issuer. {issuerName} is an example key.
+      properties:
+        '{issuerName}':
           $ref: '#/components/schemas/totalsBreakdown'
     reportBalances:
       description: Local totals for the current terminal session. Only contained in X_BALANCE, Z_BALANCE and END_OF_DAY.
@@ -283,33 +293,23 @@ components:
           example: INSTALLATION
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
-    totalsBreakdown:
+    waiterTotals:
       type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
+      description: A dictionary of totals split by waiter. {waiterId} is an example key.
       properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          description: Total amount that has been taken in the current session.
-          type: integer
-        totalRefundsAmount:
-          description: Total amount of refunds (in pence) that have been taken in the current session.
-          type: integer
-        totalRefundsCount:
-          description: Total number of refunds that have taken place in the current session.
-          type: integer
-        totalSalesAmount:
-          description: Total amount of sales (in pence) that have been taken in the current session.
-          type: integer
-        totalSalesCount:
-          description: Total number of sales that have taken place in the current session.
-          type: integer
+        '{waiterId}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
+      type: string
+      enum:
+      - GBP
+      - EUR
+      example: GBP
   parameters:
     tpiParam:
       name: tpi

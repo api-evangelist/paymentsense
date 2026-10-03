@@ -101,32 +101,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    terminalWrapper:
-      title: terminalWrapper
-      description: a list of terminals keyed by 'terminals'
-      type: object
-      properties:
-        terminals:
-          $ref: '#/components/schemas/terminalList'
-      additionalProperties:
-        $ref: '#/components/schemas/terminal'
-    capabilities:
-      type: string
-      enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-      - CANCEL_TRANSACTION
-      - REPORT_END_OF_DAY
-      - REPORT_BANKING
-      - REPORT_X_BALANCE
-      - REPORT_Z_BALANCE
-      - TERMINAL_STATUS
-    terminalList:
-      title: TerminalList
-      type: array
-      items:
-        $ref: '#/components/schemas/terminal'
     terminal:
       title: Terminal
       type: object
@@ -149,20 +123,46 @@ components:
         location:
           type: string
           description: The uri where the information about this particular terminal can be found.
+    terminalList:
+      title: TerminalList
+      type: array
+      items:
+        $ref: '#/components/schemas/terminal'
     capabilitiesList:
       type: array
       items:
         $ref: '#/components/schemas/capabilities'
-    currency:
+    capabilities:
       type: string
       enum:
-      - GBP
-      - EUR
+      - SALE
+      - REFUND
+      - DUPLICATE
+      - CANCEL_TRANSACTION
+      - REPORT_END_OF_DAY
+      - REPORT_BANKING
+      - REPORT_X_BALANCE
+      - REPORT_Z_BALANCE
+      - TERMINAL_STATUS
+    terminalWrapper:
+      title: terminalWrapper
+      description: a list of terminals keyed by 'terminals'
+      type: object
+      properties:
+        terminals:
+          $ref: '#/components/schemas/terminalList'
+      additionalProperties:
+        $ref: '#/components/schemas/terminal'
     terminalStatus:
       type: string
       enum:
       - AVAILABLE
       - BUSY
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
   securitySchemes:
     connectBasicAuth:
       type: http

@@ -296,118 +296,12 @@ paths:
     - url: https://dev-heisenberg.test.connect.paymentsense.cloud
 components:
   schemas:
-    receiptLine:
-      type: object
-      required:
-      - value
-      properties:
-        format:
-          description: Defines any special formatting applied to this line.
-          type: array
-          items:
-            $ref: '#/components/schemas/format'
-          example:
-          - BOLD
-        type:
-          description: The type of the content contained in the value field.
-          type: string
-          enum:
-          - TEXT
-          - BOX_DECLINE
-          - BOX_VOID
-          - CARRIAGE_RETURN
-          - LINE_SEPARATOR_SINGLE
-          - LINE_SEPARATOR_DOUBLE
-          - TICKET_FEED
-          example: TEXT
-        value:
-          description: Raw content of the line.
-          type: string
-          example: John's Shop
-    signatureRequest:
-      type: object
-      required:
-      - accepted
-      properties:
-        accepted:
-          description: Indicates whether the signature has been accepted.
-          type: boolean
-          example: true
-    transactionType:
-      description: Type of the transaction.
-      type: string
-      enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-      example: SALE
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
     format:
       type: string
       enum:
       - BOLD
       - DOUBLE_HEIGHT
       - DOUBLE_WIDTH
-    notifications:
-      type: string
-      enum:
-      - APPROVED
-      - BAD_SWIPE
-      - CARD_ERROR
-      - CARD_EXPIRED
-      - CARD_NOT_SUPPORTED
-      - CONNECTING
-      - CONNECTION_MADE
-      - DECLINED
-      - DECLINED_BY_CARD
-      - INSERT_CARD
-      - PIN_ENTRY
-      - PLEASE_WAIT
-      - PRESENT_CARD
-      - PRESENT_ONLY_ONE_CARD
-      - PROCESSING_ERROR
-      - REMOVE_CARD
-      - RETRYING
-      - REQUEST_SENT
-      - RE_PRESENT_CARD
-      - SIGNATURE_VERIFICATION
-      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
-      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
-      - SIGNATURE_VERIFICATION_IN_PROGRESS
-      - SIGNATURE_VERIFICATION_TIMEOUT
-      - TRANSACTION_FINISHED
-      - TRANSACTION_STARTED
-    transactionRequest:
-      type: object
-      properties:
-        transactionType:
-          $ref: '#/components/schemas/transactionType'
-        amount:
-          description: Base amount of the transaction (in pence).
-          type: integer
-          example: 1234
-        currency:
-          $ref: '#/components/schemas/currency'
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          description: UUID for this request, which can be used in other endpoints.
-          type: string
-          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
-        location:
-          description: URI where information about this request can be found.
-          type: string
-          format: URI
-          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
-    verifySignatureResponse:
-      type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/verifySignature'
     verifySignature:
       type: object
       properties:
@@ -416,13 +310,14 @@ components:
           items:
             type: string
           example: Signature verification in progress.
-    currency:
-      description: Currency of the request. The textual representation from ISO 4217 is used.
+    transactionType:
+      description: Type of the transaction.
       type: string
       enum:
-      - GBP
-      - EUR
-      example: GBP
+      - SALE
+      - REFUND
+      - DUPLICATE
+      example: SALE
     transaction:
       type: object
       properties:
@@ -574,17 +469,111 @@ components:
       required:
       - location
       - notifications
-    transactionType_2:
-      description: Type of the transaction. The DUPLICATE type is only supported on Ingenico terminals.
+    receiptLine:
+      type: object
+      required:
+      - value
+      properties:
+        format:
+          description: Defines any special formatting applied to this line.
+          type: array
+          items:
+            $ref: '#/components/schemas/format'
+          example:
+          - BOLD
+        type:
+          description: The type of the content contained in the value field.
+          type: string
+          enum:
+          - TEXT
+          - BOX_DECLINE
+          - BOX_VOID
+          - CARRIAGE_RETURN
+          - LINE_SEPARATOR_SINGLE
+          - LINE_SEPARATOR_DOUBLE
+          - TICKET_FEED
+          example: TEXT
+        value:
+          description: Raw content of the line.
+          type: string
+          example: John's Shop
+    notifications:
       type: string
       enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-      - PRE_AUTH
-      - COMPLETION
-      - ACCOUNT_VERIFICATION
-      example: SALE
+      - APPROVED
+      - BAD_SWIPE
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
+    signatureRequest:
+      type: object
+      required:
+      - accepted
+      properties:
+        accepted:
+          description: Indicates whether the signature has been accepted.
+          type: boolean
+          example: true
+    transactionRequest:
+      type: object
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType'
+        amount:
+          description: Base amount of the transaction (in pence).
+          type: integer
+          example: 1234
+        currency:
+          $ref: '#/components/schemas/currency'
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this request can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
+    verifySignatureResponse:
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/verifySignature'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
+      type: string
+      enum:
+      - GBP
+      - EUR
+      example: GBP
     notifications_2:
       type: string
       enum:
@@ -617,58 +606,6 @@ components:
       - TRANSACTION_FINISHED
       - TRANSACTION_STARTED
       - UNABLE_TO_CANCEL
-    requestLocationResponse_2:
-      type: object
-      properties:
-        requestId:
-          description: UUID for this request, which can be used in other endpoints.
-          type: string
-          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
-        location:
-          description: URI where information about this request can be found.
-          type: string
-          format: URI
-          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
-    userMessage:
-      type: object
-      properties:
-        userMessage:
-          description: Error message to display to the user.
-          type: string
-          example: This is an example error message. The string here should be displayed to the user.
-    transactionRequest_2:
-      type: object
-      properties:
-        transactionType:
-          $ref: '#/components/schemas/transactionType_2'
-        currency:
-          $ref: '#/components/schemas/currency'
-        amount:
-          description: Accepted for all transactions except duplicates. Base amount of the transaction (in pence).
-          type: integer
-          minimum: 1
-          maximum: 99999999
-          example: 1234
-        amountCashback:
-          description: Only accepted for sale transactions. Amount of cashback to attempt to add to this transaction (in pence). The amountCashback field in the transaction should always be checked to find out the actual amount of cashback processed.
-          type: integer
-          minimum: 0
-          maximum: 10000
-          example: 100
-        cardholderNotPresent:
-          description: Accepted for all transactions except duplicates. Indicates whether this transaction should be completed as CNP (e.g. manual entry of card details). If set, the PDQ will skip the present card screen (for sales and refunds) and immediately prompt for manual entry of card details. Transactions with this flag set are allowed to take longer to complete than a standard transaction.
-          type: boolean
-          example: true
-        authCode:
-          description: (Ingenico Only). Required for completion transactions and not accepted for any other transaction types. Should contain the auth code of the first pre-auth transaction performed on a customer's card. Pre-auths and completions must be completed on the same card.
-          type: string
-          example: ABC123
-        amountPreAuthorisedTotal:
-          description: (Ingenico Only). Required for completion transactions and not accepted for any other transaction types. Should contain the sum of all pre-auth transactions performed on a customer's card. Pre-auths and completions must be completed on the same card.
-          type: integer
-          minimum: 1
-          maximum: 99999999
-          example: 1234
     transaction_2:
       type: object
       properties:
@@ -829,14 +766,70 @@ components:
       required:
       - location
       - notifications
+    requestLocationResponse_2:
+      type: object
+      properties:
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this request can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
+    transactionRequest_2:
+      type: object
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType_2'
+        currency:
+          $ref: '#/components/schemas/currency'
+        amount:
+          description: Accepted for all transactions except duplicates. Base amount of the transaction (in pence).
+          type: integer
+          minimum: 1
+          maximum: 99999999
+          example: 1234
+        amountCashback:
+          description: Only accepted for sale transactions. Amount of cashback to attempt to add to this transaction (in pence). The amountCashback field in the transaction should always be checked to find out the actual amount of cashback processed.
+          type: integer
+          minimum: 0
+          maximum: 10000
+          example: 100
+        cardholderNotPresent:
+          description: Accepted for all transactions except duplicates. Indicates whether this transaction should be completed as CNP (e.g. manual entry of card details). If set, the PDQ will skip the present card screen (for sales and refunds) and immediately prompt for manual entry of card details. Transactions with this flag set are allowed to take longer to complete than a standard transaction.
+          type: boolean
+          example: true
+        authCode:
+          description: (Ingenico Only). Required for completion transactions and not accepted for any other transaction types. Should contain the auth code of the first pre-auth transaction performed on a customer's card. Pre-auths and completions must be completed on the same card.
+          type: string
+          example: ABC123
+        amountPreAuthorisedTotal:
+          description: (Ingenico Only). Required for completion transactions and not accepted for any other transaction types. Should contain the sum of all pre-auth transactions performed on a customer's card. Pre-auths and completions must be completed on the same card.
+          type: integer
+          minimum: 1
+          maximum: 99999999
+          example: 1234
+    transactionType_2:
+      description: Type of the transaction. The DUPLICATE type is only supported on Ingenico terminals.
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+      - PRE_AUTH
+      - COMPLETION
+      - ACCOUNT_VERIFICATION
+      example: SALE
+    userMessage:
+      type: object
+      properties:
+        userMessage:
+          description: Error message to display to the user.
+          type: string
+          example: This is an example error message. The string here should be displayed to the user.
   parameters:
-    tpiParam:
-      name: tpi
-      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
-      in: path
-      required: true
-      schema:
-        type: string
     requestIdParam:
       name: requestId
       description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
@@ -844,9 +837,9 @@ components:
       required: true
       schema:
         type: string
-    tidParam:
-      name: tid
-      description: Id (unique identifier assigned to a terminal) of the terminal to use.
+    tpiParam:
+      name: tpi
+      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
       in: path
       required: true
       schema:
@@ -858,15 +851,16 @@ components:
       required: true
       schema:
         type: string
+    tidParam:
+      name: tid
+      description: Id (unique identifier assigned to a terminal) of the terminal to use.
+      in: path
+      required: true
+      schema:
+        type: string
   responses:
     unavailableTerminalOrTransaction:
       description: Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unprocessibleAndBusy:
-      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
       content:
         application/connect.v2+json:
           schema:
@@ -877,6 +871,14 @@ components:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
+    unprocessibleAndBusy:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Terminal is busy processing another request</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
     unauthorized:
       description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
       content:
@@ -889,8 +891,6 @@ components:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
-    internalError:
-      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
   securitySchemes:
     connectBasicAuth:
       type: http
