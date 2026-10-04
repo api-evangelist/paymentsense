@@ -63,6 +63,48 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    reportType:
+      description: Type of the report.
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+      example: END_OF_DAY
+    waiterTotals:
+      type: object
+      description: A dictionary of totals split by waiter. {waiterId} is an example key.
+      properties:
+        '{waiterId}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          description: Total amount that has been taken in the current session.
+          type: integer
+        totalRefundsAmount:
+          description: Total amount of refunds (in pence) that have been taken in the current session.
+          type: integer
+        totalRefundsCount:
+          description: Total number of refunds that have taken place in the current session.
+          type: integer
+        totalSalesAmount:
+          description: Total amount of sales (in pence) that have been taken in the current session.
+          type: integer
+        totalSalesCount:
+          description: Total number of sales that have taken place in the current session.
+          type: integer
     format:
       type: string
       enum:
@@ -75,54 +117,6 @@ components:
       properties:
         '{acquirerName}':
           $ref: '#/components/schemas/reportBanking'
-    reportListResponse:
-      type: object
-      properties:
-        reports:
-          $ref: '#/components/schemas/reportList'
-    reportType:
-      description: Type of the report.
-      type: string
-      enum:
-      - END_OF_DAY
-      - BANKING
-      - X_BALANCE
-      - Z_BALANCE
-      example: END_OF_DAY
-    reportResponsePAT:
-      type: object
-      required:
-      - balances
-      - banking
-      - reportLines
-      - reportTime
-      - reportType
-      - reportResult
-      - tpi
-      - requestId
-      - location
-      properties:
-        balances:
-          $ref: '#/components/schemas/reportBalances'
-        banking:
-          $ref: '#/components/schemas/reportsBanking'
-        reportLines:
-          $ref: '#/components/schemas/receiptLineList'
-        reportTime:
-          type: string
-          format: date-time
-        reportType:
-          $ref: '#/components/schemas/reportType'
-        reportResult:
-          type: string
-          $ref: '#/components/schemas/reportResultsPAT'
-        tpi:
-          type: string
-        reportId:
-          type: string
-        location:
-          type: string
-          description: The URI where the information about this particular report can be found.
     reportBanking:
       type: object
       required:
@@ -160,37 +154,6 @@ components:
           example:
           - '0000'
           - '0075'
-    totalsBreakdown:
-      type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          description: Total amount that has been taken in the current session.
-          type: integer
-        totalRefundsAmount:
-          description: Total amount of refunds (in pence) that have been taken in the current session.
-          type: integer
-        totalRefundsCount:
-          description: Total number of refunds that have taken place in the current session.
-          type: integer
-        totalSalesAmount:
-          description: Total amount of sales (in pence) that have been taken in the current session.
-          type: integer
-        totalSalesCount:
-          description: Total number of sales that have taken place in the current session.
-          type: integer
-    reportList:
-      type: array
-      items:
-        $ref: '#/components/schemas/reportResponsePAT'
     reportResultsPAT:
       type: string
       enum:
@@ -223,12 +186,6 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
-    issuerTotals:
-      type: object
-      description: A dictionary of totals split by issuer. {issuerName} is an example key.
-      properties:
-        '{issuerName}':
-          $ref: '#/components/schemas/totalsBreakdown'
     reportBalances:
       description: Local totals for the current terminal session. Only contained in X_BALANCE, Z_BALANCE and END_OF_DAY.
       type: object
@@ -293,16 +250,6 @@ components:
           example: INSTALLATION
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
-    waiterTotals:
-      type: object
-      description: A dictionary of totals split by waiter. {waiterId} is an example key.
-      properties:
-        '{waiterId}':
-          $ref: '#/components/schemas/totalsBreakdown'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
     currency:
       description: Currency of the request. The textual representation from ISO 4217 is used.
       type: string
@@ -310,6 +257,59 @@ components:
       - GBP
       - EUR
       example: GBP
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    reportListResponse:
+      type: object
+      properties:
+        reports:
+          $ref: '#/components/schemas/reportList'
+    reportResponsePAT:
+      type: object
+      required:
+      - balances
+      - banking
+      - reportLines
+      - reportTime
+      - reportType
+      - reportResult
+      - tpi
+      - requestId
+      - location
+      properties:
+        balances:
+          $ref: '#/components/schemas/reportBalances'
+        banking:
+          $ref: '#/components/schemas/reportsBanking'
+        reportLines:
+          $ref: '#/components/schemas/receiptLineList'
+        reportTime:
+          type: string
+          format: date-time
+        reportType:
+          $ref: '#/components/schemas/reportType'
+        reportResult:
+          type: string
+          $ref: '#/components/schemas/reportResultsPAT'
+        tpi:
+          type: string
+        reportId:
+          type: string
+        location:
+          type: string
+          description: The URI where the information about this particular report can be found.
+    issuerTotals:
+      type: object
+      description: A dictionary of totals split by issuer. {issuerName} is an example key.
+      properties:
+        '{issuerName}':
+          $ref: '#/components/schemas/totalsBreakdown'
+    reportList:
+      type: array
+      items:
+        $ref: '#/components/schemas/reportResponsePAT'
   parameters:
     tpiParam:
       name: tpi

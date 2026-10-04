@@ -168,49 +168,50 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    transactionResult:
+      type: string
+      enum:
+      - SUCCESSFUL
+      - DECLINED
+      - VOID
+      - UNSUCCESSFUL
+      - CANCELLED
+      - TIMED_OUT
     format:
       type: string
       enum:
       - BOLD
       - DOUBLE_HEIGHT
       - DOUBLE_WIDTH
-    messageList:
-      type: array
-      items:
-        type: string
-    verifySignature:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/messageList'
-    transactionType:
+    notifications:
       type: string
       enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-    receiptLineTypeRetail:
-      type: string
-      enum:
-      - TEXT
-      - BOX_DECLINE
-      - BOX_VOID
-      - CARRIAGE_RETURN
-      - LINE_SEPARATOR_SINGLE
-      - LINE_SEPARATOR_DOUBLE
-      - TICKET_FEED
-    transactionTypeResult:
-      type: string
-      enum:
-      - LOGON
-      - REFUND
-      - REFUND_REVERSAL
-      - SALE
-      - SALE_REVERSAL
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
+      - APPROVED
+      - BAD_SWIPE
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
     transaction:
       type: object
       properties:
@@ -299,35 +300,33 @@ components:
           $ref: '#/components/schemas/receiptLineTypeRetail'
         value:
           type: string
-    notifications:
+    receiptLineTypeRetail:
       type: string
       enum:
-      - APPROVED
-      - BAD_SWIPE
-      - CARD_ERROR
-      - CARD_EXPIRED
-      - CARD_NOT_SUPPORTED
-      - CONNECTING
-      - CONNECTION_MADE
-      - DECLINED
-      - DECLINED_BY_CARD
-      - INSERT_CARD
-      - PIN_ENTRY
-      - PLEASE_WAIT
-      - PRESENT_CARD
-      - PRESENT_ONLY_ONE_CARD
-      - PROCESSING_ERROR
-      - REMOVE_CARD
-      - RETRYING
-      - REQUEST_SENT
-      - RE_PRESENT_CARD
-      - SIGNATURE_VERIFICATION
-      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
-      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
-      - SIGNATURE_VERIFICATION_IN_PROGRESS
-      - SIGNATURE_VERIFICATION_TIMEOUT
-      - TRANSACTION_FINISHED
-      - TRANSACTION_STARTED
+      - TEXT
+      - BOX_DECLINE
+      - BOX_VOID
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
+    paymentMethod:
+      type: string
+      enum:
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    messageList:
+      type: array
+      items:
+        type: string
     signatureRequest:
       type: object
       required:
@@ -335,6 +334,36 @@ components:
       properties:
         accepted:
           type: boolean
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    verifySignature:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/messageList'
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where this resource can be found.
+    transactionType:
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+    cardholderVerificationMethod:
+      type: string
+      enum:
+      - NONE
+      - PIN
+      - SIGNATURE
+      - DEVICE
     transactionRequest:
       type: object
       properties:
@@ -344,48 +373,19 @@ components:
           type: integer
         currency:
           $ref: '#/components/schemas/currency'
-    transactionResult:
+    transactionTypeResult:
       type: string
       enum:
-      - SUCCESSFUL
-      - DECLINED
-      - VOID
-      - UNSUCCESSFUL
-      - CANCELLED
-      - TIMED_OUT
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-        location:
-          type: string
-          description: The uri where this resource can be found.
+      - LOGON
+      - REFUND
+      - REFUND_REVERSAL
+      - SALE
+      - SALE_REVERSAL
     verifySignatureResponse:
       type: object
       properties:
         messages:
           $ref: '#/components/schemas/verifySignature'
-    paymentMethod:
-      type: string
-      enum:
-      - UNKNOWN
-      - KEYED
-      - SWIPED
-      - ICC_CHIP
-      - CONTACTLESS
-    cardholderVerificationMethod:
-      type: string
-      enum:
-      - NONE
-      - PIN
-      - SIGNATURE
-      - DEVICE
-    currency:
-      type: string
-      enum:
-      - GBP
-      - EUR
   securitySchemes:
     connectBasicAuth:
       type: http

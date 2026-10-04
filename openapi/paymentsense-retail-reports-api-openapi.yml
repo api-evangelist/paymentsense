@@ -84,22 +84,49 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    reportType:
+      type: string
+      enum:
+      - END_OF_DAY
+      - BANKING
+      - X_BALANCE
+      - Z_BALANCE
+    waiterTotals:
+      type: object
+      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
+      properties:
+        <waiter id>:
+          $ref: '#/components/schemas/totalsBreakdown'
+      additionalProperties:
+        $ref: '#/components/schemas/totalsBreakdown'
+    totalsBreakdown:
+      type: object
+      required:
+      - currency
+      - totalAmount
+      - totalRefundsAmount
+      - totalRefundsCount
+      - totalSalesAmount
+      - totalSalesCount
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        totalAmount:
+          type: integer
+        totalRefundsAmount:
+          type: integer
+        totalRefundsCount:
+          type: integer
+        totalSalesAmount:
+          type: integer
+        totalSalesCount:
+          type: integer
     format:
       type: string
       enum:
       - BOLD
       - DOUBLE_HEIGHT
       - DOUBLE_WIDTH
-    receiptLineTypeRetail:
-      type: string
-      enum:
-      - TEXT
-      - BOX_DECLINE
-      - BOX_VOID
-      - CARRIAGE_RETURN
-      - LINE_SEPARATOR_SINGLE
-      - LINE_SEPARATOR_DOUBLE
-      - TICKET_FEED
     reportsBanking:
       type: object
       description: A dictionary of reportBanking keyed by Acquirer name. '<acquirer name>' is an example key
@@ -108,13 +135,6 @@ components:
           $ref: '#/components/schemas/reportBanking'
       additionalProperties:
         $ref: '#/components/schemas/reportBanking'
-    reportType:
-      type: string
-      enum:
-      - END_OF_DAY
-      - BANKING
-      - X_BALANCE
-      - Z_BALANCE
     reportBanking:
       type: object
       required:
@@ -144,28 +164,16 @@ components:
           type: array
           items:
             type: string
-    totalsBreakdown:
-      type: object
-      required:
-      - currency
-      - totalAmount
-      - totalRefundsAmount
-      - totalRefundsCount
-      - totalSalesAmount
-      - totalSalesCount
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        totalAmount:
-          type: integer
-        totalRefundsAmount:
-          type: integer
-        totalRefundsCount:
-          type: integer
-        totalSalesAmount:
-          type: integer
-        totalSalesCount:
-          type: integer
+    receiptLineTypeRetail:
+      type: string
+      enum:
+      - TEXT
+      - BOX_DECLINE
+      - BOX_VOID
+      - CARRIAGE_RETURN
+      - LINE_SEPARATOR_SINGLE
+      - LINE_SEPARATOR_DOUBLE
+      - TICKET_FEED
     receiptLine:
       type: object
       required:
@@ -180,14 +188,6 @@ components:
           $ref: '#/components/schemas/receiptLineTypeRetail'
         value:
           type: string
-    issuerTotals:
-      type: object
-      description: A dictionary of issuerTotals keyed by Issuer name. '<issuer name>' is an example key
-      properties:
-        <issuer name>:
-          $ref: '#/components/schemas/totalsBreakdown'
-      additionalProperties:
-        $ref: '#/components/schemas/totalsBreakdown'
     reportBalances:
       type: object
       required:
@@ -231,14 +231,15 @@ components:
           type: string
         waiterTotals:
           $ref: '#/components/schemas/waiterTotals'
-    waiterTotals:
-      type: object
-      description: A dictionary of WaiterTotals keyed by Waiter id. '<waiter id>' is an example key
-      properties:
-        <waiter id>:
-          $ref: '#/components/schemas/totalsBreakdown'
-      additionalProperties:
-        $ref: '#/components/schemas/totalsBreakdown'
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
     requestLocationResponse:
       type: object
       properties:
@@ -252,6 +253,14 @@ components:
       properties:
         reportType:
           $ref: '#/components/schemas/reportType'
+    issuerTotals:
+      type: object
+      description: A dictionary of issuerTotals keyed by Issuer name. '<issuer name>' is an example key
+      properties:
+        <issuer name>:
+          $ref: '#/components/schemas/totalsBreakdown'
+      additionalProperties:
+        $ref: '#/components/schemas/totalsBreakdown'
     reportResponse:
       type: object
       required:
@@ -282,15 +291,6 @@ components:
         location:
           type: string
           description: The uri where the information about this particular report can be found.
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    currency:
-      type: string
-      enum:
-      - GBP
-      - EUR
   securitySchemes:
     connectBasicAuth:
       type: http

@@ -302,22 +302,35 @@ components:
       - BOLD
       - DOUBLE_HEIGHT
       - DOUBLE_WIDTH
-    verifySignature:
-      type: object
-      properties:
-        status:
-          type: array
-          items:
-            type: string
-          example: Signature verification in progress.
-    transactionType:
-      description: Type of the transaction.
+    notifications:
       type: string
       enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-      example: SALE
+      - APPROVED
+      - BAD_SWIPE
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
     transaction:
       type: object
       properties:
@@ -497,35 +510,13 @@ components:
           description: Raw content of the line.
           type: string
           example: John's Shop
-    notifications:
+    currency:
+      description: Currency of the request. The textual representation from ISO 4217 is used.
       type: string
       enum:
-      - APPROVED
-      - BAD_SWIPE
-      - CARD_ERROR
-      - CARD_EXPIRED
-      - CARD_NOT_SUPPORTED
-      - CONNECTING
-      - CONNECTION_MADE
-      - DECLINED
-      - DECLINED_BY_CARD
-      - INSERT_CARD
-      - PIN_ENTRY
-      - PLEASE_WAIT
-      - PRESENT_CARD
-      - PRESENT_ONLY_ONE_CARD
-      - PROCESSING_ERROR
-      - REMOVE_CARD
-      - RETRYING
-      - REQUEST_SENT
-      - RE_PRESENT_CARD
-      - SIGNATURE_VERIFICATION
-      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
-      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
-      - SIGNATURE_VERIFICATION_IN_PROGRESS
-      - SIGNATURE_VERIFICATION_TIMEOUT
-      - TRANSACTION_FINISHED
-      - TRANSACTION_STARTED
+      - GBP
+      - EUR
+      example: GBP
     signatureRequest:
       type: object
       required:
@@ -535,17 +526,26 @@ components:
           description: Indicates whether the signature has been accepted.
           type: boolean
           example: true
-    transactionRequest:
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    verifySignature:
       type: object
       properties:
-        transactionType:
-          $ref: '#/components/schemas/transactionType'
-        amount:
-          description: Base amount of the transaction (in pence).
-          type: integer
-          example: 1234
-        currency:
-          $ref: '#/components/schemas/currency'
+        status:
+          type: array
+          items:
+            type: string
+          example: Signature verification in progress.
+    transactionType:
+      description: Type of the transaction.
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+      example: SALE
     requestLocationResponse:
       type: object
       properties:
@@ -558,54 +558,22 @@ components:
           type: string
           format: URI
           example: https://your-host-here.test.connect.paymentsense.cloud/terminals/{tpi}/{requestType}/{requestId}
+    transactionRequest:
+      type: object
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType'
+        amount:
+          description: Base amount of the transaction (in pence).
+          type: integer
+          example: 1234
+        currency:
+          $ref: '#/components/schemas/currency'
     verifySignatureResponse:
       type: object
       properties:
         messages:
           $ref: '#/components/schemas/verifySignature'
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    currency:
-      description: Currency of the request. The textual representation from ISO 4217 is used.
-      type: string
-      enum:
-      - GBP
-      - EUR
-      example: GBP
-    notifications_2:
-      type: string
-      enum:
-      - APPROVED
-      - ATTEMPTING_CANCEL
-      - BAD_SWIPE
-      - CANCELLING
-      - CARD_ERROR
-      - CARD_EXPIRED
-      - CARD_NOT_SUPPORTED
-      - CONNECTING
-      - CONNECTION_MADE
-      - DECLINED
-      - DECLINED_BY_CARD
-      - INSERT_CARD
-      - PIN_ENTRY
-      - PLEASE_WAIT
-      - PRESENT_CARD
-      - PRESENT_ONLY_ONE_CARD
-      - PROCESSING_ERROR
-      - REMOVE_CARD
-      - RETRYING
-      - REQUEST_SENT
-      - RE_PRESENT_CARD
-      - SIGNATURE_VERIFICATION
-      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
-      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
-      - SIGNATURE_VERIFICATION_IN_PROGRESS
-      - SIGNATURE_VERIFICATION_TIMEOUT
-      - TRANSACTION_FINISHED
-      - TRANSACTION_STARTED
-      - UNABLE_TO_CANCEL
     transaction_2:
       type: object
       properties:
@@ -766,18 +734,17 @@ components:
       required:
       - location
       - notifications
-    requestLocationResponse_2:
-      type: object
-      properties:
-        requestId:
-          description: UUID for this request, which can be used in other endpoints.
-          type: string
-          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
-        location:
-          description: URI where information about this request can be found.
-          type: string
-          format: URI
-          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
+    transactionType_2:
+      description: Type of the transaction. The DUPLICATE type is only supported on Ingenico terminals.
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+      - PRE_AUTH
+      - COMPLETION
+      - ACCOUNT_VERIFICATION
+      example: SALE
     transactionRequest_2:
       type: object
       properties:
@@ -811,17 +778,18 @@ components:
           minimum: 1
           maximum: 99999999
           example: 1234
-    transactionType_2:
-      description: Type of the transaction. The DUPLICATE type is only supported on Ingenico terminals.
-      type: string
-      enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
-      - PRE_AUTH
-      - COMPLETION
-      - ACCOUNT_VERIFICATION
-      example: SALE
+    requestLocationResponse_2:
+      type: object
+      properties:
+        requestId:
+          description: UUID for this request, which can be used in other endpoints.
+          type: string
+          example: d19912ad-11a3-4af3-86e0-d6eb2ebea63c
+        location:
+          description: URI where information about this request can be found.
+          type: string
+          format: URI
+          example: https://your-host-here.test.connect.paymentsense.cloud/pac/terminals/{tid}/{requestType}/{requestId}
     userMessage:
       type: object
       properties:
@@ -829,17 +797,49 @@ components:
           description: Error message to display to the user.
           type: string
           example: This is an example error message. The string here should be displayed to the user.
+    notifications_2:
+      type: string
+      enum:
+      - APPROVED
+      - ATTEMPTING_CANCEL
+      - BAD_SWIPE
+      - CANCELLING
+      - CARD_ERROR
+      - CARD_EXPIRED
+      - CARD_NOT_SUPPORTED
+      - CONNECTING
+      - CONNECTION_MADE
+      - DECLINED
+      - DECLINED_BY_CARD
+      - INSERT_CARD
+      - PIN_ENTRY
+      - PLEASE_WAIT
+      - PRESENT_CARD
+      - PRESENT_ONLY_ONE_CARD
+      - PROCESSING_ERROR
+      - REMOVE_CARD
+      - RETRYING
+      - REQUEST_SENT
+      - RE_PRESENT_CARD
+      - SIGNATURE_VERIFICATION
+      - SIGNATURE_VERIFICATION_PROCESS_COMPLETED
+      - SIGNATURE_VERIFICATION_PROCESS_COULD_NOT_BE_COMPLETED
+      - SIGNATURE_VERIFICATION_IN_PROGRESS
+      - SIGNATURE_VERIFICATION_TIMEOUT
+      - TRANSACTION_FINISHED
+      - TRANSACTION_STARTED
+      - UNABLE_TO_CANCEL
   parameters:
-    requestIdParam:
-      name: requestId
-      description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
+    tpiParam:
+      name: tpi
+      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
       in: path
       required: true
       schema:
         type: string
-    tpiParam:
-      name: tpi
-      description: Terminal Public Identifier (unique identifier assigned to a terminal) of the terminal to use in this request.
+    requestIdParam:
+      name: requestId
+      description: Request Id (UUID assigned to a terminal request) of the terminal request to use in this request.
       in: path
       required: true
       schema:
@@ -859,14 +859,8 @@ components:
       schema:
         type: string
   responses:
-    unavailableTerminalOrTransaction:
-      description: Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>
-      content:
-        application/connect.v2+json:
-          schema:
-            $ref: '#/components/schemas/userMessage'
-    unavailableTerminal:
-      description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
+    unprocessibleEntity:
+      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
       content:
         application/connect.v2+json:
           schema:
@@ -877,16 +871,22 @@ components:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
-    internalError:
-      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
-    unauthorized:
-      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
+    unavailableTerminal:
+      description: Terminal could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li></ul>
       content:
         application/connect.v2+json:
           schema:
             $ref: '#/components/schemas/userMessage'
-    unprocessibleEntity:
-      description: Request could not be processed:<ul><li>The received JSON was invalid (e.g. missing field, invalid value in field)</li><li>Missing <strong>Software-House-Id</strong> or <strong>Installer-Id</strong> header</li></ul>
+    unavailableTerminalOrTransaction:
+      description: Terminal or transaction could not be found:<ul><li>Terminal is unavailable</li><li>No data available for terminal</li><li>Transaction requestId could not be found</li></ul>
+      content:
+        application/connect.v2+json:
+          schema:
+            $ref: '#/components/schemas/userMessage'
+    internalError:
+      description: An internal Connect error has occurred. The request should be retried and if the problem persists, support should be contacted.
+    unauthorized:
+      description: Request could not be authorized:<ul><li>Authorization credentials were not provided in the request headers</li><li>The provided authorization credentials were not correct</li></ul>
       content:
         application/connect.v2+json:
           schema:

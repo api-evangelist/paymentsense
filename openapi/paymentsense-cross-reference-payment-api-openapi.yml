@@ -42,19 +42,15 @@ paths:
       summary: /v1/cross reference payments/access token
       x-summary-source: derived
 components:
-  schemas:
+  requestBodies:
     paymentCrossReferenceRequest:
-      type: object
-      properties:
-        crossReference:
-          type: string
-          example: '181025085937854101886353'
-        cv2:
-          type: string
-          description: The CV2 code associated with the card from the original transaction. Note that if using this you need to be PCI SAQ-D compliant
-          example: '123'
-      required:
-      - crossReference
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/paymentCrossReferenceRequest'
+      description: Details of the Payment to be made
+      required: true
+  schemas:
     crossReferenceResponse:
       type: object
       properties:
@@ -74,14 +70,18 @@ components:
         message:
           type: string
           example: 'AuthCode: 898968'
-  requestBodies:
     paymentCrossReferenceRequest:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/paymentCrossReferenceRequest'
-      description: Details of the Payment to be made
-      required: true
+      type: object
+      properties:
+        crossReference:
+          type: string
+          example: '181025085937854101886353'
+        cv2:
+          type: string
+          description: The CV2 code associated with the card from the original transaction. Note that if using this you need to be PCI SAQ-D compliant
+          example: '123'
+      required:
+      - crossReference
   securitySchemes:
     api_key:
       type: apiKey
