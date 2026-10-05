@@ -1,0 +1,12 @@
+{
+ "url": "https://docs.connect.paymentsense.cloud/js/swagger_v2.json",
+ "requested_url": "https://docs.connect.paymentsense.cloud/js/swagger_v2.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 46444,
+ "sha256": "3362c2e698aebbbcae2102c51105d6e1060aae146b1e4cf3cd3ac478a2e13582",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
