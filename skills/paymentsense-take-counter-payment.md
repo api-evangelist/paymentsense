@@ -2,7 +2,7 @@
 name: Take a Pay-At-Counter card payment
 description: Drive a Paymentsense Connect card terminal to take an in-person payment from EPOS software, then confirm the outcome.
 api: openapi/paymentsense-connect-v2.json
-operations: [PACTerminals, TransactionOnTID, GetTransactionWithRequestId, VerifySignature, CancelTransactionWithRequestId]
+operations: [PACTerminals, TransactionOnTID, getPacTerminalsByTidTransactionsByRequestId, putPacTerminalsByTidTransactionsByRequestIdSignature, deletePacTerminalsByTidTransactionsByRequestId]
 ---
 
 # Take a Pay-At-Counter card payment

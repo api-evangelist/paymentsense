@@ -43,7 +43,7 @@ workflows:
         outputs:
           requestId: $response.body.requestId
       - stepId: pollTransaction
-        operationId: GetTransactionWithRequestId
+        operationId: getPacTerminalsByTidTransactionsByRequestId
         parameters:
           - name: tid
             in: path
