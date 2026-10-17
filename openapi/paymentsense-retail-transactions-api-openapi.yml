@@ -168,21 +168,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    transactionResult:
-      type: string
-      enum:
-      - SUCCESSFUL
-      - DECLINED
-      - VOID
-      - UNSUCCESSFUL
-      - CANCELLED
-      - TIMED_OUT
-    format:
-      type: string
-      enum:
-      - BOLD
-      - DOUBLE_HEIGHT
-      - DOUBLE_WIDTH
+    requestLocationResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        location:
+          type: string
+          description: The uri where this resource can be found.
+    messageList:
+      type: array
+      items:
+        type: string
     notifications:
       type: string
       enum:
@@ -212,6 +209,60 @@ components:
       - SIGNATURE_VERIFICATION_TIMEOUT
       - TRANSACTION_FINISHED
       - TRANSACTION_STARTED
+    transactionRequest:
+      type: object
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType'
+        amount:
+          type: integer
+        currency:
+          $ref: '#/components/schemas/currency'
+    signatureRequest:
+      type: object
+      required:
+      - accepted
+      properties:
+        accepted:
+          type: boolean
+    verifySignature:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/messageList'
+    receiptLineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/receiptLine'
+    paymentMethod:
+      type: string
+      enum:
+      - UNKNOWN
+      - KEYED
+      - SWIPED
+      - ICC_CHIP
+      - CONTACTLESS
+    format:
+      type: string
+      enum:
+      - BOLD
+      - DOUBLE_HEIGHT
+      - DOUBLE_WIDTH
+    transactionType:
+      type: string
+      enum:
+      - SALE
+      - REFUND
+      - DUPLICATE
+    transactionResult:
+      type: string
+      enum:
+      - SUCCESSFUL
+      - DECLINED
+      - VOID
+      - UNSUCCESSFUL
+      - CANCELLED
+      - TIMED_OUT
     transaction:
       type: object
       properties:
@@ -286,6 +337,14 @@ components:
           format: date-time
         transactionType:
           $ref: '#/components/schemas/transactionTypeResult'
+    transactionTypeResult:
+      type: string
+      enum:
+      - LOGON
+      - REFUND
+      - REFUND_REVERSAL
+      - SALE
+      - SALE_REVERSAL
     receiptLine:
       type: object
       required:
@@ -310,53 +369,11 @@ components:
       - LINE_SEPARATOR_SINGLE
       - LINE_SEPARATOR_DOUBLE
       - TICKET_FEED
-    paymentMethod:
-      type: string
-      enum:
-      - UNKNOWN
-      - KEYED
-      - SWIPED
-      - ICC_CHIP
-      - CONTACTLESS
-    currency:
-      type: string
-      enum:
-      - GBP
-      - EUR
-    messageList:
-      type: array
-      items:
-        type: string
-    signatureRequest:
-      type: object
-      required:
-      - accepted
-      properties:
-        accepted:
-          type: boolean
-    receiptLineList:
-      type: array
-      items:
-        $ref: '#/components/schemas/receiptLine'
-    verifySignature:
+    verifySignatureResponse:
       type: object
       properties:
-        status:
-          $ref: '#/components/schemas/messageList'
-    requestLocationResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-        location:
-          type: string
-          description: The uri where this resource can be found.
-    transactionType:
-      type: string
-      enum:
-      - SALE
-      - REFUND
-      - DUPLICATE
+        messages:
+          $ref: '#/components/schemas/verifySignature'
     cardholderVerificationMethod:
       type: string
       enum:
@@ -364,28 +381,11 @@ components:
       - PIN
       - SIGNATURE
       - DEVICE
-    transactionRequest:
-      type: object
-      properties:
-        transactionType:
-          $ref: '#/components/schemas/transactionType'
-        amount:
-          type: integer
-        currency:
-          $ref: '#/components/schemas/currency'
-    transactionTypeResult:
+    currency:
       type: string
       enum:
-      - LOGON
-      - REFUND
-      - REFUND_REVERSAL
-      - SALE
-      - SALE_REVERSAL
-    verifySignatureResponse:
-      type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/verifySignature'
+      - GBP
+      - EUR
   securitySchemes:
     connectBasicAuth:
       type: http

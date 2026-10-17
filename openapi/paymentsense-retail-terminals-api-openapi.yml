@@ -113,14 +113,14 @@ components:
       - REPORT_X_BALANCE
       - REPORT_Z_BALANCE
       - TERMINAL_STATUS
-    terminalWrapper:
-      title: terminalWrapper
-      description: a list of terminals keyed by 'terminals'
-      type: object
-      properties:
-        terminals:
-          $ref: '#/components/schemas/terminalList'
-      additionalProperties:
+    capabilitiesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/capabilities'
+    terminalList:
+      title: TerminalList
+      type: array
+      items:
         $ref: '#/components/schemas/terminal'
     terminal:
       title: Terminal
@@ -144,25 +144,25 @@ components:
         location:
           type: string
           description: The uri where the information about this particular terminal can be found.
-    capabilitiesList:
-      type: array
-      items:
-        $ref: '#/components/schemas/capabilities'
-    currency:
-      type: string
-      enum:
-      - GBP
-      - EUR
     terminalStatus:
       type: string
       enum:
       - AVAILABLE
       - BUSY
-    terminalList:
-      title: TerminalList
-      type: array
-      items:
+    terminalWrapper:
+      title: terminalWrapper
+      description: a list of terminals keyed by 'terminals'
+      type: object
+      properties:
+        terminals:
+          $ref: '#/components/schemas/terminalList'
+      additionalProperties:
         $ref: '#/components/schemas/terminal'
+    currency:
+      type: string
+      enum:
+      - GBP
+      - EUR
   securitySchemes:
     connectBasicAuth:
       type: http

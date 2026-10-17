@@ -35,6 +35,13 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    shippingDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
     address:
       type: object
       properties:
@@ -67,13 +74,6 @@ components:
           type: string
           example: '826'
           description: CountryCode of the address.
-    shippingDetails:
-      type: object
-      properties:
-        name:
-          type: string
-        address:
-          $ref: '#/components/schemas/address'
     accessTokenRequest:
       type: object
       properties:
