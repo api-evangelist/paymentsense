@@ -394,3 +394,9 @@ components:
     connectBasicAuth:
       type: http
       scheme: basic
+x-provenance:
+  method: harvested
+  publisher: Paymentsense
+  source: https://docs.connect.paymentsense.cloud/js/swagger_v2.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
